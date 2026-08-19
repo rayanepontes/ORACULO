@@ -249,7 +249,7 @@ em uma experiência interativa de terminal.
 Projeto desenvolvido por:
 
 * **[Rayane M. de Pontes Gomes]**
-* **[Nome do integrante]**
+* **[Luann Gabriel Flôr Alves da Silva]**
 * **[Nome do integrante]**
 * **[Nome do integrante]**
 
