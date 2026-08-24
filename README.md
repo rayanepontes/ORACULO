@@ -180,7 +180,7 @@ O jogo utiliza **arquivos locais** para armazenar o progresso da investigação.
 A organização do código busca separar as responsabilidades do jogo entre módulos.
 
 ```text
-Decifra.IA/
+ORÁCULO/
 │
 ├── src/
 │   ├── ...
@@ -251,6 +251,9 @@ Projeto desenvolvido por:
 * **[Rayane M. de Pontes Gomes]**
 * **[Luann Gabriel Flôr Alves da Silva]**
 * **[Everton Luan Gomes Batista]**
-* **[Nome do integrante]**
+* **[Mirella de Sousa Albuquerque]**
+* **[Marina Silva Mendes]**
+* **[Anamel Thaís Ferreira Lima]**
+* **[Maria Giovanna Oliveira Carvalho]**
 
 ---
