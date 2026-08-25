@@ -248,9 +248,9 @@ em uma experiência interativa de terminal.
 
 Projeto desenvolvido por:
 
-* **[Rayane M. de Pontes Gomes]**
-* **[Luann Gabriel Flôr Alves da Silva]**
-* **[Everton Luan Gomes Batista]**
+* **[Rayane M. de Pontes Gomes - rmpg@cesar.school - rynemaria@gmail.com]**
+* **[Luann Gabriel Flôr Alves da Silva - lgfas@cesar.school]**
+* **[Everton Luan Gomes Batista - elgb@cesar.school]**
 * **[Mirella de Sousa Albuquerque]**
 * **[Marina Silva Mendes]**
 * **[Anamel Thaís Ferreira Lima]**
