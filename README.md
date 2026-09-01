@@ -1,248 +1,110 @@
-
 # ORÁCULO
 
-> um jogo de investigação sobre inteligência artificial, confiança e pensamento crítico.
+> **"Você não joga contra a IA. Você precisa aprender a investigar a IA."**
 
-**ORÁCULO** é um jogo solo de investigação desenvolvido em **C e Haskell**, no qual o jogador assume o papel de uma estagiária que precisa descobrir o que aconteceu dentro de um laboratório de pesquisa em Inteligência Artificial.
+**ORÁCULO** é um jogo solo de investigação e *escape room* em terminal desenvolvido em **C e Haskell**, integrado com uma **API de Inteligência Artificial Generativa**.
 
-O problema? A principal ferramenta disponível para a investigação é justamente uma IA — e ela pode estar errada.
-
-O jogador precisa analisar pistas, interrogar suspeitos, investigar diferentes ambientes e decidir em quais informações pode confiar. Nem toda resposta fornecida pelo sistema é verdadeira, e simplesmente seguir a maior porcentagem de confiança pode levar a uma conclusão errada.
+O jogador assume o papel de uma estagiária no **NEXUS Labs** que precisa descobrir o que aconteceu dentro de um laboratório de pesquisa em IA. A principal ferramenta disponível para a investigação é o próprio sistema **ORÁCULO** — mas o jogador precisará aprender que **a alta pontuação de confiança de uma IA não garante a veracidade do fato**.
 
 ---
 
-## Sobre o jogo
+## 🔍 Sobre o Jogo
 
-Você é um estagiário recém-contratado pelo **NEXUS Labs**, instituto responsável pelo desenvolvimento do **ORÁCULO**, um sistema de IA utilizado para prever riscos e auxiliar na tomada de decisões.
+Você é uma estagiária recém-contratada pelo **NEXUS Labs**, instituto responsável pelo desenvolvimento do **ORÁCULO**, um sistema de IA avançado utilizado para prever riscos e auxiliar na tomada de decisões.
 
-Durante seu primeiro plantão, um alerta é disparado:
+Durante seu primeiro plantão, um alerta crítico é disparado no terminal:
 
 ```text
-ALERTA_NEXUS #0417
 
-Dra. Elena Voss — INCONSCIENTE
-Local: Sala do Servidor Central
-Causa: INDETERMINADA
+
 ```
 
-A cientista-chefe foi encontrada desacordada ao lado de um terminal onde uma exclusão de dataset foi parcialmente executada.
 
-Existem quatro possíveis envolvidos.
-
-Existem várias pistas.
-
-E existe o ORÁCULO.
-
-O problema é que nem sempre ele está dizendo a verdade.
 
 ---
 
-## Objetivo
-
-O objetivo não é simplesmente descobrir **quem é o culpado**.
-
-Durante a investigação, o jogador precisa avaliar a **confiabilidade das evidências** utilizadas para chegar à conclusão.
-
-As pistas podem ser:
-
-* **confiáveis**
-* **enviesadas**
-* **alucinadas**
-* **manipuladas**
-
-O jogador deve cruzar informações, confrontar suspeitos e questionar as respostas fornecidas pelo ORÁCULO antes de realizar a acusação final.
-
-> **confiança de uma IA não significa verdade.**
-
-Essa é a principal ideia trabalhada pelo jogo.
-
----
-
-## Mecânicas
-
-### Investigação
-
-O jogador pode explorar diferentes ambientes do NEXUS Labs e encontrar pistas físicas e digitais.
+## 🎮 Mecânicas de Jogabilidade
 
 ```text
-[Recepção]
-     |
-[Sala de Servidores] --- [Laboratório de Dados]
-     |
-[Sala de Reuniões] --- [Copa]
+
+
 ```
 
-### Interrogatórios
+### Explorando os Ambientes
 
-Os suspeitos podem ser interrogados durante a investigação.
-
-O ORÁCULO pode gerar resumos dos depoimentos, mas esses resumos podem conter distorções ou informações que nunca foram mencionadas.
-
-O jogador pode confrontar os personagens e verificar possíveis contradições.
-
-###  ORÁCULO
-
-O jogador pode fazer perguntas diretamente à IA.
-
-As respostas apresentam um percentual de confiança, mas esse valor não representa necessariamente a veracidade da informação.
-
-Isso cria uma das principais decisões do jogo:
-
-> confiar na resposta ou investigar por conta própria?
-
-### Minijogo de viés
-
-No Laboratório de Dados, o jogador participa de um pequeno minijogo relacionado a **viés de dados**.
-
-Ao trabalhar com um conjunto de dados desbalanceado, o jogador observa como isso pode influenciar uma decisão tomada pelo sistema.
-
-### Acusação final
-
-Ao final da investigação, o jogador deve decidir:
-
-1. quem considera responsável;
-2. quais pistas serão utilizadas como justificativa;
-3. se as evidências são suficientes para sustentar a acusação.
-
-A pontuação considera não apenas o resultado, mas também a qualidade das evidências utilizadas.
-
----
-
-##  Finais
-
-O jogo possui diferentes resultados possíveis:
-
-| Final                                   | Resultado                                                                           |
-| --------------------------------------- | ----------------------------------------------------------------------------------- |
-| **A — Acusação correta e fundamentada** | O responsável é identificado utilizando evidências confiáveis.                      |
-| **B — Acusação correta por sorte**      | O responsável é identificado, mas uma pista falsa foi utilizada como justificativa. |
-| **C — Confiança cega**                  | O jogador segue a recomendação do ORÁCULO sem investigar suficientemente.           |
-| **D — Sem provas suficientes**          | O jogador decide não acusar ninguém por falta de evidências.                        |
-| **E — O ORÁCULO**                       | Final secreto relacionado à manipulação do sistema.                                 |
-
-O jogo não considera necessariamente errado decidir **não acusar ninguém**.
-
-Reconhecer que os dados disponíveis são insuficientes também pode ser a decisão correta.
-
----
-
-##  Conceitos de Inteligência Artificial
-
-Os conceitos de IA são apresentados dentro da própria investigação, evitando que o conteúdo educativo apareça apenas como um questionário separado.
-
-Entre os conceitos trabalhados estão:
-
-* viés de dados;
-* alucinação de IA;
-* confiança de modelos;
-* dados sintéticos;
-* manipulação de informações;
-* limitações de sistemas de IA.
-
-O jogador aprende esses conceitos enquanto precisa utilizá-los para resolver o caso.
-
----
-
-##  Tecnologias
-
-### C
-
-Responsável principalmente pela estrutura e execução do jogo:
-
-* gerenciamento do estado da investigação;
-* `structs`;
-* entrada e saída de dados;
-* navegação entre ambientes;
-* gerenciamento das pistas;
-* modularização;
-* persistência em arquivos.
-
-### Haskell
-
-Utilizado para implementar regras e funções puras relacionadas à lógica do jogo:
-
-* classificação das pistas;
-* validação das evidências;
-* cálculo da acurácia investigativa;
-* regras dos finais;
-* processamento das decisões do jogador.
-
-### Persistência
-
-O jogo utiliza **arquivos locais** para armazenar o progresso da investigação.
-
-> O projeto não utiliza banco de dados.
-
----
-
-## Estrutura do projeto
-
-A organização do código busca separar as responsabilidades do jogo entre módulos.
+A navegação ocorre por comandos diretos no terminal entre diferentes salas interconectadas do NEXUS Labs:
 
 ```text
-ORÁCULO/
-│
-├── src/
-│   ├── ...
-│
-├── include/
-│   ├── ...
-│
-├── haskell/
-│   ├── ...
-│
-├── data/
-│   ├── ...
-│
-├── save/
-│   └── ...
-│
-├── README.md
-└── ...
+        [Recepção]
+            |
+  [Sala de Servidores] ─── [Laboratório de Dados]
+            |
+  [Sala de Reuniões]  ─── [Copa]
+
 ```
 
-A estrutura definitiva pode ser ajustada conforme a implementação do projeto.
 
 ---
 
-##  Como jogar
+## 🧠 Conceitos de IA Ensinados
 
-O jogo é executado diretamente pelo terminal.
+O jogo integra a teoria da Inteligência Artificial diretamente na solução do caso:
 
-Ao iniciar, o jogador encontra o menu principal:
+| Conceito de IA | Como se Aplica no Jogo | Mecânica Investigativa |
+| --- | --- | --- |
+| **Alucinação de IA** | A IA gera relatórios convincentes citando arquivos que não existem no servidor. | O jogador deve buscar a fonte primária e apontar a alucinação para descartar a pista falsa. |
+| **Viés Algorítmico** | Perfis de acesso de dois funcionários idênticos recebem classificações de risco diferentes. | Análise das métricas do modelo no Laboratório de Dados para identificar dados históricos tendenciosos. |
+| **Prompt Injection** | Instruções maliciosas foram enviadas ao terminal da Dra. Voss. | Identificar comandos ocultos enviados à IA para forçar a liberação de senhas ou logs. |
+| **Confiabilidade de Modelos** | Uma resposta da IA possui 98% de confiança, mas é desmentida por um log físico. | Julgamento crítico sobre as métricas de saída do modelo. |
+| **Dados Sintéticos / Incompletos** | O dataset utilizado para prever falhas omitiu logs do turno da noite. | Identificar falhas na amostragem que levaram a conclusões equivocadas. |
+
+
+---
+
+## 🏗️ Arquitetura & Tecnologias
+
+O sistema combina a eficiência de execução do **C** com a robustez funcional do **Haskell**, além do apoio da **API de IA Generativa**.
 
 ```text
-=========================================
-          N E X U S   L A B S
-=========================================
+┌──────────────────────────────────────┐     ┌──────────────────────────────────────┐
+│           CORE EM C (ENGINE)         │     │        LÓGICA EM HASKELL (RULES)     │
+├──────────────────────────────────────┤     ├──────────────────────────────────────┤
+│ • Interface de terminal e menus      │     │ • Classificação e validação de pistas│
+│ • Controle de salas e inventário     │  ─> │ • Validação do rigor investigativo   │
+│ • Cronômetro e chamadas HTTP (libcurl│     │ • Cálculo da acurácia e pontuação    │
+│ • Persistência local em arquivos     │     │ • Árvore de decisão dos Finais (A-E) │
+└──────────────────────────────────────┘     └──────────────────────────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                             GERAÇÃO PROCEDURAL & FALLBACK                        │
+├──────────────────────────────────────────────────────────────────────────────────┤
+│ • API de IA Generativa: Geração dinâmica do enredo, suspeitos e JSON da partida  │
+│ • Arquivos Locais (Fallback): Casos pré-definidos caso a API esteja offline     │
+└──────────────────────────────────────────────────────────────────────────────────┘
 
-              DECIFRA.IA
-           PROTOCOLO SOMBRA
-
-          [1] JOGAR
-          [2] SAIR
-
------------------------------------------
-
-ORÁCULO> aguardando comando...
-> _
 ```
 
-A partir daí, toda a investigação acontece através de comandos no terminal.
+### Regra de Arquitetura
+
+A IA Generativa atua apenas na **criação de conteúdo e narrativa**. O controle de regras, tempo, estado do jogo, cálculo de pontos e condições de vitória/derrota é feito de forma determinística pelo motor em **C e Haskell**.
 
 ---
 
-##  Projeto Integrador
-
-O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, integrando conceitos de programação em **C e Haskell** com uma proposta de aprendizagem sobre Inteligência Artificial.
-
-O projeto busca unir:
-
-**programação + narrativa + investigação + educação sobre IA**
-
-em uma experiência interativa de terminal.
+## 📁 Estrutura do Repositório
+---
 
 ---
+
+## 🎓 Projeto Integrador
+
+O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, combinando técnicas avançadas de programação estruturada (**C**), programação funcional (**Haskell**) e **IA Generativa**, com uma proposta narrativa voltada para o letramento e pensamento crítico em Inteligência Artificial.
+
+---
+
+## 📜 Licença
+
+Este projeto está licenciado sob a licença **MIT** — consulte o arquivo [LICENSE](https://www.google.com/search?q=LICENSE) para obter mais detalhes.
 
 ## Equipe
 
