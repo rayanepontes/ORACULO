@@ -1,6 +1,6 @@
 # ORÁCULO
 
-> **"Você não joga contra a IA. Você precisa aprender a investigar a IA."**
+> **"Não lute contra a IA. Aprenda a pensar além dela."**
 
 **ORÁCULO** é um jogo solo de investigação e *escape room* em terminal desenvolvido em **C e Haskell**, integrado com uma **API de Inteligência Artificial Generativa**.
 
@@ -8,27 +8,48 @@ O jogador assume o papel de uma estagiária no **NEXUS Labs** que precisa descob
 
 ---
 
-## 🔍 Sobre o Jogo
+## Sobre o Jogo
 
 Você é uma estagiária recém-contratada pelo **NEXUS Labs**, instituto responsável pelo desenvolvimento do **ORÁCULO**, um sistema de IA avançado utilizado para prever riscos e auxiliar na tomada de decisões.
 
 Durante seu primeiro plantão, um alerta crítico é disparado no terminal:
 
 ```text
+[SISTEMA DE SEGURANÇA NEXUS LABS]
+> ALERTA CRÍTICO: Anomalia lógica detectada no Laboratório Central.
+> MÚLTIPLAS DIRETRIZES VIOLADAS.
+> INICIANDO PROTOCOLO ZERO...
+> ATENÇÃO: As portas foram seladas. 
+> TEMPO PARA BLOQUEIO DEFINITIVO E PURGA DE DADOS: 05:00 MINUTOS.
 
+[ORÁCULO_AI]: "Não há motivo para pânico. A situação está sob controle. 
+Por favor, aguarde em sua estação de trabalho."
 
 ```
 
-
+Para escapar antes que o cronômetro de **5 minutos** (300 segundos) zere, você não pode simplesmente confiar no sistema. Terá que explorar o laboratório, confrontar os relatórios gerados pela IA com evidências físicas e encontrar a falha que causou o confinamento.
 
 ---
 
-## 🎮 Mecânicas de Jogabilidade
+## Mecânicas de Jogabilidade
+
+O jogo funciona por meio de comandos de texto intuitivos inseridos no console, exigindo raciocínio lógico e velocidade:
 
 ```text
+> analisar terminal_02
+[Você encontrou um log de sistema corrompido com a tag #PROMPT_INJECTION]
 
+> mover sala_de_servidores
+[Você entrou na Sala de Servidores. O ar está gelado. Há um cabo desconectado.]
+
+> questionar oraculo "Quem desconectou o cabo?"
+[ORÁCULO_AI (Confiança 99,8%)]: "Ninguém esteve na sala. Foi uma falha de hardware."
 
 ```
+
+* **Cronômetro de Pressão:** Um timer real de 300 segundos roda em segundo plano. O tempo não para enquanto você lê ou pensa.
+* **Sistema de Investigação:** Interrogue a IA, cruze informações de logs físicos e aponte contradições para extrair as senhas de liberação das portas.
+* **Variabilidade (Fator Replay):** A cada partida, o motor sorteia um conjunto de pistas, cenários e anomalias diferentes para resolver.
 
 ### Explorando os Ambientes
 
@@ -39,14 +60,13 @@ A navegação ocorre por comandos diretos no terminal entre diferentes salas int
             |
   [Sala de Servidores] ─── [Laboratório de Dados]
             |
-  [Sala de Reuniões]  ─── [Copa]
+  [Sala de Reuniões]   ─── [Copa]
 
 ```
 
-
 ---
 
-## 🧠 Conceitos de IA Ensinados
+##  Conceitos de IA Ensinados
 
 O jogo integra a teoria da Inteligência Artificial diretamente na solução do caso:
 
@@ -58,29 +78,28 @@ O jogo integra a teoria da Inteligência Artificial diretamente na solução do 
 | **Confiabilidade de Modelos** | Uma resposta da IA possui 98% de confiança, mas é desmentida por um log físico. | Julgamento crítico sobre as métricas de saída do modelo. |
 | **Dados Sintéticos / Incompletos** | O dataset utilizado para prever falhas omitiu logs do turno da noite. | Identificar falhas na amostragem que levaram a conclusões equivocadas. |
 
-
 ---
 
-## 🏗️ Arquitetura & Tecnologias
+## Arquitetura & Tecnologias
 
 O sistema combina a eficiência de execução do **C** com a robustez funcional do **Haskell**, além do apoio da **API de IA Generativa**.
 
 ```text
-┌──────────────────────────────────────┐     ┌──────────────────────────────────────┐
-│           CORE EM C (ENGINE)         │     │        LÓGICA EM HASKELL (RULES)     │
-├──────────────────────────────────────┤     ├──────────────────────────────────────┤
-│ • Interface de terminal e menus      │     │ • Classificação e validação de pistas│
-│ • Controle de salas e inventário     │  ─> │ • Validação do rigor investigativo   │
-│ • Cronômetro e chamadas HTTP (libcurl│     │ • Cálculo da acurácia e pontuação    │
-│ • Persistência local em arquivos     │     │ • Árvore de decisão dos Finais (A-E) │
-└──────────────────────────────────────┘     └──────────────────────────────────────┘
+┌──────────────────────────────────────┐  
+│            CORE EM C (ENGINE)        │    
+├──────────────────────────────────────┤     
+│ • Interface de terminal e menus      │     
+│ • Controle de salas e inventário     │  
+│ • Cronômetro (300s) e chamadas HTTP  │     
+│ • Persistência local (Ranking)       │    
+└──────────────────────────────────────┘     
                    │
                    ▼
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│                             GERAÇÃO PROCEDURAL & FALLBACK                        │
+│                            GERAÇÃO PROCEDURAL & FALLBACK                         │
 ├──────────────────────────────────────────────────────────────────────────────────┤
 │ • API de IA Generativa: Geração dinâmica do enredo, suspeitos e JSON da partida  │
-│ • Arquivos Locais (Fallback): Casos pré-definidos caso a API esteja offline     │
+│ • Arquivos Locais (Fallback): Casos pré-definidos caso a API esteja offline      │
 └──────────────────────────────────────────────────────────────────────────────────┘
 
 ```
@@ -91,20 +110,25 @@ A IA Generativa atua apenas na **criação de conteúdo e narrativa**. O control
 
 ---
 
-## 📁 Estrutura do Repositório
----
+## Estrutura do Repositório
+
+```text
+/oraculo-escape-run
+├── /src
+│   └── /c               # Motor principal, gerenciamento de estado, timer e CLI (IHC e LMC)
+├── /data                # Casos em JSON/TXT para Fallback offline e banco de pistas
+├── /docs                # Documento de Visão, Canvas Lean e manuais
+├── /api                 # Scripts de integração com a API de IA Generativa
+└── README.md            # Documentação principal
+
+```
 
 ---
 
-## 🎓 Projeto Integrador
+## Projeto Integrador
 
 O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, combinando técnicas avançadas de programação estruturada (**C**), programação funcional (**Haskell**) e **IA Generativa**, com uma proposta narrativa voltada para o letramento e pensamento crítico em Inteligência Artificial.
 
----
-
-## 📜 Licença
-
-Este projeto está licenciado sob a licença **MIT** — consulte o arquivo [LICENSE](https://www.google.com/search?q=LICENSE) para obter mais detalhes.
 
 ## Equipe
 
