@@ -124,6 +124,8 @@ A IA Generativa atua apenas na **criação de conteúdo e narrativa**. O control
 ```
 
 ---
+![Board Trello](<img width="860" height="381" alt="board projeto trello" src="https://github.com/user-attachments/assets/0b546d27-c244-418e-b913-3328d7527d16" />)
+
 
 ## Projeto Integrador
 
