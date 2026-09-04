@@ -124,6 +124,7 @@ A IA Generativa atua apenas na **criação de conteúdo e narrativa**. O control
 ```
 
 ---
+## Imagens do Board do Jira e do Trello
 
 # <img src="./assets/board%20projeto%20trello.png">
 
