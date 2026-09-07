@@ -145,6 +145,6 @@ Projeto desenvolvido por:
 * **[Mirella de Sousa Albuquerque]**
 * **[Marina Silva Mendes]**
 * **[Anamel Thaís Ferreira Lima]**
-* **[Maria Giovanna Oliveira Carvalho]**
+* **[Maria Giovanna Oliveira Carvalho - mgoc@cesar.school]**
 
 ---
