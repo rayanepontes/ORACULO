@@ -124,6 +124,11 @@ A IA Generativa atua apenas na **criação de conteúdo e narrativa**. O control
 ```
 
 ---
+## Imagens do Board do Jira e do Trello
+
+# <img src="./assets/board%20projeto%20trello.png">
+
+![Board de Módulos](./assets/board_jira.jpeg)
 
 ## Projeto Integrador
 
@@ -140,6 +145,6 @@ Projeto desenvolvido por:
 * **[Mirella de Sousa Albuquerque]**
 * **[Marina Silva Mendes]**
 * **[Anamel Thaís Ferreira Lima]**
-* **[Maria Giovanna Oliveira Carvalho]**
+* **[Maria Giovanna Oliveira Carvalho - mgoc@cesar.school]**
 
 ---
