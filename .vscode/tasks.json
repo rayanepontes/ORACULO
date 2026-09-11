@@ -1,0 +1,47 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar Raylib",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}/src/*.c",
+                "${workspaceFolder}/controller/*.c", 
+    
+                "-o",
+                "${workspaceFolder}/oraculo.exe", 
+    
+                "-O1",
+                "-Wall",
+                "-std=c99",
+                "-Wno-missing-braces",
+                "-I",
+                "C:/raylib/raylib/src",
+                "-I",
+                "${workspaceFolder}/include", 
+                "-L",
+                "C:/raylib/raylib/src",
+                "-lraylib",
+                "-lopengl32",
+                "-lgdi32",
+                "-lwinmm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+              {
+                "owner": "cpp",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                  "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$"
+                }
+              }
+            ]
+        }
+    ]
+}
