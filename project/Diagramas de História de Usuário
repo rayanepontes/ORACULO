@@ -4,20 +4,20 @@ Cada História de Usuário possui um diagrama de atividades próprio. Os arquivo
 
 | HU | História | Fonte | Imagem |
 |---|---|---|---|
-| HU01 | Iniciar Partida | [PlantUML](diagramas/HU01_Iniciar_Partida.puml) | `diagramas/HU01_Iniciar_Partida.png` |
-| HU02 | Informar Nome | [PlantUML](diagramas/HU02_Informar_Nome.puml) | `diagramas/HU02_Informar_Nome.png` |
-| HU03 | Ver Instrucoes | [PlantUML](diagramas/HU03_Ver_Instrucoes.puml) | `diagramas/HU03_Ver_Instrucoes.png` |
-| HU04 | Acompanhar Tempo | [PlantUML](diagramas/HU04_Acompanhar_Tempo.puml) | `diagramas/HU04_Acompanhar_Tempo.png` |
-| HU05 | Receber Pistas | [PlantUML](diagramas/HU05_Receber_Pistas.puml) | `diagramas/HU05_Receber_Pistas.png` |
-| HU06 | Consultar Manual | [PlantUML](diagramas/HU06_Consultar_Manual.puml) | `diagramas/HU06_Consultar_Manual.png` |
-| HU07 | Resolver Logica | [PlantUML](diagramas/HU07_Resolver_Logica.puml) | `diagramas/HU07_Resolver_Logica.png` |
-| HU08 | Aprender Conceito IA | [PlantUML](diagramas/HU08_Aprender_Conceito_IA.puml) | `diagramas/HU08_Aprender_Conceito_IA.png` |
-| HU09 | Enviar Resposta | [PlantUML](diagramas/HU09_Enviar_Resposta.puml) | `diagramas/HU09_Enviar_Resposta.png` |
-| HU10 | Receber Feedback | [PlantUML](diagramas/HU10_Receber_Feedback.puml) | `diagramas/HU10_Receber_Feedback.png` |
-| HU11 | Variacao Partidas | [PlantUML](diagramas/HU11_Variacao_Partidas.puml) | `diagramas/HU11_Variacao_Partidas.png` |
-| HU12 | Visualizar Pontuacao | [PlantUML](diagramas/HU12_Visualizar_Pontuacao.puml) | `diagramas/HU12_Visualizar_Pontuacao.png` |
-| HU13 | Resultado Final | [PlantUML](diagramas/HU13_Resultado_Final.puml) | `diagramas/HU13_Resultado_Final.png` |
-| HU14 | Consultar Ranking | [PlantUML](diagramas/HU14_Consultar_Ranking.puml) | `diagramas/HU14_Consultar_Ranking.png` |
-| HU15 | Jogar Novamente | [PlantUML](diagramas/HU15_Jogar_Novamente.puml) | `diagramas/HU15_Jogar_Novamente.png` |
+| HU01 | Iniciar Partida | [PlantUML](diagramas/HU01_Iniciar_Partida.puml) | `diagramas/HU01_Iniciar_Partida.jpeg` |
+| HU02 | Informar Nome | [PlantUML](diagramas/HU02_Informar_Nome.puml) | `diagramas/HU02_Informar_Nome.jpeg` |
+| HU03 | Ver Instrucoes | [PlantUML](diagramas/HU03_Ver_Instrucoes.puml) | `diagramas/HU03_Ver_Instrucoes.jpeg` |
+| HU04 | Acompanhar Tempo | [PlantUML](diagramas/HU04_Acompanhar_Tempo.puml) | `diagramas/HU04_Acompanhar_Tempo.jpeg` |
+| HU05 | Receber Pistas | [PlantUML](diagramas/HU05_Receber_Pistas.puml) | `diagramas/HU05_Receber_Pistas.jpeg` |
+| HU06 | Consultar Manual | [PlantUML](diagramas/HU06_Consultar_Manual.puml) | `diagramas/HU06_Consultar_Manual.jpeg` |
+| HU07 | Resolver Logica | [PlantUML](diagramas/HU07_Resolver_Logica.puml) | `diagramas/HU07_Resolver_Logica.jpeg` |
+| HU08 | Aprender Conceito IA | [PlantUML](diagramas/HU08_Aprender_Conceito_IA.puml) | `diagramas/HU08_Aprender_Conceito_IA.jpeg` |
+| HU09 | Enviar Resposta | [PlantUML](diagramas/HU09_Enviar_Resposta.puml) | `diagramas/HU09_Enviar_Resposta.jpeg` |
+| HU10 | Receber Feedback | [PlantUML](diagramas/HU10_Receber_Feedback.puml) | `diagramas/HU10_Receber_Feedback.jpeg` |
+| HU11 | Variacao Partidas | [PlantUML](diagramas/HU11_Variacao_Partidas.puml) | `diagramas/HU11_Variacao_Partidas.jpeg` |
+| HU12 | Visualizar Pontuacao | [PlantUML](diagramas/HU12_Visualizar_Pontuacao.puml) | `diagramas/HU12_Visualizar_Pontuacao.jpeg` |
+| HU13 | Resultado Final | [PlantUML](diagramas/HU13_Resultado_Final.puml) | `diagramas/HU13_Resultado_Final.jpeg` |
+| HU14 | Consultar Ranking | [PlantUML](diagramas/HU14_Consultar_Ranking.puml) | `diagramas/HU14_Consultar_Ranking.jpeg` |
+| HU15 | Jogar Novamente | [PlantUML](diagramas/HU15_Jogar_Novamente.puml) | `diagramas/HU15_Jogar_Novamente.jpeg` |
 
 > Rastreabilidade: anexar o PNG de cada diagrama ao card da HU correspondente no Board.
