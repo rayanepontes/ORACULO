@@ -17,6 +17,7 @@ void AnimationUpdate(Animation *self){
                 
                 case ONESHOT:
                     self->frame_atual_idx = self->last_idx;
+                    break;
 
                 default:
                     break;
@@ -30,6 +31,7 @@ void AnimationUpdate(Animation *self){
                 
                 case ONESHOT:
                     self->frame_atual_idx = self->first_idx;
+                    break;
 
                 default:
                     break;
