@@ -4,10 +4,12 @@
         {
             "label": "Compilar Raylib",
             "type": "shell",
-            "command": "gcc",
+            "command": "C:/raylib/w64devkit/bin/gcc.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
+                
+                "${workspaceFolder}/src/graphics/*.c",
                 "${workspaceFolder}/src/*.c",
                 "${workspaceFolder}/controller/*.c", 
     
@@ -18,12 +20,16 @@
                 "-Wall",
                 "-std=c99",
                 "-Wno-missing-braces",
+
                 "-I",
                 "C:/raylib/raylib/src",
+
                 "-I",
                 "${workspaceFolder}/include", 
+
                 "-L",
                 "C:/raylib/raylib/src",
+
                 "-lraylib",
                 "-lopengl32",
                 "-lgdi32",
