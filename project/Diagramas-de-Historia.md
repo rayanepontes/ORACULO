@@ -19,9 +19,3 @@ Cada História de Usuário possui um diagrama de atividades próprio. Os arquivo
 | HU13 | Resultado Final | (diagramas/HU13_Resultado_Final.puml) | ![HU13](./pngs/diagramas/HU13_Resultado_Final.jpg) |
 | HU14 | Consultar Ranking |(diagramas/HU14_Consultar_Ranking.puml) | ![HU14](./pngs/diagramas/HU14_Consultar_Ranking.jpg) |
 | HU15 | Jogar Novamente | (diagramas/HU15_Jogar_Novamente.puml) | ![HU15](./pngs/diagramas/HU15_Jogar_Novamente.jpg) |
-
-<<<<<<< HEAD
-=======
-> **Rastreabilidade:** cada diagrama deve ser associado ao card da respectiva HU no Board.
-
->>>>>>> 5f06265cb744fba10e87a67a84914f2886149dbd
