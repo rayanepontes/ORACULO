@@ -58,6 +58,11 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 
 ---
 
+# Sketches e Storybords
+![Sketches](./project/pngs/sketchs.jpeg)
+![Storyboards](./project/pngs/storybords.jpeg)
+
+
 # Minigames
 
 ## 1. O Triador de Treinamento
@@ -458,12 +463,6 @@ O jogador termina a investigação entendendo que sistemas de Inteligência Arti
 ```
 
 ---
-## Imagens do Board do Jira e do Trello
-
-# <img src="./assets/board%20projeto%20trello.png">
-
-![Board de Módulos](./assets/board_jira.jpeg)
-
 ## Projeto Integrador
 
 O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, combinando técnicas avançadas de programação estruturada (**C**), programação funcional (**Haskell**) e **IA Generativa**, com uma proposta narrativa voltada para o letramento e pensamento crítico em Inteligência Artificial.
