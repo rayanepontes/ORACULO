@@ -21,7 +21,7 @@ typedef enum AnimationType {
 } AnimationType;
 
 
-/** @struct Animation
+/** @struct AnimationBody
  * 
  * @brief Estrutura que armazena o estado de uma animação 2D.
  * 
@@ -34,8 +34,11 @@ typedef enum AnimationType {
  * @param step Distância que saltamos ao passar para o próximo quadro.
  * @param speed Velocidade da animação do quadro.
  * @param duration_left Duração restante para mudar para o próximo quadro.
+ * @param frames_por_linha Quantidade de quadros em cada linha do spritesheet.
+ * @param spr_dimension Dimensão de cada quadro individual em pixels (ex: 16.0f).
+ * @param type Tipo de animação (repeating ou oneshot).
  */
-typedef struct Animation{
+typedef struct AnimationBody{
     int first_idx; //Indice do primeiro quadro.
     int last_idx; //Indice do último quadro.
     int frame_atual_idx; //Indice do quadro atual.
@@ -44,8 +47,11 @@ typedef struct Animation{
     float speed; //Velocidade da animação do quadro.
     float duration_left; //Duração restante para mudar para o próximo quadro.
 
+    int frames_por_linha;  //Quantidade de quadros em cada linha do spritesheet.
+    float spr_dimension;    //Dimensão de cada quadro individual em pixels (ex: 16.0f).
+
     AnimationType type; //Tipo de animação (repeating ou oneshot).
-} Animation;
+} AnimationBody;
 
 
 /** @brief Atualiza a animação quando dentro de um loop.
@@ -56,7 +62,7 @@ typedef struct Animation{
  * 
  * @param self Ponteiro para uma estrutura de animação.
  */
-void AnimationUpdate(Animation *self);
+void AnimationUpdate(AnimationBody *self);
 
 
 /** @brief Calcula o retângulo de corte para o quadro atual da animação.
@@ -65,11 +71,9 @@ void AnimationUpdate(Animation *self);
  * dentro da imagem do spritesheet.
  * 
  * @param self Ponteiro para uma estrutura de animação.
- * @param num_frames_por_linha Quantidade de quadros em cada linha do spritesheet.
- * @param spr_dimension Dimensão de cada quadro individual em pixels (ex: 16.0f).
  * 
  * @return Rectangle Estrutura da Raylib contendo a região a ser desenhada.
  */
-Rectangle AnimationFrame(Animation *self, int num_frames_por_linha, float spr_dimension); 
+Rectangle AnimationFrame(AnimationBody *self); 
 
 #endif
