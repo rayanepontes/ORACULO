@@ -14,7 +14,7 @@ void mostrar_instrucoes(void)
 	getchar();
 }
 
-int main(void)
+int menu(void)
 {
 
 	int opcao = 0;

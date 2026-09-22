@@ -1,26 +1,34 @@
-#include "raylib.h"
+#include <raylib.h>
+#include "graphics/Animation.h"
+#include "entities/player.h"
 
-void iniciar_tela()
+int main(void)
 {
-   
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int SCREEN_WIDTH = 900;
+    const int SCREEN_HEIGHT = 450;
 
-    InitWindow(screenWidth, screenHeight, "Oráculo - o jogo");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Oráculo");
+        SetTargetFPS(60);
 
-    SetTargetFPS(60);
+        PlayerBody player;
+        PlayerInit(&player);
 
-    while (!WindowShouldClose())
-    {   
-        BeginDrawing();
+        while (!WindowShouldClose())
+        {   
+            // teste: pressionar R reseta o player como se fosse nova partida
+            if (IsKeyDown(KEY_R)) PLayerReset(&player);
 
-            ClearBackground(BLACK);
+            PlayerUpdateAction(&player);
 
-            DrawText("Testando aqui se to escrevendo mesmo\nColoquei verde pra me sentir um hacker", 190, 200, 20, GREEN);
+            BeginDrawing();
 
-        EndDrawing();
-    }   
-    
+                ClearBackground(ORANGE);
+                PlayerDraw(&player);
 
+            EndDrawing();
+        }   
+
+        PlayerUnload(&player);
     CloseWindow();
+    return 0;
 }

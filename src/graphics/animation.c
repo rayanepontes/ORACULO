@@ -1,6 +1,6 @@
 #include "graphics/animation.h"
 
-void AnimationUpdate(Animation *self){
+void AnimationUpdate(AnimationBody *self){
     float delta_time = GetFrameTime(); // Tempo em segundos que o último quadro demorou pra renderizar.
     self->duration_left -= delta_time; 
 
@@ -40,9 +40,9 @@ void AnimationUpdate(Animation *self){
     }
 }
 
-Rectangle AnimationFrame(Animation *self, int num_frames_por_linha, float spr_dimension){
-    int x = (self->frame_atual_idx % num_frames_por_linha) * spr_dimension; //Cálculo da coluna (eixo x)
-    int y = (self->frame_atual_idx / num_frames_por_linha) * spr_dimension; //Cálculo da linha (eixo y)
+Rectangle AnimationFrame(AnimationBody *self){
+    int x = (self->frame_atual_idx % self->frames_por_linha) * self->spr_dimension; //Cálculo da coluna (eixo x)
+    int y = (self->frame_atual_idx / self->frames_por_linha) * self->spr_dimension; //Cálculo da linha (eixo y)
 
-    return (Rectangle){.x = (float)x, .y = (float)y, .width = spr_dimension, .height = spr_dimension};
+    return (Rectangle){.x = (float)x, .y = (float)y, .width = self->spr_dimension, .height = self->spr_dimension};
 }
