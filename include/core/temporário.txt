@@ -1,2 +1,2 @@
 Quando não se tem arquivo na pastas as pastas que estão dentro dela ficam de um jeito esquisito, então
-até que toda subpasta dessa pasta não tenha um arquivo dentro, mantenha esse txt aqui.
+até que toda subpasta dessa pasta não tenha um arquivo dentro, mantenha esse txt aqui (e o .gitkeep também).
