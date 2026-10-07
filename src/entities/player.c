@@ -1,47 +1,57 @@
 #include <raylib.h>
 #include "entities/player.h"
+#include "core/app-state.h"
 
 //----------- Funções internas (não expostas no .h) - Essas são de uso exclusivo desse arquivo .c
 
 //Inicializa as animações carregando as texturas e montando os corpos dos tipos de animações do player.
 static void InitAnimations(PlayerBody *self){
-    self->textures[idle] = LoadTexture("assets/texture/sprites_teste/tiny_heroes_spr/3 Dude_Monster/Dude_Monster_Idle_4.png");
+    self->textures[idle] = LoadTexture("assets/texture/sprites_teste/tiny_heroes_spr/3 Dude_Monster/Personagem_Principal_Idle.png");
     self->anims[idle] = (AnimationBody){
-            .first_idx = 0,
-            .last_idx = 3,
-            .frame_atual_idx = 0,
-            .step = 1,
-            .speed = 0.1,
-            .duration_left = 0.1,
-            .frames_por_linha = 4,
-            .spr_dimension = 32.0,
-            .type = REPEATING
+        .num_frames = 4,
+        .first_idx = 0,
+        .last_idx = 3,
+        .frame_atual_idx = 0,
+        .step = 1,
+        .speed = 0.5,
+        .duration_left = 0.5,
+        .frames_por_linha = 4,
+        .frame_width = 175.02f,
+        .frame_height = 257.0f,
+        .margin_left = 8.0f,
+        .type = REPEATING
         };
 
     self->textures[walk] = LoadTexture("assets/texture/sprites_teste/tiny_heroes_spr/3 Dude_Monster/Dude_Monster_Walk_6.png");
     self->anims[walk] = (AnimationBody){
-            .first_idx = 0,
-            .last_idx = 5,
-            .frame_atual_idx = 0,
-            .step = 1,
-            .speed = 0.1,
-            .duration_left = 0.1,
-            .frames_por_linha = 5,
-            .spr_dimension = 32.0,
-            .type = REPEATING
+        .num_frames = 5,
+        .first_idx = 0,
+        .last_idx = 5,
+        .frame_atual_idx = 0,
+        .step = 1,
+        .speed = 0.1,
+        .duration_left = 0.1,
+        .frames_por_linha = 5,
+        .frame_width = 32.0,
+        .frame_height = 32.0,
+        .margin_left = 0.0,
+        .type = REPEATING
         };
 
     self->textures[run] = LoadTexture("assets/texture/sprites_teste/tiny_heroes_spr/3 Dude_Monster/Dude_Monster_Run_6.png");
     self->anims[run] = (AnimationBody){
-            .first_idx = 0,
-            .last_idx = 5,
-            .frame_atual_idx = 0,
-            .step = 1,
-            .speed = 0.1,
-            .duration_left = 0.1,
-            .frames_por_linha = 5,
-            .spr_dimension = 32.0,            
-            .type = REPEATING
+        .num_frames = 5,
+        .first_idx = 0,
+        .last_idx = 5,
+        .frame_atual_idx = 0,
+        .step = 1,
+        .speed = 0.1,
+        .duration_left = 0.1,
+        .frames_por_linha = 5,
+        .frame_width = 32.0,
+        .frame_height = 32.0,
+        .margin_left = 0.0,
+        .type = REPEATING
         };
 }
 
@@ -144,7 +154,9 @@ void PlayerUpdateAction(PlayerBody *self){
 void PlayerDraw(PlayerBody *self){
 
     AnimationBody *anim = &self->anims[self->action_atual];
-    Texture2D texture =  self->textures[self->action_atual];
+    
+    unsigned int frame_atual_idx = g_frame % anim->num_frames;
+    Texture2D texture =  self->textures[frame_atual_idx];
 
     Rectangle frame = AnimationFrame(anim);
     frame.width *= self->direction;
@@ -152,7 +164,7 @@ void PlayerDraw(PlayerBody *self){
     DrawTexturePro(
         texture,
         frame,
-        (Rectangle){ self->position.x, self->position.y, 128.0f, 128.0f },
+        (Rectangle){ self->position.x, self->position.y, 88.0f, 129.0f },
         (Vector2)  { 0.0f, 0.0f },
         0.0f,
         WHITE

@@ -12,6 +12,7 @@
                 "${workspaceFolder}/src/entities/*.c",
                 "${workspaceFolder}/src/graphics/*.c",
                 "${workspaceFolder}/src/*.c",
+                "${workspaceFolder}/src/core/*.c",
                 "${workspaceFolder}/controller/*.c", 
     
                 "-o",

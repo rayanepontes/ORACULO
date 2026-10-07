@@ -1,6 +1,7 @@
 #include <raylib.h>
-#include "graphics/Animation.h"
+#include "graphics/animation.h"
 #include "entities/player.h"
+#include "core/app-state.h"
 
 int main(void)
 {
@@ -13,6 +14,7 @@ int main(void)
         PlayerBody player;
         PlayerInit(&player);
 
+        g_frame = 0u;
         while (!WindowShouldClose())
         {   
             // teste: pressionar R reseta o player como se fosse nova partida
@@ -26,6 +28,8 @@ int main(void)
                 PlayerDraw(&player);
 
             EndDrawing();
+
+            ++g_frame;
         }   
 
         PlayerUnload(&player);
