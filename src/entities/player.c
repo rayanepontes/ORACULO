@@ -1,6 +1,8 @@
 #include <raylib.h>
 #include "entities/player.h"
 #include "core/app-state.h"
+#include <math.h>
+#include <stdio.h>
 
 //----------- Funções internas (não expostas no .h) - Essas são de uso exclusivo desse arquivo .c
 
@@ -13,10 +15,10 @@ static void InitAnimations(PlayerBody *self){
         .last_idx = 3,
         .frame_atual_idx = 0,
         .step = 1,
-        .speed = 0.5,
+        .speed = 10,
         .duration_left = 0.5,
         .frames_por_linha = 4,
-        .frame_width = 175.02f,
+        .frame_width = 175.0f,
         .frame_height = 257.0f,
         .margin_left = 8.0f,
         .type = REPEATING
@@ -151,15 +153,32 @@ void PlayerUpdateAction(PlayerBody *self){
     AnimationUpdate(&self->anims[self->action_atual]);
 }
 
+void GetAnimRect(const AnimationBody* anim, Rectangle* outRect)
+{
+    float t = (g_frame * anim->speed) / 60;
+    t = roundf(fmodf(t, anim->num_frames));
+
+    float frameIdx = (unsigned int)fmodf(roundf(t), (float)anim->num_frames) * anim->frame_width;
+    //outRect->x = frameIdx * anim->frame_width;
+    outRect->x = t * anim->frame_width;
+    outRect->y = 0;
+    outRect->width = anim->frame_width;
+    outRect->height = anim->frame_height;
+    
+    printf("FrameIDX: %f", frameIdx);
+}
+
 void PlayerDraw(PlayerBody *self){
 
     AnimationBody *anim = &self->anims[self->action_atual];
     
-    unsigned int frame_atual_idx = g_frame % anim->num_frames;
-    Texture2D texture =  self->textures[frame_atual_idx];
+    Texture2D texture =  self->textures[self->action_atual];
 
-    Rectangle frame = AnimationFrame(anim);
+    /*Rectangle frame = AnimationFrame(anim);
     frame.width *= self->direction;
+     */
+    Rectangle frame;
+    GetAnimRect(anim, &frame);
 
     DrawTexturePro(
         texture,

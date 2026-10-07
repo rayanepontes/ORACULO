@@ -29,6 +29,9 @@ file(GLOB_RECURSE SOURCES
 # Setup do Executavel
 add_executable(Oraculo ${SOURCES})
 
+set_target_properties(Oraculo PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+)
 # Diretórios de headers
 target_include_directories(Oraculo PUBLIC
     "${CMAKE_SOURCE_DIR}/include"
@@ -42,4 +45,14 @@ if (APPLE)
     target_link_libraries(Oraculo "-framework Cocoa")
     target_link_libraries(Oraculo "-framework OpenGL")
     target_link_libraries(Oraculo "-framework QuartzCore")
+    set_target_properties(Oraculo PROPERTIES
+      XCODE_SCHEME_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    )
 endif()
+
+# Copia os Assets para o build
+add_custom_command(TARGET Oraculo POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/assets"
+        "$<TARGET_FILE_DIR:Oraculo>/assets"
+)
