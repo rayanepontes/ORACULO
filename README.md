@@ -7,55 +7,55 @@
 O jogador assume o papel de uma estagiária no **NEXUS Labs** que precisa descobrir o que aconteceu dentro de um laboratório de pesquisa em IA. A principal ferramenta disponível para a investigação é o próprio sistema **ORÁCULO** — mas o jogador precisará aprender que **a alta pontuação de confiança de uma IA não garante a veracidade do fato**.
 
 ---
+## Compilando o Projeto
 
-## Building the Project
+Antes de compilar este projeto, certifique-se de que o **CMake** esteja instalado e disponível no seu ambiente de desenvolvimento.
 
-Before building this project, make sure that **CMake** is installed and available in your environment.
+Você pode baixar o CMake pelo site oficial:
 
-You can download CMake from the official website:
+[CMake](https://cmake.org/)
 
-[CMake](https://cmake.org/?utm_source=chatgpt.com)
+### 1. Abra a interface gráfica do CMake
 
-### 1. Open CMake GUI
-
-Run the following command:
+Execute o seguinte comando:
 
 ```bash
 cmake-gui
 ```
 
-In CMake GUI, set the following directories:
+Na interface gráfica do CMake, configure os seguintes diretórios:
 
-* **Source directory:** the root directory of this project
-* **Build directory:** the directory where the generated build files will be stored
+* **Diretório de origem (Source directory):** diretório raiz deste projeto.
+* **Diretório de compilação (Build directory):** diretório onde os arquivos gerados durante o processo de compilação serão armazenados.
 
-![CMake Setup](project/cmake_0.png)
+![Configuração do CMake](project/cmake_0.png)
 
-### 2. Configure the Project
+### 2. Configure o projeto
 
-Click **Configure** to configure the project.
+Clique em **Configure** para configurar o projeto.
 
-CMake will ask you to select a generator/toolchain. Choose the one appropriate for your platform:
+O CMake solicitará que você selecione um gerador (generator) ou uma ferramenta de compilação (toolchain). Escolha a opção adequada ao seu sistema operacional:
 
 * **macOS:** Xcode
 * **Linux:** Unix Makefiles
-* **Windows:** Visual Studio or Ninja
+* **Windows:** Visual Studio ou Ninja
 
-  * If you choose Ninja, make sure it is installed and available in your `PATH`.
+  * Caso escolha o Ninja, certifique-se de que ele esteja instalado e disponível na variável de ambiente `PATH`.
 
-### 3. Generate the Build Files
+### 3. Gere os arquivos de compilação
 
-Once configuration is complete, click **Generate** to generate the build files for your selected toolchain.
+Após concluir a configuração, clique em **Generate** para gerar os arquivos de compilação correspondentes à ferramenta selecionada.
 
-You can then open the generated project using your selected IDE/toolchain and build it normally.
+Em seguida, você poderá abrir o projeto gerado na IDE ou ferramenta de desenvolvimento escolhida e compilá-lo normalmente.
 
-Alternatively, you can build the project directly from the command line:
+Como alternativa, também é possível compilar o projeto diretamente pelo terminal:
 
 ```bash
 cmake --build <build_path>
 ```
 
-Replace `<build_path>` with the path to your configured build directory.
+Substitua `<build_path>` pelo caminho do diretório de compilação configurado anteriormente.
+
 
 
 ## Sobre o Jogo
