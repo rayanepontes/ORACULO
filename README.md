@@ -9,7 +9,6 @@ O jogador assume o papel de uma estagiária do **NEXUS Labs**, um laboratório d
 O principal desafio não é simplesmente encontrar a resposta certa, mas **aprender a questionar as decisões de um sistema automatizado**.
 
 ---
-
 ## Sobre o Jogo
 
 Você é uma estagiária recém-contratada pelo **NEXUS Labs**, instituto responsável pelo desenvolvimento do **ORÁCULO**, um sistema de Inteligência Artificial utilizado para análise de dados, segurança e tomada de decisões automatizadas.
@@ -505,4 +504,10 @@ Projeto desenvolvido por:
 * **[Anamel Thaís Ferreira Lima]**
 * **[Maria Giovanna Oliveira Carvalho - mgoc@cesar.school]**
 
+## Contribuiçāo
+```
+Mirella Albuquerque e Anamel - Documentação 
+Luan Marcos, Luann Flôr, Everton Luan - Codificando 
+Rayane Pontes, Maria Giovanna e Marina Mendes - Design
+```
 ---
