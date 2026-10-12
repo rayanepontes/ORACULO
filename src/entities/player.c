@@ -24,19 +24,19 @@ static void InitAnimations(PlayerBody *self){
         .type = REPEATING
         };
 
-    self->textures[walk] = LoadTexture("assets/texture/sprites_teste/tiny_heroes_spr/3 Dude_Monster/Dude_Monster_Walk_6.png");
+    self->textures[walk] = LoadTexture("assets/texture/sprites_teste/tiny_heroes_spr/3 Dude_Monster/Personagem_Principal_Walk_5.png");
     self->anims[walk] = (AnimationBody){
         .num_frames = 5,
         .first_idx = 0,
-        .last_idx = 5,
+        .last_idx = 4,
         .frame_atual_idx = 0,
         .step = 1,
-        .speed = 0.1,
+        .speed = 8,
         .duration_left = 0.1,
-        .frames_por_linha = 5,
-        .frame_width = 32.0,
-        .frame_height = 32.0,
-        .margin_left = 0.0,
+        .frames_por_linha = 8,
+        .frame_width = 175.0,
+        .frame_height = 257.0,
+        .margin_left = 0,
         .type = REPEATING
         };
 

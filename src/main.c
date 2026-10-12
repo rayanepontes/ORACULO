@@ -9,6 +9,7 @@ int main(void)
     const int SCREEN_HEIGHT = 450;
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Oráculo");
+    ToggleFullscreen();
         SetTargetFPS(60);
 
         PlayerBody player;
