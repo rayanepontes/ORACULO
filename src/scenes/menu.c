@@ -10,7 +10,7 @@
 static void InitBackgrounds(MenuBody *self) {
     self->backgrounds[TELA_PRINCIPAL] = LoadTexture("assets/texture/menu/tela_principal.png");
     self->backgrounds[TELA_NOME]      = LoadTexture("assets/texture/menu/tela_principal.png");
-    self->backgrounds[TELA_RANKING]   = LoadTexture("assets/texture/menu/frame 3.png");
+    self->backgrounds[TELA_RANKING]   = LoadTexture("assets/texture/menu/tela_vazia.png");
     self->caixa_nome = LoadTexture("assets/texture/menu/Rectangle 122.png");
     self->nickname_input[0] = '\0';
     self->nickname_len = 0;
@@ -41,6 +41,8 @@ void MenuUpdate(MenuBody *self) {
                 if (self->opcao_atual == MENU_OPC_RANKING){
                     self->tela_atual = TELA_RANKING;
                 }else {
+                    self->nickname_input[0] = '\0';
+                    self->nickname_len = 0;
                     self->tela_atual = TELA_NOME;
                 }
             }
@@ -197,22 +199,76 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             break;
         }
         case TELA_RANKING: {
-            Vector2 position = {
-                (scream_width / 2.0f) - 150.0f,
-                scream_height / 2.0f
+            // --- título ---
+            const char *titulo = "RANKING";
+            float titulo_size  = 72.0f;                                        // tamanho do título
+            Vector2 titulo_dim = MeasureTextEx(resources->fonte_principal, titulo, titulo_size, 1);
+            Vector2 titulo_pos = {
+                (scream_width / 2.0f) - (titulo_dim.x / 2.0f),                // centralizado
+                scream_height * 0.22f                                           // posição vertical do título
             };
-            DrawTextEx(resources->fonte_principal, "RANKING EM BREVE", position, 60.0f, 1, WHITE);
+            DrawTextEx(resources->fonte_principal, titulo, titulo_pos, titulo_size, 1, resources->amarelo);
 
-            Vector2 position_voltar = {
-                (scream_width / 2.0f) - 180.0f,
-                scream_height * 0.75f                                      // 75% da altura da tela
+            // --- lista de entradas ---
+            float entry_size    = 50.0f;                                       // tamanho da fonte de cada linha
+            float entry_start_y = scream_height * 0.35f;                       // y da primeira entrada
+            float entry_spacing = 40.0f;                                       // espaço vertical entre entradas
+
+            // --- colunas (ajuste os valores x para centralizar no computador) ---
+            float col_rank_x  = scream_width * 0.32f;   // coluna: número da posição
+            float col_nome_x  = scream_width * 0.47f;   // coluna: nickname
+            float col_pont_x  = scream_width * 0.65f;   // coluna: pontuação
+
+            // --- cabeçalho ---
+            float header_y    = entry_start_y - 48.0f;  // logo acima da primeira entrada
+            float header_size = 36.0f;                  // tamanho da fonte do cabeçalho
+            DrawTextEx(resources->fonte_principal, "RANK", (Vector2){ col_rank_x, header_y }, header_size, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, "NAME", (Vector2){ col_nome_x, header_y }, header_size, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, "SCORE",(Vector2){ col_pont_x, header_y }, header_size, 1, resources->lilas_hint);
+
+
+            if (resources->ranking_count == 0) {
+                const char *vazio = "Nenhuma partida registrada ainda.";
+                Vector2 vazio_dim = MeasureTextEx(resources->fonte_principal, vazio, 40.0f, 1);
+                Vector2 vazio_pos = {
+                    (scream_width / 2.0f) - (vazio_dim.x / 2.0f),
+                    scream_height * 0.45f
+                };
+                DrawTextEx(resources->fonte_principal, vazio, vazio_pos, 40.0f, 1, resources->lilas_hint);
+            } else {
+                // --- lista de entradas ---
+                for (int i = 0; i < resources->ranking_count; i++) {
+                    float y   = entry_start_y + i * entry_spacing;
+                    Color cor = (i == 0) ? resources->amarelo : resources->branco;
+
+                    DrawTextEx(resources->fonte_principal,
+                        TextFormat("%d.", i + 1),
+                        (Vector2){ col_rank_x, y }, entry_size, 1, cor);
+
+                    DrawTextEx(resources->fonte_principal,
+                        resources->ranking[i].nickname,
+                        (Vector2){ col_nome_x, y }, entry_size, 1, cor);
+
+                    DrawTextEx(resources->fonte_principal,
+                        TextFormat("%d", resources->ranking[i].score),
+                        (Vector2){ col_pont_x, y }, entry_size, 1, cor);
+                }
+            }
+
+            // --- instrução no rodapé ---
+            const char *hint = "ENTER / ESC - voltar";
+            Vector2 hint_dim = MeasureTextEx(resources->fonte_principal, hint, 32.0f, 1);
+            Vector2 hint_pos = {
+                (scream_width / 2.0f) - (hint_dim.x / 2.0f),                  // centralizado
+                scream_height * 0.88f                                           // próximo ao rodapé
             };
-            DrawTextEx(resources->fonte_principal, "ENTER/ESC - VOLTAR", position_voltar, 40.0f, 1, GRAY);
+            DrawTextEx(resources->fonte_principal, hint, hint_pos, 32.0f, 1, resources->lilas_hint);
             break;
         }
+
         default:
             break;
-    }
+    }    
 }
 
 void MenuUnload(MenuBody *self) {
