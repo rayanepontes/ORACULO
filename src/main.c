@@ -4,6 +4,8 @@
 #include "map/map.h"
 #include "core/resources.h"
 #include "scenes/menu.h"
+#include "database/database.h"
+#include <string.h>
 
 // PROVISÓRIO — entrega 12/10
 #include <stddef.h>
@@ -39,6 +41,7 @@ static const Relatorio relatorios[3] = {
 int main(void)
 {
     InitWindow(900, 450, "Oráculo");
+    SetExitKey(KEY_NULL);
     ToggleFullscreen();
     SetTargetFPS(60);
 
@@ -71,8 +74,7 @@ int main(void)
     int       selecao           = 0;           // PROVISÓRIO
     bool      perto_do_notebook = false;       // PROVISÓRIO
 
-    while (!WindowShouldClose())
-    {
+    while (!WindowShouldClose() && !menu.sair){
         // ── Update ────────────────────────────────────────────────────────────
         if (state == STATE_MENU) {
 
@@ -111,8 +113,18 @@ int main(void)
                 } else if (state == STATE_VITORIA) {
                     // PROVISÓRIO
                     if (IsKeyPressed(KEY_ENTER)) {
+                        GameData new_entry;
+                        strncpy(new_entry.nickname, menu.nickname_input, 6);
+                        new_entry.nickname[6] = '\0';
+                        new_entry.score = 100;
+
+                        if (DataInsert(resources.ranking, &resources.ranking_count, new_entry)) {
+                            DataSave(resources.ranking, resources.ranking_count);
+                        }
+
                         PLayerReset(&player);
-                        state = STATE_GAMEPLAY;
+                        menu.tela_atual = TELA_PRINCIPAL;
+                        state = STATE_MENU;
                     }
 
                 } else if (state == STATE_GAME_OVER) {

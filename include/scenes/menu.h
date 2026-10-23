@@ -20,10 +20,11 @@
  * @param TELA_TOTAL Quantidade total de telas.
  */
 typedef enum TelaMenu {
-    TELA_PRINCIPAL, /**< Tela inicial com as opções do menu. */
-    TELA_NOME,      /**< Subtela de inserção de nome do jogador. */
-    TELA_RANKING,   /**< Subtela de ranking. */
-    TELA_TOTAL      /**< Quantidade total de telas. */
+    TELA_PRINCIPAL, // Tela inicial com as opções do menu. 
+    TELA_NOME,      // Subtela de inserção de nome do jogador. 
+    TELA_RANKING,   // Subtela de ranking. 
+    TELA_CONFIRMA_SAIR,
+    TELA_TOTAL      // Quantidade total de telas. 
 } TelaMenu;
 
 /** @enum MenuOpc
@@ -34,24 +35,34 @@ typedef enum TelaMenu {
  * @param MENU_OPC_OPC  Quantidade total de opções.
  */
 typedef enum MenuOpc {
-    MENU_OPC_INICIAR, /**< Inicia uma nova partida. */
-    MENU_OPC_RANKING,     /**< Navega para a subtela de ranking. */
-    MENU_TOTAL_OPC        /**< Quantidade total de opções. */
+    MENU_OPC_INICIAR, // Inicia uma nova partida.
+    MENU_OPC_RANKING, // Navega para a subtela de ranking.
+    MENU_OPC_SAIR, // Sai do jogo.
+    MENU_TOTAL_OPC //Quantidade total de opções.
 } MenuOpc;
 
 /** @struct MenuBody
  * 
  * @brief Estado completo da cena de menu.
- * @param backgrounds[TELA_TOTAL] Uma textura de fundo por subtela.
+ * @param backgrounds Uma textura de fundo por subtela.
+ * @param caixa_nome Caixa que o player digita o nome.
  * @param tela_atual Subtela visível no momento.
  * @param opcao_atual Opção selecionada no menu principal.
  * @param confirmado True quando o jogador confirma com ENTER.
+ * @param sair True quando o jogador confirma com ENTER. 
+ * @param nickname_input Até 6 caracteres + /0.
+ * @param nickname_len Quantas letras já foram digitadas.
  */
 typedef struct MenuBody {
-    Texture2D backgrounds[TELA_TOTAL]; /**< Uma textura de fundo por subtela. */
-    TelaMenu  tela_atual;              /**< Subtela visível no momento. */
-    MenuOpc   opcao_atual;             /**< Opção selecionada no menu principal. */
-    bool      confirmado;              /**< true quando o jogador confirma com ENTER. */
+    Texture2D backgrounds[TELA_TOTAL]; // Uma textura de fundo por subtela.
+    Texture2D caixa_nome; // Caixa que o player digita o nome.
+    TelaMenu tela_atual; // Subtela visível no momento.
+    MenuOpc opcao_atual; // Opção selecionada no menu principal.
+    bool confirmado; // True quando o jogador confirma com ENTER. 
+    bool sair; // True quando o jogador confirma que quer sair do jogo.
+    char nickname_input[7]; // Até 6 caracteres + /0.
+    int nickname_len; // Quantas letras já foram digitadas.
+
 } MenuBody;
 
 /** @brief Inicializa a cena de menu carregando todas as texturas.
