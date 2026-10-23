@@ -78,7 +78,7 @@ int main(void)
         // ── Update ────────────────────────────────────────────────────────────
         if (state == STATE_MENU) {
 
-            MenuUpdate(&menu);
+            MenuUpdate(&menu, &resources);
 
             if (menu.confirmado) {
                 menu.confirmado = false; // reseta para poder voltar ao menu depois

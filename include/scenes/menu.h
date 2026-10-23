@@ -17,13 +17,14 @@
  * @param TELA_PRINCIPAL Tela inicial com as opções do menu.
  * @param TELA_NOME Tela inicial com as opções do menu.
  * @param TELA_RANKING Subtela de inserção de nome do jogador.
+ * @param TELA_CONFIRMA_SAIR Tela que o player afirma de deseja sair do jogo.
  * @param TELA_TOTAL Quantidade total de telas.
  */
 typedef enum TelaMenu {
     TELA_PRINCIPAL, // Tela inicial com as opções do menu. 
     TELA_NOME,      // Subtela de inserção de nome do jogador. 
     TELA_RANKING,   // Subtela de ranking. 
-    TELA_CONFIRMA_SAIR,
+    TELA_CONFIRMA_SAIR, // Tela que o player afirma de deseja sair do jogo.
     TELA_TOTAL      // Quantidade total de telas. 
 } TelaMenu;
 
@@ -52,6 +53,7 @@ typedef enum MenuOpc {
  * @param sair True quando o jogador confirma com ENTER. 
  * @param nickname_input Até 6 caracteres + /0.
  * @param nickname_len Quantas letras já foram digitadas.
+ * @param nome_repetido Flag para nomes repetidos.
  */
 typedef struct MenuBody {
     Texture2D backgrounds[TELA_TOTAL]; // Uma textura de fundo por subtela.
@@ -62,6 +64,7 @@ typedef struct MenuBody {
     bool sair; // True quando o jogador confirma que quer sair do jogo.
     char nickname_input[7]; // Até 6 caracteres + /0.
     int nickname_len; // Quantas letras já foram digitadas.
+    bool nome_repetido; // Flag para nomes repetidos.
 
 } MenuBody;
 
@@ -72,8 +75,9 @@ void MenuInit(MenuBody *self);
 
 /** @brief Processa o input e atualiza o estado do menu.
  * @param self Ponteiro para o MenuBody ativo.
+ * @param resources Ponteiro para os recursos globais (fonte, etc).
  */
-void MenuUpdate(MenuBody *self);
+void MenuUpdate(MenuBody *self, const ResourcesBody *resources);
 
 /** @brief Desenha a cena de menu na tela.
  * @param self      Ponteiro para o MenuBody ativo.
