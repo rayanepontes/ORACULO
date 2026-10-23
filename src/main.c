@@ -4,6 +4,8 @@
 #include "map/map.h"
 #include "core/resources.h"
 #include "scenes/menu.h"
+#include "database/database.h"
+#include <string.h>
 
 // PROVISÓRIO — entrega 12/10
 #include <stddef.h>
@@ -111,8 +113,18 @@ int main(void)
                 } else if (state == STATE_VITORIA) {
                     // PROVISÓRIO
                     if (IsKeyPressed(KEY_ENTER)) {
+                        GameData new_entry;
+                        strncpy(new_entry.nickname, menu.nickname_input, 6);
+                        new_entry.nickname[6] = '\0';
+                        new_entry.score = 100;
+
+                        if (DataInsert(resources.ranking, &resources.ranking_count, new_entry)) {
+                            DataSave(resources.ranking, resources.ranking_count);
+                        }
+
                         PLayerReset(&player);
-                        state = STATE_GAMEPLAY;
+                        menu.tela_atual = TELA_PRINCIPAL;
+                        state = STATE_MENU;
                     }
 
                 } else if (state == STATE_GAME_OVER) {

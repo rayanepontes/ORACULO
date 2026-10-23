@@ -42,16 +42,23 @@ typedef enum MenuOpc {
 /** @struct MenuBody
  * 
  * @brief Estado completo da cena de menu.
- * @param backgrounds[TELA_TOTAL] Uma textura de fundo por subtela.
+ * @param backgrounds Uma textura de fundo por subtela.
+ * @param caixa_nome Caixa que o player digita o nome.
  * @param tela_atual Subtela visível no momento.
  * @param opcao_atual Opção selecionada no menu principal.
  * @param confirmado True quando o jogador confirma com ENTER.
+ * @param nickname_input Até 6 caracteres + /0.
+ * @param nickname_len Quantas letras já foram digitadas.
  */
 typedef struct MenuBody {
-    Texture2D backgrounds[TELA_TOTAL]; /**< Uma textura de fundo por subtela. */
-    TelaMenu  tela_atual;              /**< Subtela visível no momento. */
-    MenuOpc   opcao_atual;             /**< Opção selecionada no menu principal. */
-    bool      confirmado;              /**< true quando o jogador confirma com ENTER. */
+    Texture2D backgrounds[TELA_TOTAL]; // Uma textura de fundo por subtela.
+    Texture2D caixa_nome; // Caixa que o player digita o nome.
+    TelaMenu tela_atual; // Subtela visível no momento.
+    MenuOpc opcao_atual; // Opção selecionada no menu principal.
+    bool confirmado; // true quando o jogador confirma com ENTER. 
+    char nickname_input[7]; // Até 6 caracteres + /0.
+    int nickname_len; // Quantas letras já foram digitadas.
+
 } MenuBody;
 
 /** @brief Inicializa a cena de menu carregando todas as texturas.

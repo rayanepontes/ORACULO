@@ -13,7 +13,7 @@
  * @brief Dados de uma entrada do ranking.
  */
 typedef struct GameData {
-    char nickname[7]; // Nickname do jogador (máx 5 chars + '\0').
+    char nickname[7]; // Nickname do jogador (máx 6 chars + '\0').
     int  score;       // Pontuação obtida na partida.
 } GameData;
 

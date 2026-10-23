@@ -10,13 +10,18 @@
 #define RESOURCES_H
 
 #include <raylib.h>
-#include "include/database/database.h"
+#include "database/database.h"
 
 /** @brief Recursos globais do jogo. */
 typedef struct ResourcesBody {
     Font fonte_principal; // Fonte VT323, usada em todas as cenas.
     GameData ranking[DATABASE_MAX_ENTRIES]; // Rank dos players com melhores scores
     int ranking_count; // Quantidade de dados que tem no ranking
+    Color     amarelo;
+    Color     branco;
+    Color     lilas_escuro;
+    Color     lilas_hint;
+    Color     letra_caixa;
 }ResourcesBody;
 
 /**
