@@ -1,6 +1,8 @@
 #include <raylib.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "scenes/menu.h"
+#include "core/resources.h"
 
 // ─── Funções internas ─────────────────────────────────────────────────────────
 
@@ -15,6 +17,23 @@ static void InitBackgrounds(MenuBody *self) {
     self->caixa_nome = LoadTexture("assets/texture/menu/Rectangle 122.png");
     self->nickname_input[0] = '\0';
     self->nickname_len = 0;
+    self->nome_repetido = false;
+}
+
+static bool NomeJaExiste(const ResourcesBody *resources, const char *nome) {
+    for (int i = 0; i < resources->ranking_count; i++) {
+        const char *existente = resources->ranking[i].nickname;
+        int j = 0;
+
+        while (existente[j] != '\0' && nome[j] != '\0' &&
+               tolower((unsigned char)existente[j]) == tolower((unsigned char)nome[j])) {
+            j++;
+        }
+
+        // chegou ao fim das duas strings juntas = iguais ignorando maiúscula/minúscula
+        if (existente[j] == '\0' && nome[j] == '\0') return true;
+    }
+    return false;
 }
 
 // ─── Funções públicas ─────────────────────────────────────────────────────────
@@ -27,7 +46,7 @@ void MenuInit(MenuBody *self) {
     self->sair = false;
 }
 
-void MenuUpdate(MenuBody *self) {
+void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
     switch (self->tela_atual) {
         case TELA_PRINCIPAL:     
             if (IsKeyPressed(KEY_DOWN)) {
@@ -44,6 +63,7 @@ void MenuUpdate(MenuBody *self) {
                 }else if (self->opcao_atual == MENU_OPC_INICIAR) {
                     self->nickname_input[0] = '\0';
                     self->nickname_len = 0;
+                    self->nome_repetido = false;
                     self->tela_atual = TELA_NOME;
                 }else if (self->opcao_atual == MENU_OPC_SAIR) {
                     self->tela_atual = TELA_CONFIRMA_SAIR;  
@@ -64,11 +84,15 @@ void MenuUpdate(MenuBody *self) {
             if (IsKeyPressed(KEY_BACKSPACE) && self->nickname_len > 0) {
                 self->nickname_len--;
                 self->nickname_input[self->nickname_len] = '\0';
+                self->nome_repetido = false;
             }
 
-            // confirma com ENTER (só se digitou pelo menos 1 char)
             if (IsKeyPressed(KEY_ENTER) && self->nickname_len > 0) {
-                self->confirmado = true;
+                if (NomeJaExiste(resources, self->nickname_input)) {
+                    self->nome_repetido = true;      // não confirma
+                } else {
+                    self->confirmado = true;
+                }
                 break;
             }
 
@@ -83,6 +107,7 @@ void MenuUpdate(MenuBody *self) {
                     self->nickname_input[self->nickname_len] = (char)ch;
                     self->nickname_len++;
                     self->nickname_input[self->nickname_len] = '\0';
+                    self->nome_repetido = false;
                 }
                 ch = GetCharPressed(); // pode ter mais de uma tecla no buffer
             }
@@ -199,13 +224,23 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             }
 
             // --- instrução no rodapé ---
-            const char *hint = "ENTER - confirmar   ESC - voltar";
-            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, hint, 32.0f, 1); // tamanho do texto hint
+            const char *dica = "ENTER - confirmar   ESC - voltar";
+            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, dica, 32.0f, 1); // tamanho do texto dica
             Vector2 dica_position = {
                 (scream_width  / 2.0f) - (dica_dimension.x / 2.0f),            // centralizado na tela
                 box_y + box_h + 24.0f                                      // 24px abaixo da caixa
             };
-            DrawTextEx(resources->fonte_principal, hint, dica_position, 32.0f, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, dica, dica_position, 32.0f, 1, resources->lilas_hint);
+
+            if (self->nome_repetido) {
+                const char *erro = "Esse nome ja foi cadastrado!";
+                Vector2 erro_dim = MeasureTextEx(resources->fonte_principal, erro, 36.0f, 1);
+                Vector2 erro_pos = {
+                    (scream_width / 2.0f) - (erro_dim.x / 2.0f),
+                    label_pos.y + 60.0f
+                };
+                DrawTextEx(resources->fonte_principal, erro, erro_pos, 36.0f, 1, RED);
+            }
             break;
         }
         case TELA_RANKING: {
@@ -266,26 +301,26 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             }
 
             // --- instrução no rodapé ---
-            const char *hint = "ENTER / ESC - voltar";
-            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, hint, 32.0f, 1);
+            const char *dica = "ENTER / ESC - voltar";
+            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, dica, 32.0f, 1);
             Vector2 dica_position = {
                 (scream_width / 2.0f) - (dica_dimension.x / 2.0f),                  // centralizado
                 scream_height * 0.75f                                           // próximo ao rodapé
             };
-            DrawTextEx(resources->fonte_principal, hint, dica_position, 32.0f, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, dica, dica_position, 32.0f, 1, resources->lilas_hint);
             break;
         }
         case TELA_CONFIRMA_SAIR:
             const char *msg  = "Deseja mesmo fechar o jogo?";
-            const char *hint = "ENTER - sim   ESC - nao";
+            const char *dica = "ENTER - sim   ESC - nao";
 
             Vector2 msg_dim  = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
-            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, hint, 36.0f, 1);
+            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, dica, 36.0f, 1);
 
             DrawTextEx(resources->fonte_principal, msg,
                 (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.55f },
                 56.0f, 1, resources->branco);
-            DrawTextEx(resources->fonte_principal, hint,
+            DrawTextEx(resources->fonte_principal, dica,
                 (Vector2){ (scream_width / 2.0f) - (dica_dimension.x / 2.0f), scream_height * 0.65f },
                 36.0f, 1, resources->lilas_hint);
             break;
