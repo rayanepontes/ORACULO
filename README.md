@@ -11,7 +11,7 @@ O principal desafio não é simplesmente encontrar a resposta certa, mas **apren
 ---
 ## Board Atualizado
 
-![sprint e backlog](./project/pngs/Trello-Board.png)
+![sprint e backlog](./project/pngs/trello-board.png)
 ---
 ## Compilando o Projeto
 
