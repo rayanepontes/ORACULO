@@ -41,6 +41,7 @@ static const Relatorio relatorios[3] = {
 int main(void)
 {
     InitWindow(900, 450, "Oráculo");
+    SetExitKey(KEY_NULL);
     ToggleFullscreen();
     SetTargetFPS(60);
 
@@ -73,8 +74,7 @@ int main(void)
     int       selecao           = 0;           // PROVISÓRIO
     bool      perto_do_notebook = false;       // PROVISÓRIO
 
-    while (!WindowShouldClose())
-    {
+    while (!WindowShouldClose() && !menu.sair){
         // ── Update ────────────────────────────────────────────────────────────
         if (state == STATE_MENU) {
 

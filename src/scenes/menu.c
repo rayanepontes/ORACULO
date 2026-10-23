@@ -11,6 +11,7 @@ static void InitBackgrounds(MenuBody *self) {
     self->backgrounds[TELA_PRINCIPAL] = LoadTexture("assets/texture/menu/tela_principal.png");
     self->backgrounds[TELA_NOME]      = LoadTexture("assets/texture/menu/tela_principal.png");
     self->backgrounds[TELA_RANKING]   = LoadTexture("assets/texture/menu/tela_vazia.png");
+    self->backgrounds[TELA_CONFIRMA_SAIR] = LoadTexture("assets/texture/menu/tela_principal.png");
     self->caixa_nome = LoadTexture("assets/texture/menu/Rectangle 122.png");
     self->nickname_input[0] = '\0';
     self->nickname_len = 0;
@@ -23,12 +24,12 @@ void MenuInit(MenuBody *self) {
     self->tela_atual  = TELA_PRINCIPAL;
     self->opcao_atual = MENU_OPC_INICIAR;
     self->confirmado  = false;
+    self->sair = false;
 }
 
 void MenuUpdate(MenuBody *self) {
     switch (self->tela_atual) {
-        case TELA_PRINCIPAL:
-        
+        case TELA_PRINCIPAL:     
             if (IsKeyPressed(KEY_DOWN)) {
                 self->opcao_atual = (self->opcao_atual + 1) % MENU_TOTAL_OPC;
             }
@@ -40,18 +41,20 @@ void MenuUpdate(MenuBody *self) {
             if (IsKeyPressed(KEY_ENTER)) {
                 if (self->opcao_atual == MENU_OPC_RANKING){
                     self->tela_atual = TELA_RANKING;
-                }else {
+                }else if (self->opcao_atual == MENU_OPC_INICIAR) {
                     self->nickname_input[0] = '\0';
                     self->nickname_len = 0;
                     self->tela_atual = TELA_NOME;
+                }else if (self->opcao_atual == MENU_OPC_SAIR) {
+                    self->tela_atual = TELA_CONFIRMA_SAIR;  
                 }
             }
             break;
 
-        case TELA_NOME: {
+        case TELA_NOME: 
             if (IsKeyPressed(KEY_ESCAPE)) {
-                self->tela_atual = TELA_NOME;
                 // limpa o que foi digitado ao voltar
+                self->tela_atual = TELA_PRINCIPAL;
                 self->nickname_input[0] = '\0';
                 self->nickname_len      = 0;
                 break;
@@ -84,14 +87,21 @@ void MenuUpdate(MenuBody *self) {
                 ch = GetCharPressed(); // pode ter mais de uma tecla no buffer
             }
             break;
-        }    
+            
         case TELA_RANKING: 
-
             if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER)) {
                 self->tela_atual = TELA_PRINCIPAL;
             }
             break;
-    
+
+        case TELA_CONFIRMA_SAIR:
+            if (IsKeyPressed(KEY_ENTER)) {
+                self->sair = true;
+            } else if (IsKeyPressed(KEY_ESCAPE)) {
+                self->tela_atual = TELA_PRINCIPAL;
+            }
+            break;
+
         default:
             break;
     }
@@ -112,7 +122,7 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
     switch (self->tela_atual) {
 
         case TELA_PRINCIPAL: {
-            const char *labels[MENU_TOTAL_OPC] = { "INICIAR PARTIDA", "RANKING" };
+            const char *labels[MENU_TOTAL_OPC] = { "INICIAR PARTIDA", "RANKING", "SAIR" };
 
             for (int i = 0; i < MENU_TOTAL_OPC; i++) {
                 bool  is_select = (i == self->opcao_atual);
@@ -190,12 +200,12 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
 
             // --- instrução no rodapé ---
             const char *hint = "ENTER - confirmar   ESC - voltar";
-            Vector2 hint_dim = MeasureTextEx(resources->fonte_principal, hint, 32.0f, 1); // tamanho do texto hint
-            Vector2 hint_pos = {
-                (scream_width  / 2.0f) - (hint_dim.x / 2.0f),            // centralizado na tela
+            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, hint, 32.0f, 1); // tamanho do texto hint
+            Vector2 dica_position = {
+                (scream_width  / 2.0f) - (dica_dimension.x / 2.0f),            // centralizado na tela
                 box_y + box_h + 24.0f                                      // 24px abaixo da caixa
             };
-            DrawTextEx(resources->fonte_principal, hint, hint_pos, 32.0f, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, hint, dica_position, 32.0f, 1, resources->lilas_hint);
             break;
         }
         case TELA_RANKING: {
@@ -257,15 +267,29 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
 
             // --- instrução no rodapé ---
             const char *hint = "ENTER / ESC - voltar";
-            Vector2 hint_dim = MeasureTextEx(resources->fonte_principal, hint, 32.0f, 1);
-            Vector2 hint_pos = {
-                (scream_width / 2.0f) - (hint_dim.x / 2.0f),                  // centralizado
-                scream_height * 0.88f                                           // próximo ao rodapé
+            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, hint, 32.0f, 1);
+            Vector2 dica_position = {
+                (scream_width / 2.0f) - (dica_dimension.x / 2.0f),                  // centralizado
+                scream_height * 0.75f                                           // próximo ao rodapé
             };
-            DrawTextEx(resources->fonte_principal, hint, hint_pos, 32.0f, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, hint, dica_position, 32.0f, 1, resources->lilas_hint);
             break;
         }
+        case TELA_CONFIRMA_SAIR:
+            const char *msg  = "Deseja mesmo fechar o jogo?";
+            const char *hint = "ENTER - sim   ESC - nao";
 
+            Vector2 msg_dim  = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
+            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, hint, 36.0f, 1);
+
+            DrawTextEx(resources->fonte_principal, msg,
+                (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.55f },
+                56.0f, 1, resources->branco);
+            DrawTextEx(resources->fonte_principal, hint,
+                (Vector2){ (scream_width / 2.0f) - (dica_dimension.x / 2.0f), scream_height * 0.65f },
+                36.0f, 1, resources->lilas_hint);
+            break;
+    
         default:
             break;
     }    
