@@ -34,6 +34,8 @@ Será produzido um screencast demonstrando a execução dos testes de sistema, i
 
 Após a gravação, o vídeo será anexado ao card correspondente no Board para permitir a verificação das evidências da Sprint 01.
 
+[Oráculo (build + teste)](https://youtu.be/y1CsfokQSvo)
+
 **Board da Sprint:** (adicionar link do Board)
 
 **Repositório GitHub:** (adicionar link do repositório)
