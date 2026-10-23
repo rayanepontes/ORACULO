@@ -13,29 +13,8 @@ Os testes foram executados para validar os comportamentos esperados. Os screenca
 | TS05 | Executar Histórias Implementadas | Funcionalidades apresentam os comportamentos esperados. | Aprovado |
 | TS06 | Encerrar Jogo | Aplicação encerrada corretamente. | Aprovado |
 
-## Evidências dos Testes
-
-| ID | Evidência | Screencast |
-|---|---|---|
-| TS01–TS06 | Demonstração da compilação, inicialização e execução dos testes de sistema. | A produzir |
-
-## Procedimento de Teste
-
-1. Compilar o projeto utilizando CMake.
-2. Iniciar o executável e verificar a abertura da janela do jogo.
-3. Verificar a movimentação da personagem.
-4. Verificar a alternância entre os sprites de idle e walk.
-5. Executar as funcionalidades correspondentes às histórias implementadas na Sprint 01.
-6. Verificar o encerramento da aplicação.
-
 ## Screencast dos Testes
-
-Será produzido um screencast demonstrando a execução dos testes de sistema, incluindo a compilação do projeto, a inicialização do jogo e a verificação das funcionalidades implementadas.
-
-Após a gravação, o vídeo será anexado ao card correspondente no Board para permitir a verificação das evidências da Sprint 01.
 
 [Oráculo (build + teste)](https://youtu.be/y1CsfokQSvo)
 
-**Board da Sprint:** (adicionar link do Board)
 
-**Repositório GitHub:** (adicionar link do repositório)
