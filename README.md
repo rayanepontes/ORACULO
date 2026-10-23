@@ -8,7 +8,10 @@ O jogador assume o papel de uma estagiária do **NEXUS Labs**, um laboratório d
 
 O principal desafio não é simplesmente encontrar a resposta certa, mas **aprender a questionar as decisões de um sistema automatizado**.
 
+---
+## Board Atualizado
 
+![sprint e backlog](./project/pngs/Trello-Board.png)
 ---
 ## Compilando o Projeto
 
