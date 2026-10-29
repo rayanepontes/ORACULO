@@ -64,8 +64,9 @@ typedef struct PlayerBody{
  *          que o player possui. Em seguida dita a posição, direção e animação iniciais do player.
  * 
  * @param self Ponteiro para uma entidade player.
+ * @param posicao_inicial Posição inicial do player no jogo.
  */
-void PlayerInit(PlayerBody *self);
+void PlayerInit(PlayerBody *self, Vector2 posicao_inicial);
 
 /** @brief Reseta o estado do player.
  * 
@@ -74,8 +75,9 @@ void PlayerInit(PlayerBody *self);
  *          posição, direção e animação do player para o estado incial.
  * 
  * @param self Ponteiro para uma entidade player.
+ * @param posicao_inicial Posição inicial do player no jogo.
  */
-void PLayerReset(PlayerBody *self);
+void PLayerReset(PlayerBody *self, Vector2 posicao_inicial);
 
 /** @brief Atualiza as ações do player.
  * 

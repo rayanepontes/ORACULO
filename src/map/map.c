@@ -8,7 +8,6 @@
 void MapInit(MapBody *self, MapType type, const char *texture_path) {
     self->type          = type;
     self->texture       = LoadTexture(texture_path);
-    self->camera_offset = (Vector2){ 0.0f, 0.0f };
     self->crop.source   = (Rectangle){ 0.0f, 0.0f, 0.0f, 0.0f };
     self->crop.dest     = (Rectangle){ 0.0f, 0.0f, 0.0f, 0.0f };
 }
@@ -18,15 +17,13 @@ void MapSetCrop(MapBody *self, Rectangle source, Rectangle dest) {
     self->crop.dest   = dest;
 }
 
-void MapSetCamera(MapBody *self, Vector2 offset) {
-    self->camera_offset = offset;
-}
-
 void MapDraw(MapBody *self) {
     switch (self->type) {
 
         case MAP_SINGLE:
-            DrawTextureV(self->texture, self->camera_offset, WHITE);
+            float escala = 3.0f;  // ajuste até ficar bom visualmente
+            
+            DrawTextureEx(self->texture, (Vector2){0, 0}, 0.0f, escala, WHITE);
             break;
 
         case MAP_CROP:

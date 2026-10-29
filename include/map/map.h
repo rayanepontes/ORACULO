@@ -44,7 +44,6 @@ typedef struct MapCrop {
  * @param type          Tipo de mapa que determina como ele será desenhado.
  * @param texture       Textura principal do mapa.
  * @param crop          Dados de recorte, usado quando type == MAP_CROP.
- * @param camera_offset Deslocamento da câmera sobre o mapa, usado quando type == MAP_SINGLE.
  */
 typedef struct MapBody {
     MapType  type;
@@ -52,9 +51,6 @@ typedef struct MapBody {
 
     // usado em MAPA_RECORTE
     MapCrop crop;
-
-    // usado em MAPA_UNICO — posição da câmera sobre o mapa
-    Vector2 camera_offset;
 } MapBody;
 
 /** @brief Carrega a textura e inicializa o estado do mapa.
@@ -80,16 +76,6 @@ void MapInit(MapBody *self, MapType type, const char *texture_path);
  * @param dest    Região de destino na tela (posição + escala).
  */
 void MapSetCrop(MapBody *self, Rectangle source, Rectangle dest);
-
-/** @brief Define o deslocamento da câmera para MAP_SINGLE.
- *
- * @details Move o ponto de vista sobre o mapa inteiro. Só tem efeito
- *          quando o tipo do mapa é MAP_SINGLE.
- *
- * @param self    Ponteiro para uma entidade mapa.
- * @param offset  Deslocamento (x, y) da câmera sobre a textura.
- */
-void MapSetCamera(MapBody *self, Vector2 offset);
 
 /** @brief Desenha o mapa na tela.
  *

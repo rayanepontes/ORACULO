@@ -58,19 +58,19 @@ void ResetAnimations(PlayerBody *self){
 
 // -------- Funções visiveis para qualquer lugar que importalas.
 
-void PlayerInit(PlayerBody *self){
+void PlayerInit(PlayerBody *self, Vector2 posicao_inicial){
     InitAnimations(self);
 
-    self->position = (Vector2){ 250.0f, 250.0f };
+    self->position = posicao_inicial;
     self->direction = RIGHT;
     self->action_atual = idle;
 }
 
-void PLayerReset(PlayerBody *self){
+void PLayerReset(PlayerBody *self, Vector2 posicao_inicial){
     //Texturas já estão carregadas, só reseta estado.
     ResetAnimations(self);
 
-    self->position     = (Vector2){ 250.0f, 250.0f };
+    self->position     = posicao_inicial;
     self->direction    = RIGHT;
     self->action_atual = idle;
 }
