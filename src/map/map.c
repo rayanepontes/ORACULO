@@ -21,7 +21,7 @@ void MapDraw(MapBody *self) {
     switch (self->type) {
 
         case MAP_SINGLE:
-            float escala = 3.0f;  // ajuste até ficar bom visualmente
+            float escala = 2.0f;  // ajuste até ficar bom visualmente
             
             DrawTextureEx(self->texture, (Vector2){0, 0}, 0.0f, escala, WHITE);
             break;

@@ -9,6 +9,10 @@
 #include <raylib.h>
 #include "graphics/animation.h"
 
+#define PLAYER_BASE_SCALE 1.5f
+#define PLAYER_BASE_WIDTH 175.0f
+#define PLAYER_BASE_HEIGHT 257.0f
+
 /** @enum PlayerDirection
  * 
  * @brief Define o lado para qual o player está se movimentando.

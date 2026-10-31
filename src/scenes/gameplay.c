@@ -13,9 +13,14 @@ void GameplayInit(GameplayBody *self) {
     // ── Player (Estagiária) ───────────────────────────────────────────────────
     PlayerInit(&self->player, centro_tela);
 
+    float sprite_w = PLAYER_BASE_WIDTH * PLAYER_BASE_SCALE;  
+    float sprite_h =  PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE;
+
     // ── Mapa do jogo ──────────────────────────────────────────────────────────
-    MapInit(&self->map, MAP_SINGLE, "assets/texture/mapa/mapa-temporario.png"); 
-    self->camera.target   = self->player.position;  // o que a câmera mira
+    MapInit(&self->map, MAP_SINGLE, "assets/texture/mapa/mapa.png"); 
+    self->camera.target   = (Vector2){ 
+        self->player.position.x + sprite_w / 2.0f,
+        self->player.position.y + sprite_h / 2.0f };  // o que a câmera mira
     self->camera.offset   = (Vector2)centro_tela; 
     self->camera.rotation = 0.0f;
     self->camera.zoom     = 1.0f;
@@ -37,7 +42,13 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 
     PlayerUpdateAction(&self->player);
 
-    self->camera.target = self->player.position;
+    float sprite_w = PLAYER_BASE_WIDTH * PLAYER_BASE_SCALE;  
+    float sprite_h =  PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE;
+
+    self->camera.target = (Vector2){
+        self->player.position.x + sprite_w / 2.0f,
+        self->player.position.y + sprite_h / 2.0f
+    };
 }
 
 void GameplayDraw(GameplayBody *self) {
