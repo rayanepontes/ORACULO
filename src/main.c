@@ -16,8 +16,8 @@ int main(void)
     ToggleFullscreen();
     SetTargetFPS(60);
 
-    int sw = GetScreenWidth();
-    int sh = GetScreenHeight();
+    int scream_wigth = GetScreenWidth();
+    int scream_height = GetScreenHeight();
 
     // ── Recursos globais ──────────────────────────────────────────────────────
     ResourcesBody resources;
@@ -87,22 +87,22 @@ int main(void)
             ClearBackground(BLACK);
 
             if (state == STATE_MENU) {
-                MenuDraw(&menu, &resources, sw, sh);
+                MenuDraw(&menu, &resources, scream_wigth, scream_height);
 
             } else if (state == STATE_PLAYING || state == STATE_INTERFACE) {
-                GameplayDraw(&gameplay);
+                GameplayDraw(&gameplay, &state, &resources, scream_wigth, scream_height);
 
             } else if (state == STATE_WIN) {
-                GameplayDraw(&gameplay);  // fundo da partida por baixo
-                DrawRectangle(0, 0, sw, sh, (Color){ 0, 0, 0, 180 });
-                DrawText("Missao cumprida!", sw/2 - 150, sh/2 - 30, 32, GREEN);
-                DrawText("ENTER para voltar ao menu", sw/2 - 175, sh/2 + 20, 20, WHITE);
+                GameplayDraw(&gameplay, &state, &resources, scream_wigth, scream_height);  // fundo da partida por baixo
+                DrawRectangle(0, 0, scream_wigth, scream_height, (Color){ 0, 0, 0, 180 });
+                DrawText("Missao cumprida!", scream_wigth/2 - 150, scream_height/2 - 30, 32, GREEN);
+                DrawText("ENTER para voltar ao menu", scream_wigth/2 - 175, scream_height/2 + 20, 20, WHITE);
 
             } else if (state == STATE_GAME_OVER) {
-                GameplayDraw(&gameplay);  // fundo da partida por baixo
-                DrawRectangle(0, 0, sw, sh, (Color){ 0, 0, 0, 200 });
-                DrawText("Game Over", sw/2 - 100, sh/2 - 30, 40, RED);
-                DrawText("ENTER para voltar ao menu", sw/2 - 175, sh/2 + 20, 20, WHITE);
+                GameplayDraw(&gameplay, &state, &resources, scream_wigth, scream_height);  // fundo da partida por baixo
+                DrawRectangle(0, 0, scream_wigth, scream_height, (Color){ 0, 0, 0, 200 });
+                DrawText("Game Over", scream_wigth/2 - 100, scream_height/2 - 30, 40, RED);
+                DrawText("ENTER para voltar ao menu", scream_wigth/2 - 175, scream_height/2 + 20, 20, WHITE);
             }
 
         EndDrawing();

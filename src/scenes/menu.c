@@ -15,9 +15,6 @@ static void InitBackgrounds(MenuBody *self) {
     self->backgrounds[TELA_RANKING]   = LoadTexture("assets/texture/menu/tela_vazia.png");
     self->backgrounds[TELA_CONFIRMA_SAIR] = LoadTexture("assets/texture/menu/tela_principal.png");
     self->caixa_nome = LoadTexture("assets/texture/menu/Rectangle 122.png");
-    self->nickname_input[0] = '\0';
-    self->nickname_len = 0;
-    self->nome_repetido = false;
 }
 
 static bool NomeJaExiste(const ResourcesBody *resources, const char *nome) {
@@ -40,6 +37,9 @@ static bool NomeJaExiste(const ResourcesBody *resources, const char *nome) {
 
 void MenuInit(MenuBody *self) {
     InitBackgrounds(self);
+    self->nickname_input[0] = '\0';
+    self->nickname_len = 0;
+    self->nome_repetido = false;
     self->tela_atual  = TELA_PRINCIPAL;
     self->opcao_atual = MENU_OPC_INICIAR;
     self->confirmado  = false;
@@ -314,11 +314,11 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             const char *msg  = "Deseja mesmo fechar o jogo?";
             const char *instrucao = "ENTER - sim   ESC - voltar";
 
-            Vector2 msg_dim  = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
+            Vector2 msg_dimension  = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
             Vector2 instrucao_dimension = MeasureTextEx(resources->fonte_principal, instrucao, 36.0f, 1);
 
             DrawTextEx(resources->fonte_principal, msg,
-                (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.55f },
+                (Vector2){ (scream_width / 2.0f) - (msg_dimension.x / 2.0f), scream_height * 0.55f },
                 56.0f, 1, resources->branco);
             DrawTextEx(resources->fonte_principal, instrucao,
                 (Vector2){ (scream_width / 2.0f) - (instrucao_dimension.x / 2.0f), scream_height * 0.65f },
