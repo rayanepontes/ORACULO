@@ -9,10 +9,7 @@ O jogador assume o papel de uma estagiária do **NEXUS Labs**, um laboratório d
 O principal desafio não é simplesmente encontrar a resposta certa, mas **aprender a questionar as decisões de um sistema automatizado**.
 
 ---
-## Board Atualizado
 
-![sprint e backlog](./project/pngs/trello-board.png)
----
 ## Compilando o Projeto
 
 ## Guia de instalação (Raylib)
@@ -67,9 +64,6 @@ cmake --build <build_path>
 
 Substitua `<build_path>` pelo caminho do diretório de compilação configurado anteriormente.
 
-
-![menu principal do oráculo](./project/pngs/menu-principal.png)
-
 ## Sobre o Jogo
 
 Você é uma estagiária recém-contratada pelo **NEXUS Labs**, instituto responsável pelo desenvolvimento do **ORÁCULO**, um sistema de Inteligência Artificial utilizado para análise de dados, segurança e tomada de decisões automatizadas.
@@ -120,7 +114,7 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 
 # Screencast PIF
 
-[![▶ Clique para assistir: ](https://img.youtube.com/vi/VpeTWdTRT4A/maxresdefault.jpg)](https://www.youtube.com/watch?v=VpeTWdTRT4A)
+[![▶ Clique para assistir: ](./project/pngs/menu-principal.png)](https://www.youtube.com/watch?v=VpeTWdTRT4A)
 
 # Minigames
 
