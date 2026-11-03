@@ -8,17 +8,17 @@
 #include "entities/player.h"
 #include "map/map.h"
 
-typedef enum interface_gameplay{
+typedef enum InterfaceGameplay{
     TELA_VOLTAR_MENU,
     TOTAL_TELAS
-}interface_gameplay;
+}InterfaceGameplay;
 
 typedef struct GameplayBody{
     // mapa, jogador, inimigos: os tipos que o time já tem
     PlayerBody player;
     MapBody    map;
     Camera2D camera;
-    interface_gameplay interface_atual;
+    InterfaceGameplay interface_atual;
     int        score;       // reservado — implementar com o sistema de tempo
     char       nickname[7]; // copiado do menu antes de iniciar
     bool       terminou;    // main lê: partida chegou ao fim

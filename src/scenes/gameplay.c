@@ -25,6 +25,7 @@ void GameplayInit(GameplayBody *self) {
     self->camera.rotation = 0.0f;
     self->camera.zoom     = 1.0f;
 
+    self->interface_atual = TELA_VOLTAR_MENU;
     self->score       = 0;
     self->nickname[0] = '\0';
     self->terminou    = false;
@@ -55,13 +56,17 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         return;  // trava o resto do update
     }
 
+    // Aqui o player escolhe se volta pro menu ou não
     if (IsKeyPressed(KEY_ESCAPE)) {
-        *state = STATE_INTERFACE;  // abre confirmação
+        self->interface_atual = TELA_VOLTAR_MENU;
+        *state = STATE_INTERFACE; 
         return;
     }
 
     PlayerUpdateAction(&self->player);
 
+
+    // Câmera andando junto com o player
     float sprite_w = PLAYER_BASE_WIDTH * PLAYER_BASE_SCALE;  
     float sprite_h =  PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE;
 
@@ -90,7 +95,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
                 DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){ 0, 0, 0, 150 }); // fundo cinza
                 DrawTextEx(resources->fonte_principal, msg,
                     (Vector2){ (scream_width / 2.0f) - (msg_dimension.x / 2.0f), scream_height * 0.45f },
-                    130.0f, 1, resources->branco);
+                    130.0f, 1, resources->amarelo);
                 DrawTextEx(resources->fonte_principal, instrucao,
                     (Vector2){ (scream_width / 2.0f) - (instrucao_dimension.x / 2.0f), scream_height * 0.65f },
                     50.0f, 1, resources->lilas_claro);               
