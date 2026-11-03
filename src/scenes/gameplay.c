@@ -1,6 +1,9 @@
 /**
  * @file gameplay.c
  * @brief Implementação da cena de gameplay.
+ * @details Contém a lógica de inicialização, atualização e renderização
+ *          da partida, incluindo o gerenciamento das telas de interface
+ *          que se sobrepõem ao jogo (STATE_INTERFACE).
  */
 
 #include "scenes/gameplay.h"

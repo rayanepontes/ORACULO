@@ -1,3 +1,15 @@
+/**
+ * @file main.c
+ * @brief Ponto de entrada e loop principal do jogo.
+ * @details Inicializa a janela, carrega os recursos globais e executa o game loop.
+ *          O fluxo de estados segue a máquina definida em game_state.h:
+ *
+ *          STATE_MENU → (confirmado) → STATE_PLAYING
+ *          STATE_PLAYING ↔ STATE_INTERFACE  (Se tiver em uma interface o jogo não atualiza, exceto o tempo)
+ *          STATE_PLAYING → (terminou) → STATE_WIN | STATE_GAME_OVER
+ *          STATE_WIN | STATE_GAME_OVER → (ENTER) → STATE_MENU
+ */
+
 #include <raylib.h>
 #include "core/game_state.h"
 #include "core/resources.h"
@@ -12,7 +24,7 @@
 int main(void)
 {
     InitWindow(900, 450, "Oráculo");
-    SetExitKey(KEY_NULL);
+    SetExitKey(KEY_NULL); // desativa o ESC nativo do Raylib
     ToggleFullscreen();
     SetTargetFPS(60);
 
@@ -42,6 +54,7 @@ int main(void)
 
             MenuUpdate(&menu, &resources);
 
+            // jogador confirmou o nome: transfere nickname e inicia a partida
             if (menu.confirmado) {
                 menu.confirmado = false;
                 strncpy(gameplay.nickname, menu.nickname_input, 6);
@@ -72,6 +85,7 @@ int main(void)
                     strncpy(entrada.nickname, gameplay.nickname, 6);
                     entrada.nickname[6] = '\0';
                     entrada.score = gameplay.score;
+                    // DataInsert retorna true só se a entrada entrou no top DATABASE_MAX_ENTRIES
                     if (DataInsert(resources.ranking, &resources.ranking_count, entrada)) {
                         DataSave(resources.ranking, resources.ranking_count);
                     }

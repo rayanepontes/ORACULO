@@ -1,3 +1,11 @@
+/**
+ * @file database.h
+ * @brief Módulo de persistência do ranking de jogadores.
+ * @details Gerencia a leitura, escrita e inserção ordenada de entradas no
+ *          ranking armazenado em arquivo texto. O ranking é limitado a
+ *          DATABASE_MAX_ENTRIES entradas, ordenadas por score decrescente.
+ */
+
 #ifndef DATABASE_H
 #define DATABASE_H
 
