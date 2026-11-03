@@ -20,7 +20,7 @@ typedef struct ResourcesBody {
     Color     amarelo;
     Color     branco;
     Color     lilas_escuro;
-    Color     lilas_hint;
+    Color     lilas_claro;
     Color     letra_caixa;
 }ResourcesBody;
 

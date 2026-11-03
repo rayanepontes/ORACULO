@@ -12,7 +12,7 @@ void ResourcesInit(ResourcesBody *self) {
     self->amarelo      = GetColor(0xEFB239FF);
     self->branco       = GetColor(0xE5E0EBFF);
     self->lilas_escuro = GetColor(0x6B5E8CFF);
-    self->lilas_hint   = GetColor(0x9988BBFF);
+    self->lilas_claro   = GetColor(0x9988BBFF);
     self->letra_caixa  = GetColor(0x2A1F4EFF);
 }
 

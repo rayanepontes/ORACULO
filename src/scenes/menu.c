@@ -15,9 +15,6 @@ static void InitBackgrounds(MenuBody *self) {
     self->backgrounds[TELA_RANKING]   = LoadTexture("assets/texture/menu/tela_vazia.png");
     self->backgrounds[TELA_CONFIRMA_SAIR] = LoadTexture("assets/texture/menu/tela_principal.png");
     self->caixa_nome = LoadTexture("assets/texture/menu/Rectangle 122.png");
-    self->nickname_input[0] = '\0';
-    self->nickname_len = 0;
-    self->nome_repetido = false;
 }
 
 static bool NomeJaExiste(const ResourcesBody *resources, const char *nome) {
@@ -40,6 +37,9 @@ static bool NomeJaExiste(const ResourcesBody *resources, const char *nome) {
 
 void MenuInit(MenuBody *self) {
     InitBackgrounds(self);
+    self->nickname_input[0] = '\0';
+    self->nickname_len = 0;
+    self->nome_repetido = false;
     self->tela_atual  = TELA_PRINCIPAL;
     self->opcao_atual = MENU_OPC_INICIAR;
     self->confirmado  = false;
@@ -224,13 +224,13 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             }
 
             // --- instrução no rodapé ---
-            const char *dica = "ENTER - confirmar   ESC - voltar";
-            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, dica, 32.0f, 1); // tamanho do texto dica
-            Vector2 dica_position = {
-                (scream_width  / 2.0f) - (dica_dimension.x / 2.0f),            // centralizado na tela
+            const char *instrucao = "ENTER - confirmar   ESC - voltar";
+            Vector2 instrucao_dimension = MeasureTextEx(resources->fonte_principal, instrucao, 32.0f, 1); // tamanho do texto instrucao
+            Vector2 instrucao_position = {
+                (scream_width  / 2.0f) - (instrucao_dimension.x / 2.0f),            // centralizado na tela
                 box_y + box_h + 24.0f                                      // 24px abaixo da caixa
             };
-            DrawTextEx(resources->fonte_principal, dica, dica_position, 32.0f, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, instrucao, instrucao_position, 32.0f, 1, resources->lilas_claro);
 
             if (self->nome_repetido) {
                 const char *erro = "Esse nome ja foi cadastrado!";
@@ -267,9 +267,9 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             // --- cabeçalho ---
             float header_y    = entry_start_y - 48.0f;  // logo acima da primeira entrada
             float header_size = 36.0f;                  // tamanho da fonte do cabeçalho
-            DrawTextEx(resources->fonte_principal, "RANK", (Vector2){ col_rank_x, header_y }, header_size, 1, resources->lilas_hint);
-            DrawTextEx(resources->fonte_principal, "NAME", (Vector2){ col_nome_x, header_y }, header_size, 1, resources->lilas_hint);
-            DrawTextEx(resources->fonte_principal, "SCORE",(Vector2){ col_pont_x, header_y }, header_size, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, "RANK", (Vector2){ col_rank_x, header_y }, header_size, 1, resources->lilas_claro);
+            DrawTextEx(resources->fonte_principal, "NAME", (Vector2){ col_nome_x, header_y }, header_size, 1, resources->lilas_claro);
+            DrawTextEx(resources->fonte_principal, "SCORE",(Vector2){ col_pont_x, header_y }, header_size, 1, resources->lilas_claro);
 
 
             if (resources->ranking_count == 0) {
@@ -279,7 +279,7 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
                     (scream_width / 2.0f) - (vazio_dim.x / 2.0f),
                     scream_height * 0.45f
                 };
-                DrawTextEx(resources->fonte_principal, vazio, vazio_pos, 40.0f, 1, resources->lilas_hint);
+                DrawTextEx(resources->fonte_principal, vazio, vazio_pos, 40.0f, 1, resources->lilas_claro);
             } else {
                 // --- lista de entradas ---
                 for (int i = 0; i < resources->ranking_count; i++) {
@@ -301,28 +301,28 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             }
 
             // --- instrução no rodapé ---
-            const char *dica = "ENTER / ESC - voltar";
-            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, dica, 32.0f, 1);
-            Vector2 dica_position = {
-                (scream_width / 2.0f) - (dica_dimension.x / 2.0f),                  // centralizado
+            const char *instrucao = "ENTER / ESC - voltar";
+            Vector2 instrucao_dimension = MeasureTextEx(resources->fonte_principal, instrucao, 32.0f, 1);
+            Vector2 instrucao_position = {
+                (scream_width / 2.0f) - (instrucao_dimension.x / 2.0f),                  // centralizado
                 scream_height * 0.75f                                           // próximo ao rodapé
             };
-            DrawTextEx(resources->fonte_principal, dica, dica_position, 32.0f, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, instrucao, instrucao_position, 32.0f, 1, resources->lilas_claro);
             break;
         }
         case TELA_CONFIRMA_SAIR:
             const char *msg  = "Deseja mesmo fechar o jogo?";
-            const char *dica = "ENTER - sim   ESC - nao";
+            const char *instrucao = "ENTER - sim   ESC - voltar";
 
-            Vector2 msg_dim  = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
-            Vector2 dica_dimension = MeasureTextEx(resources->fonte_principal, dica, 36.0f, 1);
+            Vector2 msg_dimension  = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
+            Vector2 instrucao_dimension = MeasureTextEx(resources->fonte_principal, instrucao, 36.0f, 1);
 
             DrawTextEx(resources->fonte_principal, msg,
-                (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.55f },
+                (Vector2){ (scream_width / 2.0f) - (msg_dimension.x / 2.0f), scream_height * 0.55f },
                 56.0f, 1, resources->branco);
-            DrawTextEx(resources->fonte_principal, dica,
-                (Vector2){ (scream_width / 2.0f) - (dica_dimension.x / 2.0f), scream_height * 0.65f },
-                36.0f, 1, resources->lilas_hint);
+            DrawTextEx(resources->fonte_principal, instrucao,
+                (Vector2){ (scream_width / 2.0f) - (instrucao_dimension.x / 2.0f), scream_height * 0.65f },
+                36.0f, 1, resources->lilas_claro);
             break;
     
         default:
