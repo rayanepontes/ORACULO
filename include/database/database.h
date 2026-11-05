@@ -1,3 +1,11 @@
+/**
+ * @file database.h
+ * @brief Módulo de persistência do ranking de jogadores.
+ * @details Gerencia a leitura, escrita e inserção ordenada de entradas no
+ *          ranking armazenado em arquivo texto. O ranking é limitado a
+ *          DATABASE_MAX_ENTRIES entradas, ordenadas por score decrescente.
+ */
+
 #ifndef DATABASE_H
 #define DATABASE_H
 
@@ -13,7 +21,7 @@
  * @brief Dados de uma entrada do ranking.
  */
 typedef struct GameData {
-    char nickname[7]; // Nickname do jogador (máx 5 chars + '\0').
+    char nickname[7]; // Nickname do jogador (máx 6 chars + '\0').
     int  score;       // Pontuação obtida na partida.
 } GameData;
 
