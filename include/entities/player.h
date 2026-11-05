@@ -9,10 +9,6 @@
 #include <raylib.h>
 #include "graphics/animation.h"
 
-#define PLAYER_BASE_SCALE 1.5f
-#define PLAYER_BASE_WIDTH 175.0f
-#define PLAYER_BASE_HEIGHT 257.0f
-
 /** @enum PlayerDirection
  * 
  * @brief Define o lado para qual o player está se movimentando.
@@ -68,9 +64,8 @@ typedef struct PlayerBody{
  *          que o player possui. Em seguida dita a posição, direção e animação iniciais do player.
  * 
  * @param self Ponteiro para uma entidade player.
- * @param posicao_inicial Posição inicial do player no jogo.
  */
-void PlayerInit(PlayerBody *self, Vector2 posicao_inicial);
+void PlayerInit(PlayerBody *self);
 
 /** @brief Reseta o estado do player.
  * 
@@ -79,9 +74,8 @@ void PlayerInit(PlayerBody *self, Vector2 posicao_inicial);
  *          posição, direção e animação do player para o estado incial.
  * 
  * @param self Ponteiro para uma entidade player.
- * @param posicao_inicial Posição inicial do player no jogo.
  */
-void PLayerReset(PlayerBody *self, Vector2 posicao_inicial);
+void PLayerReset(PlayerBody *self);
 
 /** @brief Atualiza as ações do player.
  * 

@@ -10,7 +10,6 @@
                 "-g",
                 
                 "${workspaceFolder}/src/core/*.c",
-                "${workspaceFolder}/src/database/*.c",
                 "${workspaceFolder}/src/entities/*.c",
                 "${workspaceFolder}/src/graphics/*.c",
                 "${workspaceFolder}/src/map/*.c",
