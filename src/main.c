@@ -16,6 +16,7 @@
 #include "database/database.h"
 #include "entities/player.h"
 #include "graphics/Animation.h"
+#include "graphics/ui.h"
 #include "map/map.h"
 #include "scenes/gameplay.h"
 #include "scenes/menu.h"
@@ -72,6 +73,9 @@ int main(void)
                 GameplayUnload(&gameplay);
                 GameplayInit(&gameplay);
                 state = STATE_MENU;
+                menu.nickname_input[0] = '\0';  
+                menu.nickname_len = 0;           
+                menu.nome_repetido = false;      
             } else if (gameplay.terminou) {
                 state = gameplay.venceu ? STATE_WIN : STATE_GAME_OVER;
             }

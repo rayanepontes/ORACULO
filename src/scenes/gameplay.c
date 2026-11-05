@@ -8,6 +8,7 @@
 
 #include "scenes/gameplay.h"
 #include "core/game_state.h"
+#include "graphics/ui.h"
 
 void GameplayInit(GameplayBody *self) {
     Vector2 centro_tela = { (float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f };
@@ -34,6 +35,7 @@ void GameplayInit(GameplayBody *self) {
     self->terminou    = false;
     self->venceu      = false;
     self->voltar_menu = false;
+    self->opc_confirmacao = VOLTAR_MENU;
 }
 
 void GameplayUpdate(GameplayBody *self, GameState *state) {
@@ -42,13 +44,17 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
-                // tela de confirmação ativa
-                if (IsKeyPressed(KEY_ENTER)) {
-                    self->voltar_menu = true;
-                    return;
+
+                int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC);
+                if (confirmado == VOLTAR_MENU) {
+                    self->voltar_menu = true; // SIM
+                } else if (confirmado == VOLTAR_JOGO) {
+                    self->opc_confirmacao = VOLTAR_MENU;
+                    *state = STATE_PLAYING; // NAO
                 }
                 if (IsKeyPressed(KEY_ESCAPE)) {
-                    *state = STATE_PLAYING;  // cancela, volta ao jogo
+                    self->opc_confirmacao = VOLTAR_MENU;
+                    *state = STATE_PLAYING;
                 }
                 break;
             
@@ -87,22 +93,28 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
 
     if (*state == STATE_INTERFACE) {
         switch (self->interface_atual) {
-            case TELA_VOLTAR_MENU:
-                const char *msg  = "Certeza que quer desistir?";
-                const char *instrucao = "ENTER - sim   ESC - voltar";
+            case TELA_VOLTAR_MENU: {
+                const char *labels[TOTAL_OPC] = { "DESISTIR", "VOLTAR AO JOGO" };
 
-                Vector2 msg_dimension  = MeasureTextEx(resources->fonte_principal, msg, 130.0f, 1);
-                Vector2 instrucao_dimension = MeasureTextEx(resources->fonte_principal, instrucao, 50.0f, 1);
+                const char *msg = "Certeza que quer desistir?";
+                Vector2 msg_dim = MeasureTextEx(resources->fonte_principal, msg, 130.0f, 1);
 
-                // sobreposição de confirmação
-                DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){ 0, 0, 0, 150 }); // fundo cinza
+                DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){ 0, 0, 0, 150 });
                 DrawTextEx(resources->fonte_principal, msg,
-                    (Vector2){ (scream_width / 2.0f) - (msg_dimension.x / 2.0f), scream_height * 0.45f },
-                    130.0f, 1, resources->amarelo);
-                DrawTextEx(resources->fonte_principal, instrucao,
-                    (Vector2){ (scream_width / 2.0f) - (instrucao_dimension.x / 2.0f), scream_height * 0.65f },
-                    50.0f, 1, resources->lilas_claro);               
+                    (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.30f },
+                    130.0f, 1, resources->branco);
+
+                UiOpcaoEstilo estilo = {
+                    .size_normal  = 60.0f,
+                    .size_select  = 72.0f,
+                    .cor_normal   = resources->branco,
+                    .cor_select   = resources->amarelo,
+                    .espacamento  = 90.0f
+                };
+                UiOpcaoDraw(resources->fonte_principal, (const char **)labels, TOTAL_OPC,
+                            (int)self->opc_confirmacao, estilo, scream_height * 0.60f, scream_width);
                 break;
+            }
             
             default:
                 break;

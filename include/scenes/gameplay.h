@@ -32,6 +32,12 @@ typedef enum TelaInterface {
     TOTAL_TELAS       // Quantidade total de telas de interface.
 } TelaInterface;
 
+typedef enum OpcVoltarMenu{
+    VOLTAR_MENU,
+    VOLTAR_JOGO,
+    TOTAL_OPC
+}OpcVoltarMenu;
+
 /** @struct GameplayBody
  *
  * @brief Estado completo da cena de gameplay.
@@ -59,6 +65,7 @@ typedef struct GameplayBody {
     bool          terminou;        // main lê: partida chegou ao fim
     bool          venceu;          // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;     // main lê: jogador pediu para voltar ao menu
+    OpcVoltarMenu opc_confirmacao;
 } GameplayBody;
 
 /** @brief Inicializa a cena de gameplay carregando player, mapa e câmera.

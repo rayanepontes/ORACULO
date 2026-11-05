@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include "scenes/menu.h"
 #include "core/resources.h"
+#include "graphics/ui.h"
 
 // ─── Funções internas ─────────────────────────────────────────────────────────
 
@@ -44,31 +45,16 @@ void MenuInit(MenuBody *self) {
     self->opcao_atual = MENU_OPC_INICIAR;
     self->confirmado  = false;
     self->sair = false;
+    self->opc_confirmacao = 0;
 }
 
 void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
     switch (self->tela_atual) {
-        case TELA_PRINCIPAL:     
-            if (IsKeyPressed(KEY_DOWN)) {
-                self->opcao_atual = (self->opcao_atual + 1) % MENU_TOTAL_OPC;
-            }
-
-            if (IsKeyPressed(KEY_UP)) {
-                self->opcao_atual = (self->opcao_atual - 1 + MENU_TOTAL_OPC) % MENU_TOTAL_OPC;
-            }
-
-            if (IsKeyPressed(KEY_ENTER)) {
-                if (self->opcao_atual == MENU_OPC_RANKING){
-                    self->tela_atual = TELA_RANKING;
-                }else if (self->opcao_atual == MENU_OPC_INICIAR) {
-                    self->nickname_input[0] = '\0';
-                    self->nickname_len = 0;
-                    self->nome_repetido = false;
-                    self->tela_atual = TELA_NOME;
-                }else if (self->opcao_atual == MENU_OPC_SAIR) {
-                    self->tela_atual = TELA_CONFIRMA_SAIR;  
-                }
-            }
+        case TELA_PRINCIPAL:
+            int confirmado = UiOpcaoUpdate((int*)&self->opcao_atual, MENU_TOTAL_OPC);
+            if (confirmado == MENU_OPC_INICIAR) { self->tela_atual = TELA_NOME; }
+            if (confirmado == MENU_OPC_RANKING) { self->tela_atual = TELA_RANKING; }
+            if (confirmado == MENU_OPC_SAIR)    { self->tela_atual = TELA_CONFIRMA_SAIR; }
             break;
 
         case TELA_NOME: 
@@ -119,13 +105,20 @@ void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
             }
             break;
 
-        case TELA_CONFIRMA_SAIR:
-            if (IsKeyPressed(KEY_ENTER)) {
-                self->sair = true;
-            } else if (IsKeyPressed(KEY_ESCAPE)) {
+        case TELA_CONFIRMA_SAIR: {
+            int confirmado = UiOpcaoUpdate(&self->opc_confirmacao, 2);
+            if (confirmado == 0) {
+                self->sair = true; // SIM
+            } else if (confirmado == 1) {
+                self->opc_confirmacao = 0;
+                self->tela_atual = TELA_PRINCIPAL; // NAO
+            }
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                self->opc_confirmacao = 0;
                 self->tela_atual = TELA_PRINCIPAL;
             }
             break;
+        }
 
         default:
             break;
@@ -149,19 +142,16 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
         case TELA_PRINCIPAL: {
             const char *labels[MENU_TOTAL_OPC] = { "INICIAR PARTIDA", "RANKING", "SAIR" };
 
-            for (int i = 0; i < MENU_TOTAL_OPC; i++) {
-                bool  is_select = (i == self->opcao_atual);
-                Color cor  = is_select ? resources->amarelo : resources->branco;
-                float size = is_select ? 72.0f : 60.0f;   // tamanho: selecionado / normal
+            UiOpcaoEstilo estilo = {
+                .size_normal  = 60.0f,
+                .size_select  = 72.0f,
+                .cor_normal   = resources->branco,
+                .cor_select   = resources->amarelo,
+                .espacamento  = 90.0f
+            };
 
-                Vector2 dimension = MeasureTextEx(resources->fonte_principal, labels[i], size, 1);
-                Vector2 position  = {
-                    (scream_width  / 2.0f) - (dimension.x / 2.0f),        // centralizado na tela
-                    (scream_height * 0.55f) + (i * 90.0f)                  // altura inicial + espaço entre opções
-                };
-
-                DrawTextEx(resources->fonte_principal, labels[i], position, size, 1, cor);
-            }
+            UiOpcaoDraw(resources->fonte_principal, labels, MENU_TOTAL_OPC,
+                        self->opcao_atual, estilo, scream_height * 0.55f, scream_width);
             break;
         }
         case TELA_NOME: {
@@ -310,20 +300,26 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             DrawTextEx(resources->fonte_principal, instrucao, instrucao_position, 32.0f, 1, resources->lilas_claro);
             break;
         }
-        case TELA_CONFIRMA_SAIR:
-            const char *msg  = "Deseja mesmo fechar o jogo?";
-            const char *instrucao = "ENTER - sim   ESC - voltar";
-
-            Vector2 msg_dimension  = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
-            Vector2 instrucao_dimension = MeasureTextEx(resources->fonte_principal, instrucao, 36.0f, 1);
-
+        case TELA_CONFIRMA_SAIR: {
+            const char *msg = "Deseja mesmo fechar o jogo?";
+            Vector2 msg_dim = MeasureTextEx(resources->fonte_principal, msg, 56.0f, 1);
             DrawTextEx(resources->fonte_principal, msg,
-                (Vector2){ (scream_width / 2.0f) - (msg_dimension.x / 2.0f), scream_height * 0.55f },
+                (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.55f },
                 56.0f, 1, resources->branco);
-            DrawTextEx(resources->fonte_principal, instrucao,
-                (Vector2){ (scream_width / 2.0f) - (instrucao_dimension.x / 2.0f), scream_height * 0.65f },
-                36.0f, 1, resources->lilas_claro);
+
+
+            const char *labels[2] = { "Sair do jogo", "Voltar ao menu" };
+            UiOpcaoEstilo estilo = {
+                .size_normal  = 48.0f,
+                .size_select  = 60.0f,
+                .cor_normal   = resources->branco,
+                .cor_select   = resources->amarelo,
+                .espacamento  = 70.0f
+            };
+            UiOpcaoDraw(resources->fonte_principal, labels, 2,
+                        self->opc_confirmacao, estilo, scream_height * 0.65f, scream_width);
             break;
+        }
     
         default:
             break;

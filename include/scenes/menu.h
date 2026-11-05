@@ -50,6 +50,7 @@ typedef enum MenuOpc {
  * @param tela_atual Subtela visível no momento.
  * @param opcao_atual Opção selecionada no menu principal.
  * @param confirmado True quando o jogador confirma com ENTER.
+  * @param opc_confimacao  0 = SIM, 1 = NAO — usado em TELA_CONFIRMA_SAIR    
  * @param sair True quando o jogador confirma com ENTER. 
  * @param nickname_input Até 6 caracteres + /0.
  * @param nickname_len Quantas letras já foram digitadas.
@@ -61,6 +62,7 @@ typedef struct MenuBody {
     TelaMenu tela_atual; // Subtela visível no momento.
     MenuOpc opcao_atual; // Opção selecionada no menu principal.
     bool confirmado; // True quando o jogador confirma com ENTER. 
+    int opc_confirmacao; // 0 = SIM, 1 = NAO — usado em TELA_CONFIRMA_SAIR    
     bool sair; // True quando o jogador confirma que quer sair do jogo.
     char nickname_input[7]; // Até 6 caracteres + /0.
     int nickname_len; // Quantas letras já foram digitadas.
