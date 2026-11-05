@@ -58,19 +58,19 @@ void ResetAnimations(PlayerBody *self){
 
 // -------- Funções visiveis para qualquer lugar que importalas.
 
-void PlayerInit(PlayerBody *self, Vector2 posicao_inicial){
+void PlayerInit(PlayerBody *self){
     InitAnimations(self);
 
-    self->position = posicao_inicial;
+    self->position = (Vector2){ 250.0f, 250.0f };
     self->direction = RIGHT;
     self->action_atual = idle;
 }
 
-void PLayerReset(PlayerBody *self, Vector2 posicao_inicial){
+void PLayerReset(PlayerBody *self){
     //Texturas já estão carregadas, só reseta estado.
     ResetAnimations(self);
 
-    self->position     = posicao_inicial;
+    self->position     = (Vector2){ 250.0f, 250.0f };
     self->direction    = RIGHT;
     self->action_atual = idle;
 }
@@ -143,6 +143,7 @@ void PlayerUpdateAction(PlayerBody *self){
 }
 
 void PlayerDraw(PlayerBody *self){
+
     AnimationBody *anim = &self->anims[self->action_atual];
     Texture2D texture =  self->textures[self->action_atual];
 
@@ -152,7 +153,7 @@ void PlayerDraw(PlayerBody *self){
     DrawTexturePro(
         texture,
         frame,
-        (Rectangle){ self->position.x, self->position.y, PLAYER_BASE_WIDTH * PLAYER_BASE_SCALE, PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE },
+        (Rectangle){ self->position.x, self->position.y, 175.0f , 257.0f  },
         (Vector2)  { 0.0f, 0.0f },
         0.0f,
         WHITE
