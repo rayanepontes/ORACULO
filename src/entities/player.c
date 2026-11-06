@@ -75,70 +75,73 @@ void PLayerReset(PlayerBody *self, Vector2 posicao_inicial){
     self->action_atual = idle;
 }
 
-void PlayerUpdateAction(PlayerBody *self){
+void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_count) {
     float player_speed = 4.0f;
 
-    bool movendo = false;
+    bool movendo  = false;
     bool correndo = false;
 
-    //Eixo X (direita e esquerda são opostos — não podem ser simultâneos).
+    float vel_x = 0.0f;
+    float vel_y = 0.0f;
+
+    // ── Calcula velocidade desejada ───────────────────────────────────────────
     if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
-        self->direction   = LEFT;
-
-        if (IsKeyDown(KEY_LEFT_SHIFT)) {
-            self->position.x -= (player_speed * 2);
-            correndo = true;
-        }else {
-            self->position.x -= player_speed;
-            movendo = true;
-        }
-        
+        self->direction = LEFT;
+        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? -(player_speed * 2) : -player_speed;
+        correndo = IsKeyDown(KEY_LEFT_SHIFT);
+        movendo  = !correndo;
     } else if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
-        self->direction   = RIGHT;
-
-        if (IsKeyDown(KEY_LEFT_SHIFT)) {
-            self->position.x += (player_speed * 2);
-            correndo = true;
-        }else {
-            self->position.x += player_speed;
-            movendo = true;
-        }
-
+        self->direction = RIGHT;
+        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? (player_speed * 2) : player_speed;
+        correndo = IsKeyDown(KEY_LEFT_SHIFT);
+        movendo  = !correndo;
     }
 
-    //Eixo Y (cima e baixo são opostos — não podem ser simultâneos).
     if (IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN)) {
-
-        if (IsKeyDown(KEY_LEFT_SHIFT)) {
-            self->position.y -= (player_speed * 2);
-            correndo = true;
-        }else {
-            self->position.y -= player_speed;
-            movendo = true;
-        }
-
+        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? -(player_speed * 2) : -player_speed;
+        correndo = IsKeyDown(KEY_LEFT_SHIFT);
+        movendo  = movendo || !correndo;
     } else if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_UP)) {
-
-        if (IsKeyDown(KEY_LEFT_SHIFT)) {
-            self->position.y += (player_speed * 2);
-            correndo = true;
-        }else {
-            self->position.y += player_speed;
-            movendo = true;
-        }
-
+        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? (player_speed * 2) : player_speed;
+        correndo = IsKeyDown(KEY_LEFT_SHIFT);
+        movendo  = movendo || !correndo;
     }
 
-    //Tipo de animação gerada.
-    if (movendo) {
-        self->action_atual = walk;
-    }else if (correndo) {
+    // ── Resolve colisão no eixo X ─────────────────────────────────────────────
+    self->position.x += vel_x;
+    Rectangle hitbox = {
+        self->position.x + HITBOX_OFFSET_X,
+        self->position.y + HITBOX_OFFSET_Y,
+        HITBOX_WIDTH,
+        HITBOX_HEIGHT
+    };
+    for (int i = 0; i < colisor_count; i++) {
+        CollisionResolve(&hitbox, colisores[i].rect);
+    }
+    self->position.x = hitbox.x - HITBOX_OFFSET_X;
+
+    // ── Resolve colisão no eixo Y ─────────────────────────────────────────────
+    self->position.y += vel_y;
+    hitbox = (Rectangle){
+        self->position.x + HITBOX_OFFSET_X,
+        self->position.y + HITBOX_OFFSET_Y,
+        HITBOX_WIDTH,
+        HITBOX_HEIGHT
+    };
+    for (int i = 0; i < colisor_count; i++) {
+        CollisionResolve(&hitbox, colisores[i].rect);
+    }
+    self->position.y = hitbox.y - HITBOX_OFFSET_Y;
+
+    // ── Atualiza animação ─────────────────────────────────────────────────────
+    if (correndo) {
         self->action_atual = run;
+    } else if (movendo) {
+        self->action_atual = walk;
     } else {
         self->action_atual = idle;
     }
 
-    //Atualiza só a animação ativa.
     AnimationUpdate(&self->anims[self->action_atual]);
 }
 

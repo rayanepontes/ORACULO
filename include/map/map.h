@@ -7,6 +7,9 @@
 #define MAP_H
 
 #include <raylib.h>
+#include "physics/collision.h"
+
+#define MAP_ESCALA 2.0f
 
 /** @enum MapType
  *
@@ -51,7 +54,11 @@ typedef struct MapBody {
 
     // usado em MAPA_RECORTE
     MapCrop crop;
+    CollisionRect colisores[MAX_COLISORES]; 
+    int           colisor_count;            
 } MapBody;
+
+void MapInitCollision(MapBody *self);
 
 /** @brief Carrega a textura e inicializa o estado do mapa.
  *
