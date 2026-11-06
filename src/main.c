@@ -4,8 +4,9 @@
  * @details Inicializa a janela, carrega os recursos globais e executa o game loop.
  *          O fluxo de estados segue a máquina definida em game_state.h:
  *
- *          STATE_MENU → (confirmado) → STATE_PLAYING
- *          STATE_PLAYING ↔ STATE_INTERFACE  (Se tiver em uma interface o jogo não atualiza, exceto o tempo)
+ *          STATE_MENU → (confirmado) → STATE_INTERFACE (TELA_INSTRUCOES)
+ *          STATE_INTERFACE (instruções) → (ENTER) → STATE_PLAYING
+ *          STATE_PLAYING ↔ STATE_INTERFACE  (em uma interface o jogo e o cronômetro pausam)
  *          STATE_PLAYING → (terminou) → STATE_WIN | STATE_GAME_OVER
  *          STATE_WIN | STATE_GAME_OVER → (ENTER) → STATE_MENU
  */
@@ -61,7 +62,8 @@ int main(void)
                 strncpy(gameplay.nickname, menu.nickname_input, 6);
                 gameplay.nickname[6] = '\0';
                 menu.tela_atual = TELA_PRINCIPAL;
-                state = STATE_PLAYING;
+                gameplay.interface_atual = TELA_INSTRUCOES; 
+                state = STATE_INTERFACE;
             }
 
         } else if (state == STATE_PLAYING || state == STATE_INTERFACE) {

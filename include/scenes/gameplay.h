@@ -16,6 +16,9 @@
 #include "entities/player.h"
 #include "map/map.h"
 
+/** @brief Duração total de uma partida, em segundos (300 = 5 minutos). */
+#define GAMEPLAY_TEMPO_TOTAL 300.0f
+
 /** @enum TelaInterface
  *
  * @brief Subtelas de interface que podem se sobrepor ao gameplay.
@@ -25,10 +28,12 @@
  *          Adicione novos valores aqui à medida que novas telas forem criadas.
  *
  * @param TELA_VOLTAR_MENU Confirmação de saída para o menu principal.
+ * @param TELA_INSTRUCOES  Instruções exibidas antes da partida começar.
  * @param TOTAL_TELAS      Quantidade total de telas de interface.
  */
 typedef enum TelaInterface {
     TELA_VOLTAR_MENU, // Confirmação de saída para o menu principal.
+    TELA_INSTRUCOES,  // Instruções exibidas antes da partida começar.
     TOTAL_TELAS       // Quantidade total de telas de interface.
 } TelaInterface;
 
@@ -45,26 +50,32 @@ typedef enum OpcVoltarMenu{
  * @details Agrupa o player, o mapa, a câmera e todos os flags que a main
  *          precisa ler ao final de cada frame para decidir transições de estado.
  *
- * @param player          Entidade controlada pelo jogador.
- * @param map             Mapa atual do jogo.
- * @param camera          Câmera 2D que segue o player.
- * @param interface_atual Subtela de interface ativa quando state == STATE_INTERFACE.
- * @param score           Pontuação da partida — reservado para o sistema de tempo.
- * @param nickname        Nome do jogador copiado do menu (máx 6 chars + '\0').
- * @param terminou        True quando a partida chega ao fim (vitória ou derrota).
- * @param venceu          True se o jogador venceu; false se perdeu.
- * @param voltar_menu     True quando o jogador confirma que quer voltar ao menu.
+ * @param player            Entidade controlada pelo jogador.
+ * @param map               Mapa atual do jogo.
+ * @param camera            Câmera 2D que segue o player.
+ * @param interface_atual   Subtela de interface ativa quando state == STATE_INTERFACE.
+ * @param score             Pontuação da partida: tempo restante (inteiro) ao vencer.
+ * @param tempo_restante    Segundos que faltam para o fim da partida (contagem regressiva).
+ * @param cronometro_ativo  True enquanto o cronômetro está rodando (após as instruções).
+ * @param instrucoes_vistas True depois que o jogador confirmou a tela de instruções.
+ * @param nickname          Nome do jogador copiado do menu (máx 6 chars + '\0').
+ * @param terminou          True quando a partida chega ao fim (vitória ou derrota).
+ * @param venceu            True se o jogador venceu; false se perdeu.
+ * @param voltar_menu       True quando o jogador confirma que quer voltar ao menu.
  */
 typedef struct GameplayBody {
     PlayerBody    player;
     MapBody       map;
     Camera2D      camera;
-    TelaInterface interface_atual; // subtela ativa quando state == STATE_INTERFACE
-    int           score;           // reservado — implementar com o sistema de tempo
-    char          nickname[7];     // copiado do menu antes de iniciar
-    bool          terminou;        // main lê: partida chegou ao fim
-    bool          venceu;          // main lê: vitória (true) ou derrota (false)
-    bool          voltar_menu;     // main lê: jogador pediu para voltar ao menu
+    TelaInterface interface_atual;   // subtela ativa quando state == STATE_INTERFACE
+    int           score;             // tempo restante (int) ao vencer
+    float         tempo_restante;    // segundos restantes (regressivo)
+    bool          cronometro_ativo;  // cronômetro rodando?
+    bool          instrucoes_vistas; // jogador já passou pela tela de instruções?
+    char          nickname[7];       // copiado do menu antes de iniciar
+    bool          terminou;          // main lê: partida chegou ao fim
+    bool          venceu;            // main lê: vitória (true) ou derrota (false)
+    bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
     OpcVoltarMenu opc_confirmacao;
 } GameplayBody;
 
@@ -97,6 +108,16 @@ void GameplayUpdate(GameplayBody *self, GameState *state);
  * @param scream_height Altura atual da tela em pixels.
  */
 void GameplayDraw  (GameplayBody *self, GameState *state, ResourcesBody *resources, int scream_width, int scream_height);
+
+/** @brief Encerra a partida com vitória e calcula o score.
+ *
+ * @details Para o cronômetro, define score = tempo_restante convertido para
+ *          inteiro e marca terminou/venceu para a main trocar para STATE_WIN.
+ *          Chame esta função quando o objetivo da fase for cumprido.
+ *
+ * @param self Ponteiro para o GameplayBody ativo.
+ */
+void GameplayVencer(GameplayBody *self);
 
 /** @brief Descarrega todos os recursos da cena de gameplay.
  * @param self Ponteiro para o GameplayBody a ser descarregado.
