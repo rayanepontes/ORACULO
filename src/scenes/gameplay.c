@@ -68,12 +68,110 @@ static void GameplayDrawInstrucoes(ResourcesBody *resources, int scream_width, i
                72.0f, 1, resources->amarelo);
 }
 
+/** @brief Caminhos dos PNGs do manual, na ordem das páginas (0 = capa). */
+static const char *MANUAL_CAMINHOS[MANUAL_TOTAL_PAGINAS] = {
+    "assets/texture/manual_jogador/manual_1.png",
+    "assets/texture/manual_jogador/manual_2.png",
+    "assets/texture/manual_jogador/manual_3.png",
+    "assets/texture/manual_jogador/manual_4.png"
+};
+
+/** @brief Desconta o tempo da partida; ao zerar, encerra com derrota. */
+static void GameplayCronometroUpdate(GameplayBody *self) {
+    if (!self->cronometro_ativo) return;
+
+    self->tempo_restante -= GetFrameTime();
+
+    if (self->tempo_restante <= 0.0f) {
+        self->tempo_restante   = 0.0f;
+        self->cronometro_ativo = false;
+        self->manual_aberto    = false;   // fecha o manual se o tempo acabar
+        self->venceu           = false;
+        self->terminou         = true;    // main troca para STATE_GAME_OVER
+    }
+}
+
+/** @brief Abre/fecha o manual (M) e troca de página (setas). */
+static void GameplayManualUpdate(GameplayBody *self) {
+    if (!self->manual_aberto) {
+        if (IsKeyPressed(KEY_M)) {
+            self->manual_aberto = true;
+            self->manual_pagina = 0;      // sempre abre na capa
+        }
+        return;
+    }
+
+    if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
+        self->manual_aberto = false;
+    } else if (IsKeyPressed(KEY_RIGHT) && self->manual_pagina < MANUAL_TOTAL_PAGINAS - 1) {
+        self->manual_pagina++;
+    } else if (IsKeyPressed(KEY_LEFT) && self->manual_pagina > 0) {
+        self->manual_pagina--;
+    }
+}
+
+/** @brief Desenha o manual: fundo escurecido, página atual e instruções de uso. */
+static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
+    DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 0, 0, 150 });
+
+    // Página centralizada, mantendo a proporção. Começa abaixo do relógio (HUD)
+    // e deixa a faixa de baixo livre para as instruções.
+    Texture2D pag = self->manual_paginas[self->manual_pagina];
+    if (pag.id != 0) {
+        float escala = fminf((scream_width * 0.90f) / pag.width,
+                             (scream_height * 0.74f) / pag.height);
+        float dest_w = pag.width  * escala;
+        float dest_h = pag.height * escala;
+        Rectangle origem  = { 0.0f, 0.0f, (float)pag.width, (float)pag.height };
+        Rectangle destino = { (scream_width - dest_w) / 2.0f, scream_height * 0.10f, dest_w, dest_h };
+        DrawTexturePro(pag, origem, destino, (Vector2){ 0.0f, 0.0f }, 0.0f, WHITE);
+    } else {
+        const char *caminho = MANUAL_CAMINHOS[self->manual_pagina];
+        const char *linhas[3] = {
+            TextFormat("Imagem nao carregada: %s", caminho),
+            TextFormat("Arquivo existe: %s", FileExists(caminho) ? "SIM" : "NAO"),
+            TextFormat("Pasta de execucao: %s", GetWorkingDirectory())
+        };
+        for (int i = 0; i < 3; i++) {
+            Vector2 dim = MeasureTextEx(resources->fonte_principal, linhas[i], 36.0f, 1);
+            DrawTextEx(resources->fonte_principal, linhas[i],
+                       (Vector2){ (scream_width / 2.0f) - (dim.x / 2.0f),
+                                  scream_height * 0.40f + i * 50.0f },
+                       36.0f, 1, RED);
+        }
+    }
+
+    // Número da página
+    const char *indice = TextFormat("Pagina %d/%d", self->manual_pagina + 1, MANUAL_TOTAL_PAGINAS);
+    Vector2 indice_dim = MeasureTextEx(resources->fonte_principal, indice, 50.0f, 1);
+    DrawTextEx(resources->fonte_principal, indice,
+               (Vector2){ (scream_width / 2.0f) - (indice_dim.x / 2.0f), scream_height * 0.86f },
+               50.0f, 1, resources->branco);
+
+    // Como usar / como sair
+    const char *ajuda = "SETAS < > : mudar de pagina   |   M ou ESC : fechar o manual";
+    Vector2 ajuda_dim = MeasureTextEx(resources->fonte_principal, ajuda, 50.0f, 1);
+    DrawTextEx(resources->fonte_principal, ajuda,
+               (Vector2){ (scream_width / 2.0f) - (ajuda_dim.x / 2.0f), scream_height * 0.92f },
+               50.0f, 1, resources->amarelo);
+}
+
 void GameplayInit(GameplayBody *self) {
     self->interface_atual = TELA_INSTRUCOES;
     self->score       = 0;
     self->tempo_restante    = GAMEPLAY_TEMPO_TOTAL;
     self->cronometro_ativo  = false;
     self->instrucoes_vistas = false;
+
+    self->manual_aberto = false;
+    self->manual_pagina = 0;
+    TraceLog(LOG_INFO, "MANUAL: pasta de execucao = %s", GetWorkingDirectory());
+    for (int i = 0; i < MANUAL_TOTAL_PAGINAS; i++) {
+        self->manual_paginas[i] = LoadTexture(MANUAL_CAMINHOS[i]);
+        TraceLog(LOG_INFO, "MANUAL: [%s] existe=%d textura_id=%d",
+                 MANUAL_CAMINHOS[i], (int)FileExists(MANUAL_CAMINHOS[i]),
+                 (int)self->manual_paginas[i].id);
+    }
 
     Vector2 centro_tela = { (float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f };
     Vector2 posicao_inicial = {2050 * MAP_ESCALA, 1050 * MAP_ESCALA};
@@ -137,6 +235,13 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         return;  // trava o resto do update
     }
 
+    // ── Manual (M): o tempo continua, mas player e câmera ficam congelados ──
+    if (self->manual_aberto || IsKeyPressed(KEY_M)) {
+        GameplayManualUpdate(self);
+        GameplayCronometroUpdate(self);
+        return;
+    }
+
     // Aqui o player escolhe se volta pro menu ou não
     if (IsKeyPressed(KEY_ESCAPE)) {
         self->interface_atual = TELA_VOLTAR_MENU;
@@ -144,19 +249,9 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         return;
     }
 
-    // ── Cronômetro regressivo ────────────────────────────────────────────────
-    // Só chega aqui em STATE_PLAYING; em STATE_INTERFACE o return acima o pausa.
-    if (self->cronometro_ativo) {
-        self->tempo_restante -= GetFrameTime();
-
-        if (self->tempo_restante <= 0.0f) {
-            self->tempo_restante   = 0.0f;
-            self->cronometro_ativo = false;
-            self->venceu           = false;
-            self->terminou         = true;   // main troca para STATE_GAME_OVER
-            return;
-        }
-    }
+    // ── Cronômetro regressivo ──
+    GameplayCronometroUpdate(self);
+    if (self->terminou) return;
 
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
 
@@ -177,6 +272,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         PlayerDraw(&self->player);
         //CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
+
+    if (*state == STATE_PLAYING && self->manual_aberto) {      // ← NOVO
+        GameplayDrawManual(self, resources, scream_width, scream_height);
+    }
 
     GameplayDrawHUD(self, resources, scream_width); 
 
@@ -217,12 +316,16 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
 
 void GameplayVencer(GameplayBody *self) {
     self->cronometro_ativo = false;
+    self->manual_aberto    = false;
     self->score    = (int)self->tempo_restante;  // tempo que sobrou vira pontuação
     self->venceu   = true;
     self->terminou = true;
 }
 
 void GameplayUnload(GameplayBody *self) {
+    for (int i = 0; i < MANUAL_TOTAL_PAGINAS; i++) {
+        UnloadTexture(self->manual_paginas[i]);
+    }
     PlayerUnload(&self->player);
     MapUnload(&self->map);
 }

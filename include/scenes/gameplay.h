@@ -18,6 +18,8 @@
 
 /** @brief Duração total de uma partida, em segundos (300 = 5 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 300.0f
+/** @brief Quantidade de páginas do manual (a primeira é a capa). */
+#define MANUAL_TOTAL_PAGINAS 4
 
 /** @enum TelaInterface
  *
@@ -58,6 +60,9 @@ typedef enum OpcVoltarMenu{
  * @param tempo_restante    Segundos que faltam para o fim da partida (contagem regressiva).
  * @param cronometro_ativo  True enquanto o cronômetro está rodando (após as instruções).
  * @param instrucoes_vistas True depois que o jogador confirmou a tela de instruções.
+ * @param manual_aberto   True enquanto o manual está sobreposto (o tempo continua).
+ * @param manual_pagina   Índice da página atual do manual (0 = capa).
+ * @param manual_paginas  Texturas das páginas do manual.
  * @param nickname          Nome do jogador copiado do menu (máx 6 chars + '\0').
  * @param terminou          True quando a partida chega ao fim (vitória ou derrota).
  * @param venceu            True se o jogador venceu; false se perdeu.
@@ -72,6 +77,9 @@ typedef struct GameplayBody {
     float         tempo_restante;    // segundos restantes (regressivo)
     bool          cronometro_ativo;  // cronômetro rodando?
     bool          instrucoes_vistas; // jogador já passou pela tela de instruções?
+    bool          manual_aberto;                           // manual na tela?
+    int           manual_pagina;                           // página atual (0 = capa)
+    Texture2D     manual_paginas[MANUAL_TOTAL_PAGINAS];    // PNGs do manual
     char          nickname[7];       // copiado do menu antes de iniciar
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
