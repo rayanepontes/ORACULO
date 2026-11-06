@@ -8,10 +8,15 @@
 
 #include <raylib.h>
 #include "graphics/animation.h"
+#include "physics/collision.h"
 
 #define PLAYER_BASE_SCALE 1.5f
 #define PLAYER_BASE_WIDTH 175.0f
 #define PLAYER_BASE_HEIGHT 257.0f
+#define HITBOX_WIDTH    140.0f  // largura da hitbox
+#define HITBOX_HEIGHT   130.0f  // altura da hitbox
+#define HITBOX_OFFSET_X  61.0f  // centraliza horizontalmente no sprite
+#define HITBOX_OFFSET_Y 235.0f  // ancora na base do sprite
 
 /** @enum PlayerDirection
  * 
@@ -90,7 +95,7 @@ void PLayerReset(PlayerBody *self, Vector2 posicao_inicial);
  * 
  * @param self Ponteiro para uma entidade player.
  */
-void PlayerUpdateAction(PlayerBody *self);
+void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_count);
 
 /** @brief Desenha o player na tela.
  * 

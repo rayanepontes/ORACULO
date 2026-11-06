@@ -9,13 +9,15 @@
 #include "scenes/gameplay.h"
 #include "core/game_state.h"
 #include "graphics/ui.h"
+#include "physics/collision.h"
+#include "map/map.h"
 
 void GameplayInit(GameplayBody *self) {
     Vector2 centro_tela = { (float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f };
-    //Vector2 centro_mapa = {self->map.texture.width / 2, self->map.texture.height / 2};
+    Vector2 posicao_inicial = {2050 * MAP_ESCALA, 1050 * MAP_ESCALA};
 
     // ── Player (Estagiária) ───────────────────────────────────────────────────
-    PlayerInit(&self->player, centro_tela);
+    PlayerInit(&self->player, posicao_inicial);
 
     float sprite_w = PLAYER_BASE_WIDTH * PLAYER_BASE_SCALE;  
     float sprite_h =  PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE;
@@ -72,7 +74,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         return;
     }
 
-    PlayerUpdateAction(&self->player);
+    PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
 
 
     // Câmera andando junto com o player
@@ -89,6 +91,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     BeginMode2D(self->camera);
         MapDraw(&self->map);
         PlayerDraw(&self->player);
+        //CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
 
     if (*state == STATE_INTERFACE) {
