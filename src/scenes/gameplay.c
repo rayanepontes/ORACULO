@@ -78,13 +78,13 @@ static const char *MANUAL_CAMINHOS[MANUAL_TOTAL_PAGINAS] = {
 
 /** @brief Desconta o tempo da partida; ao zerar, encerra com derrota. */
 static void GameplayCronometroUpdate(GameplayBody *self) {
-    if (!self->cronometro_ativo) return;
+    if (!self->timer_ativo) return;
 
     self->tempo_restante -= GetFrameTime();
 
     if (self->tempo_restante <= 0.0f) {
         self->tempo_restante   = 0.0f;
-        self->cronometro_ativo = false;
+        self->timer_ativo = false;
         self->manual_aberto    = false;   // fecha o manual se o tempo acabar
         self->venceu           = false;
         self->terminou         = true;    // main troca para STATE_GAME_OVER
@@ -160,7 +160,7 @@ void GameplayInit(GameplayBody *self) {
     self->interface_atual = TELA_INSTRUCOES;
     self->tempo_conclusao       = 0;
     self->tempo_restante    = GAMEPLAY_TEMPO_TOTAL;
-    self->cronometro_ativo  = false;
+    self->timer_ativo  = false;
     self->instrucoes_vistas = false;
 
     self->manual_aberto = false;
@@ -207,7 +207,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
                 GameplayCronometroUpdate(self);
-                
+
                 int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC);
                 if (confirmado == VOLTAR_MENU) {
                     self->voltar_menu = true; // SIM
@@ -224,7 +224,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
             case TELA_INSTRUCOES: 
                 if (IsKeyPressed(KEY_ENTER)) {
                     self->instrucoes_vistas = true;
-                    self->cronometro_ativo  = true;  // o tempo começa a contar aqui
+                    self->timer_ativo  = true;  // o tempo começa a contar aqui
                     *state = STATE_PLAYING;
                 }
                 break;
@@ -316,7 +316,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
 }
 
 void GameplayVencer(GameplayBody *self) {
-    self->cronometro_ativo = false;
+    self->timer_ativo = false;
     self->manual_aberto    = false;
     self->tempo_conclusao  = (int)(GAMEPLAY_TEMPO_TOTAL - self->tempo_restante);  // tempo decorrido em segundos
     self->venceu   = true;

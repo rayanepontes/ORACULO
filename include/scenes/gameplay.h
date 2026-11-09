@@ -58,7 +58,7 @@ typedef enum OpcVoltarMenu{
  * @param interface_atual   Subtela de interface ativa quando state == STATE_INTERFACE.
  * @param tempo_conclusao   Tempo de conclusão da partida em segundos.
  * @param tempo_restante    Segundos que faltam para o fim da partida (contagem regressiva).
- * @param cronometro_ativo  True enquanto o cronômetro está rodando (após as instruções).
+ * @param timer_ativo       True enquanto o cronômetro está rodando (após as instruções).
  * @param instrucoes_vistas True depois que o jogador confirmou a tela de instruções.
  * @param manual_aberto   True enquanto o manual está sobreposto (o tempo continua).
  * @param manual_pagina   Índice da página atual do manual (0 = capa).
@@ -75,7 +75,7 @@ typedef struct GameplayBody {
     TelaInterface interface_atual;   // subtela ativa quando state == STATE_INTERFACE
     int           tempo_conclusao;   // tempo de conclusão em segundos (preenchido ao vencer)
     float         tempo_restante;    // segundos restantes (regressivo)
-    bool          cronometro_ativo;  // cronômetro rodando?
+    bool          timer_ativo;  // timer rodando?
     bool          instrucoes_vistas; // jogador já passou pela tela de instruções?
     bool          manual_aberto;                           // manual na tela?
     int           manual_pagina;                           // página atual (0 = capa)
