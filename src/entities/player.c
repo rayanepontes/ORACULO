@@ -49,7 +49,7 @@ static void InitAnimations(PlayerBody *self){
 }
 
 //Reseta o quadro de todas as animações do player para o estado inicial delas.
-void ResetAnimations(PlayerBody *self){
+static void ResetAnimations(PlayerBody *self){
     for (int i = 0; i < total_actions; i++){
         self->anims[i].frame_atual_idx = self->anims[i].first_idx;
         self->anims[i].duration_left = self->anims[i].speed;
@@ -76,8 +76,6 @@ void PLayerReset(PlayerBody *self, Vector2 posicao_inicial){
 }
 
 void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_count) {
-    float player_speed = 4.0f;
-
     bool movendo  = false;
     bool correndo = false;
 
@@ -87,22 +85,22 @@ void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_
     // ── Calcula velocidade desejada ───────────────────────────────────────────
     if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         self->direction = LEFT;
-        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? -(player_speed * 2) : -player_speed;
+        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 2) : -PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = !correndo;
     } else if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
         self->direction = RIGHT;
-        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? (player_speed * 2) : player_speed;
+        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 2) : PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = !correndo;
     }
 
     if (IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN)) {
-        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? -(player_speed * 2) : -player_speed;
+        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 2) : -PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = movendo || !correndo;
     } else if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_UP)) {
-        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? (player_speed * 2) : player_speed;
+        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 2) : PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = movendo || !correndo;
     }

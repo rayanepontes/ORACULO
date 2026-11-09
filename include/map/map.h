@@ -21,7 +21,7 @@ typedef enum MapType {
     MAP_SINGLE,    // imagem enorme, sem recorte
     MAP_CROP,  // recorte manual de uma região
     MAP_TILEMAP,  // grade de tiles (futuro)
-    MAPA_COUNT
+    MAP_COUNT // Quantidade de tipos de mapa. //
 } MapType;
 
 /** @struct MapCrop

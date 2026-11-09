@@ -15,7 +15,7 @@
  *  
  * @brief Subtelas disponíveis dentro da cena de menu.
  * @param TELA_PRINCIPAL Tela inicial com as opções do menu.
- * @param TELA_NOME Tela inicial com as opções do menu.
+ * @param TELA_NOME Subtela de inserção do nome do jogador.
  * @param TELA_RANKING Subtela de inserção de nome do jogador.
  * @param TELA_CONFIRMA_SAIR Tela que o player afirma de deseja sair do jogo.
  * @param TELA_TOTAL Quantidade total de telas.
@@ -33,7 +33,8 @@ typedef enum TelaMenu {
  * @brief Opções disponíveis no menu principal.
  * @param MENU_OPC_INICIAR  Inicia uma nova partida.
  * @param MENU_OPC_RANKING  Navega para a subtela de ranking.
- * @param MENU_OPC_OPC  Quantidade total de opções.
+ * @param MENU_OPC_SAIR Sai do jogo.
+ * @param MENU_TOTAL_OPC  Quantidade total de opções.
  */
 typedef enum MenuOpc {
     MENU_OPC_INICIAR, // Inicia uma nova partida.
@@ -50,7 +51,7 @@ typedef enum MenuOpc {
  * @param tela_atual Subtela visível no momento.
  * @param opcao_atual Opção selecionada no menu principal.
  * @param confirmado True quando o jogador confirma com ENTER.
-  * @param opc_confimacao  0 = SIM, 1 = NAO — usado em TELA_CONFIRMA_SAIR    
+  * @param opc_confimacao  0 = SIM, 1 = NAO — usado em TELA_CONFIRMA_SAIR.   
  * @param sair True quando o jogador confirma com ENTER. 
  * @param nickname_input Até 6 caracteres + /0.
  * @param nickname_len Quantas letras já foram digitadas.
