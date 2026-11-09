@@ -56,7 +56,7 @@ typedef enum OpcVoltarMenu{
  * @param map               Mapa atual do jogo.
  * @param camera            Câmera 2D que segue o player.
  * @param interface_atual   Subtela de interface ativa quando state == STATE_INTERFACE.
- * @param score             Pontuação da partida: tempo restante (inteiro) ao vencer.
+ * @param tempo_conclusao   Tempo de conclusão da partida em segundos.
  * @param tempo_restante    Segundos que faltam para o fim da partida (contagem regressiva).
  * @param cronometro_ativo  True enquanto o cronômetro está rodando (após as instruções).
  * @param instrucoes_vistas True depois que o jogador confirmou a tela de instruções.
@@ -73,7 +73,7 @@ typedef struct GameplayBody {
     MapBody       map;
     Camera2D      camera;
     TelaInterface interface_atual;   // subtela ativa quando state == STATE_INTERFACE
-    int           score;             // tempo restante (int) ao vencer
+    int           tempo_conclusao;   // tempo de conclusão em segundos (preenchido ao vencer)
     float         tempo_restante;    // segundos restantes (regressivo)
     bool          cronometro_ativo;  // cronômetro rodando?
     bool          instrucoes_vistas; // jogador já passou pela tela de instruções?
@@ -117,9 +117,9 @@ void GameplayUpdate(GameplayBody *self, GameState *state);
  */
 void GameplayDraw  (GameplayBody *self, GameState *state, ResourcesBody *resources, int scream_width, int scream_height);
 
-/** @brief Encerra a partida com vitória e calcula o score.
+/** @brief Encerra a partida com vitória e registra o tempo de conclusão.
  *
- * @details Para o cronômetro, define score = tempo_restante convertido para
+ * @details Para o cronômetro, define tempo_conclusao = tempo decorrido convertido para
  *          inteiro e marca terminou/venceu para a main trocar para STATE_WIN.
  *          Chame esta função quando o objetivo da fase for cumprido.
  *

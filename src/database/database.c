@@ -11,8 +11,8 @@
 // ─── Funções internas ─────────────────────────────────────────────────────────
 
 /**
- * @brief Ordena o array de entradas em ordem decrescente de score.
- * @details Usa bubble sort — suficiente para no máximo DATABASE_MAX_ENTRIES entradas.
+ * @brief Ordena o array de entradas em ordem crescente de tempo (menor = melhor).
+ * @details Usa insertion sort — suficiente para no máximo DATABASE_MAX_ENTRIES entradas. 
  * @param data_saved Array de GameData a ordenar.
  * @param count      Quantidade de entradas no array.
  */
@@ -23,7 +23,7 @@ static void data_sort(GameData data_saved[], int count) {
         int j = i - 1;
 
         // desloca os elementos menores que a chave uma posição à frente
-        while (j >= 0 && data_saved[j].score < chave.score) {
+        while (j >= 0 && data_saved[j].tempo > chave.tempo) {
             data_saved[j + 1] = data_saved[j];
             j--;
         }
@@ -46,7 +46,7 @@ void DataLoad(GameData data_saved[], int *count) {
     while (*count < DATABASE_MAX_ENTRIES) {
         GameData entry;
         // lê uma linha no formato "NICK 1500"
-        int lidos = fscanf(file, "%6s %d", entry.nickname, &entry.score);
+        int lidos = fscanf(file, "%6s %d", entry.nickname, &entry.tempo);
 
         // fscanf retorna a quantidade de campos lidos — se não for 2, chegou no fim
         if (lidos != 2) break;
@@ -64,7 +64,7 @@ void DataSave(GameData entries[], int count) {
     if (file == NULL) return;
 
     for (int i = 0; i < count; i++) {
-        fprintf(file, "%s %d\n", entries[i].nickname, entries[i].score);
+        fprintf(file, "%s %d\n", entries[i].nickname, entries[i].tempo);
     }
 
     fclose(file);
@@ -76,13 +76,16 @@ bool DataInsert(GameData data_saved[], int *count, GameData new_entry) {
         data_saved[*count] = new_entry;
         (*count)++;
     } else {
-        // Ranking cheio — substitui o último (menor score) se o novo for maior
-        if (new_entry.score > data_saved[DATABASE_MAX_ENTRIES - 1].score) {
+        // Ranking cheio — substitui o último (maior tempo) se o novo for menor
+        if (new_entry.tempo < data_saved[DATABASE_MAX_ENTRIES - 1].tempo) {
             data_saved[DATABASE_MAX_ENTRIES - 1] = new_entry;
         } else {
-            return false; // novo score não entra no top 10
+            return false; // tempo não entra no top 10
         }
     }
+
+    // Reordena para manter ordem crescente
+    data_sort(data_saved, *count);
 
     // Reordena para manter ordem decrescente
     data_sort(data_saved, *count);

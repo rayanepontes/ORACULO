@@ -22,7 +22,7 @@
  */
 typedef struct GameData {
     char nickname[7]; // Nickname do jogador (máx 6 chars + '\0').
-    int  score;       // Pontuação obtida na partida.
+    int  tempo;       // Tempo de conclusão em segundos (menor = melhor).
 } GameData;
 
 /**
