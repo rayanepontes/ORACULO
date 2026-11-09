@@ -158,7 +158,7 @@ static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int
 
 void GameplayInit(GameplayBody *self) {
     self->interface_atual = TELA_INSTRUCOES;
-    self->score       = 0;
+    self->tempo_conclusao       = 0;
     self->tempo_restante    = GAMEPLAY_TEMPO_TOTAL;
     self->cronometro_ativo  = false;
     self->instrucoes_vistas = false;
@@ -192,7 +192,7 @@ void GameplayInit(GameplayBody *self) {
     self->camera.zoom     = 1.0f;
 
     self->interface_atual = TELA_VOLTAR_MENU;
-    self->score       = 0;
+    self->tempo_conclusao       = 0;
     self->nickname[0] = '\0';
     self->terminou    = false;
     self->venceu      = false;
@@ -317,7 +317,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
 void GameplayVencer(GameplayBody *self) {
     self->cronometro_ativo = false;
     self->manual_aberto    = false;
-    self->score    = (int)self->tempo_restante;  // tempo que sobrou vira pontuação
+    self->tempo_conclusao  = (int)(GAMEPLAY_TEMPO_TOTAL - self->tempo_restante);  // tempo decorrido em segundos
     self->venceu   = true;
     self->terminou = true;
 }

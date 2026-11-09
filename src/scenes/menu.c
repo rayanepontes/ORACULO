@@ -259,7 +259,7 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
             float header_size = 36.0f;                  // tamanho da fonte do cabeçalho
             DrawTextEx(resources->fonte_principal, "RANK", (Vector2){ col_rank_x, header_y }, header_size, 1, resources->lilas_claro);
             DrawTextEx(resources->fonte_principal, "NAME", (Vector2){ col_nome_x, header_y }, header_size, 1, resources->lilas_claro);
-            DrawTextEx(resources->fonte_principal, "SCORE",(Vector2){ col_pont_x, header_y }, header_size, 1, resources->lilas_claro);
+            DrawTextEx(resources->fonte_principal, "TEMPO",(Vector2){ col_pont_x, header_y }, header_size, 1, resources->lilas_claro);
 
 
             if (resources->ranking_count == 0) {
@@ -285,7 +285,7 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
                         (Vector2){ col_nome_x, y }, entry_size, 1, cor);
 
                     DrawTextEx(resources->fonte_principal,
-                        TextFormat("%d", resources->ranking[i].score),
+                        TextFormat("%02d:%02d", resources->ranking[i].tempo / 60, resources->ranking[i].tempo % 60),
                         (Vector2){ col_pont_x, y }, entry_size, 1, cor);
                 }
             }
