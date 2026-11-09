@@ -206,7 +206,8 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
-
+                GameplayCronometroUpdate(self);
+                
                 int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC);
                 if (confirmado == VOLTAR_MENU) {
                     self->voltar_menu = true; // SIM
