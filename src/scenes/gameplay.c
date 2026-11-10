@@ -186,6 +186,8 @@ static void GameplayDrawVoltarMenu(GameplayBody *self, ResourcesBody *resources,
                 (int)self->opc_confirmacao, estilo, scream_height * 0.60f, scream_width);
 }
 
+// ─── Funções públicas ─────────────────────────────────────────────────────────
+
 void GameplayInit(GameplayBody *self) {
     self->interface_atual = TELA_INSTRUCOES;
     self->tempo_conclusao       = 0;
@@ -201,6 +203,11 @@ void GameplayInit(GameplayBody *self) {
         TraceLog(LOG_INFO, "MANUAL: [%s] existe=%d textura_id=%d",
                  MANUAL_CAMINHOS[i], (int)FileExists(MANUAL_CAMINHOS[i]),
                  (int)self->manual_paginas[i].id);
+    }
+
+    self->minigames_concluidos = 0;
+    for (int i = 0; i < GAMEPLAY_TOTAL_MINIGAMES; i++) {
+        self->minigames_completos[i] = false;
     }
 
     Vector2 centro_tela = { (float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f };
@@ -323,6 +330,18 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
             default:
                 break;
         }
+    }
+}
+
+void GameplayMinigameConcluido(GameplayBody *self, int indice) {
+    if (indice < 0 || indice >= GAMEPLAY_TOTAL_MINIGAMES) return;
+    if (self->minigames_completos[indice]) return; // já contabilizado
+
+    self->minigames_completos[indice] = true;
+    self->minigames_concluidos++;
+
+    if (self->minigames_concluidos >= GAMEPLAY_TOTAL_MINIGAMES) {
+        GameplayVencer(self);
     }
 }
 

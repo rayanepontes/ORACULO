@@ -20,6 +20,8 @@
 #define GAMEPLAY_TEMPO_TOTAL 300.0f
 /** @brief Quantidade de páginas do manual (a primeira é a capa). */
 #define MANUAL_TOTAL_PAGINAS 5
+/** @brief Número máximo de minigames diferentes no jogo. */
+#define GAMEPLAY_TOTAL_MINIGAMES 1
 
 /** @enum TelaInterface
  *
@@ -64,6 +66,8 @@ typedef enum OpcVoltarMenu{
  * @param manual_pagina   Índice da página atual do manual (0 = capa).
  * @param manual_paginas  Texturas das páginas do manual.
  * @param nickname          Nome do jogador copiado do menu (máx 6 chars + '\0').
+ * @param minigames_concluidos   Quantos minigames o jogador já concluiu nesta partida.
+ * @param minigames_completos    Flags por índice; evita contabilizar o mesmo minigame duas vezes.
  * @param terminou          True quando a partida chega ao fim (vitória ou derrota).
  * @param venceu            True se o jogador venceu; false se perdeu.
  * @param voltar_menu       True quando o jogador confirma que quer voltar ao menu.
@@ -81,6 +85,8 @@ typedef struct GameplayBody {
     int           manual_pagina_atual;                           // página atual (0 = capa)
     Texture2D     manual_paginas[MANUAL_TOTAL_PAGINAS];    // PNGs do manual
     char          nickname[7];       // copiado do menu antes de iniciar
+    int           minigames_concluidos; // quantos minigames já foram finalizados
+    bool          minigames_completos[GAMEPLAY_TOTAL_MINIGAMES]; // evita contar o mesmo duas vezes
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
@@ -116,6 +122,16 @@ void GameplayUpdate(GameplayBody *self, GameState *state);
  * @param scream_height Altura atual da tela em pixels.
  */
 void GameplayDraw  (GameplayBody *self, GameState *state, ResourcesBody *resources, int scream_width, int scream_height);
+
+/** @brief Registra a conclusão de um minigame pelo índice e verifica vitória.
+ *
+ * @details Ignora chamadas duplicadas para o mesmo índice. Chama GameplayVencer
+ *          automaticamente quando todos os minigames forem concluídos.
+ *
+ * @param self   Ponteiro para o GameplayBody ativo.
+ * @param indice Índice do minigame (0 a GAMEPLAY_MAX_MINIGAMES - 1).
+ */
+void GameplayMinigameConcluido(GameplayBody *self, int indice);
 
 /** @brief Encerra a partida com vitória e registra o tempo de conclusão.
  *
