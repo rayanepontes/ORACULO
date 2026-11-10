@@ -70,10 +70,11 @@ static void GameplayDrawInstrucoes(ResourcesBody *resources, int scream_width, i
 
 /** @brief Caminhos dos PNGs do manual, na ordem das páginas (0 = capa). */
 static const char *MANUAL_CAMINHOS[MANUAL_TOTAL_PAGINAS] = {
-    "assets/texture/manual_jogador/manual_1.png",
-    "assets/texture/manual_jogador/manual_2.png",
-    "assets/texture/manual_jogador/manual_3.png",
-    "assets/texture/manual_jogador/manual_4.png"
+    "assets/texture/manual_jogador/manual_capa.png",
+    "assets/texture/manual_jogador/manual_pag_1.png",
+    "assets/texture/manual_jogador/manual_pag_2.png",
+    "assets/texture/manual_jogador/manual_pag_3.png",
+    "assets/texture/manual_jogador/manual_pag_4.png"
 };
 
 /** @brief Desconta o tempo da partida; ao zerar, encerra com derrota. */
@@ -96,17 +97,17 @@ static void GameplayManualUpdate(GameplayBody *self) {
     if (!self->manual_aberto) {
         if (IsKeyPressed(KEY_M)) {
             self->manual_aberto = true;
-            self->manual_pagina = 0;      // sempre abre na capa
+            self->manual_pagina_atual = 0;      // sempre abre na capa
         }
         return;
     }
 
     if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
         self->manual_aberto = false;
-    } else if (IsKeyPressed(KEY_RIGHT) && self->manual_pagina < MANUAL_TOTAL_PAGINAS - 1) {
-        self->manual_pagina++;
-    } else if (IsKeyPressed(KEY_LEFT) && self->manual_pagina > 0) {
-        self->manual_pagina--;
+    } else if (IsKeyPressed(KEY_RIGHT) && self->manual_pagina_atual < MANUAL_TOTAL_PAGINAS - 1) {
+        self->manual_pagina_atual++;
+    } else if (IsKeyPressed(KEY_LEFT) && self->manual_pagina_atual > 0) {
+        self->manual_pagina_atual--;
     }
 }
 
@@ -116,7 +117,7 @@ static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int
 
     // Página centralizada, mantendo a proporção. Começa abaixo do relógio (HUD)
     // e deixa a faixa de baixo livre para as instruções.
-    Texture2D pag = self->manual_paginas[self->manual_pagina];
+    Texture2D pag = self->manual_paginas[self->manual_pagina_atual];
     if (pag.id != 0) {
         float escala = fminf((scream_width * 0.90f) / pag.width,
                              (scream_height * 0.74f) / pag.height);
@@ -126,7 +127,7 @@ static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int
         Rectangle destino = { (scream_width - dest_w) / 2.0f, scream_height * 0.10f, dest_w, dest_h };
         DrawTexturePro(pag, origem, destino, (Vector2){ 0.0f, 0.0f }, 0.0f, WHITE);
     } else {
-        const char *caminho = MANUAL_CAMINHOS[self->manual_pagina];
+        const char *caminho = MANUAL_CAMINHOS[self->manual_pagina_atual];
         const char *linhas[3] = {
             TextFormat("Imagem nao carregada: %s", caminho),
             TextFormat("Arquivo existe: %s", FileExists(caminho) ? "SIM" : "NAO"),
@@ -142,7 +143,7 @@ static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int
     }
 
     // Número da página
-    const char *indice = TextFormat("Pagina %d/%d", self->manual_pagina + 1, MANUAL_TOTAL_PAGINAS);
+    const char *indice = TextFormat("Pagina %d/%d", self->manual_pagina_atual + 1, MANUAL_TOTAL_PAGINAS);
     Vector2 indice_dim = MeasureTextEx(resources->fonte_principal, indice, 50.0f, 1);
     DrawTextEx(resources->fonte_principal, indice,
                (Vector2){ (scream_width / 2.0f) - (indice_dim.x / 2.0f), scream_height * 0.86f },
@@ -193,7 +194,7 @@ void GameplayInit(GameplayBody *self) {
     self->instrucoes_vistas = false;
 
     self->manual_aberto = false;
-    self->manual_pagina = 0;
+    self->manual_pagina_atual = 0;
     TraceLog(LOG_INFO, "MANUAL: pasta de execucao = %s", GetWorkingDirectory());
     for (int i = 0; i < MANUAL_TOTAL_PAGINAS; i++) {
         self->manual_paginas[i] = LoadTexture(MANUAL_CAMINHOS[i]);

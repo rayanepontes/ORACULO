@@ -19,7 +19,7 @@
 /** @brief Duração total de uma partida, em segundos (300 = 5 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 300.0f
 /** @brief Quantidade de páginas do manual (a primeira é a capa). */
-#define MANUAL_TOTAL_PAGINAS 4
+#define MANUAL_TOTAL_PAGINAS 5
 
 /** @enum TelaInterface
  *
@@ -78,7 +78,7 @@ typedef struct GameplayBody {
     bool          timer_ativo;  // timer rodando?
     bool          instrucoes_vistas; // jogador já passou pela tela de instruções?
     bool          manual_aberto;                           // manual na tela?
-    int           manual_pagina;                           // página atual (0 = capa)
+    int           manual_pagina_atual;                           // página atual (0 = capa)
     Texture2D     manual_paginas[MANUAL_TOTAL_PAGINAS];    // PNGs do manual
     char          nickname[7];       // copiado do menu antes de iniciar
     bool          terminou;          // main lê: partida chegou ao fim
