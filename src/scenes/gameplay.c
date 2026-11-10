@@ -77,7 +77,7 @@ static const char *MANUAL_CAMINHOS[MANUAL_TOTAL_PAGINAS] = {
 };
 
 /** @brief Desconta o tempo da partida; ao zerar, encerra com derrota. */
-static void GameplayCronometroUpdate(GameplayBody *self) {
+static void GameplayTemporizadorUpdate(GameplayBody *self) {
     if (!self->timer_ativo) return;
 
     self->tempo_restante -= GetFrameTime();
@@ -156,6 +156,35 @@ static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int
                50.0f, 1, resources->amarelo);
 }
 
+/** @brief Desenha o overlay de confirmação de desistência.
+ * @param self         Ponteiro para o GameplayBody.
+ * @param resources    Recursos visuais (fonte, cores).
+ * @param scream_width  Largura da tela em pixels.
+ * @param scream_height Altura da tela em pixels.
+ */
+static void GameplayDrawVoltarMenu(GameplayBody *self, ResourcesBody *resources,
+                                   int scream_width, int scream_height) {
+    const char *labels[TOTAL_OPC] = { "DESISTIR", "VOLTAR AO JOGO" };
+
+    const char *msg = "Certeza que quer desistir?";
+    Vector2 msg_dim = MeasureTextEx(resources->fonte_principal, msg, 130.0f, 1);
+
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){ 0, 0, 0, 150 });
+    DrawTextEx(resources->fonte_principal, msg,
+        (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.30f },
+        130.0f, 1, resources->branco);
+
+    UiOpcaoEstilo estilo = {
+        .size_normal  = 60.0f,
+        .size_select  = 72.0f,
+        .cor_normal   = resources->branco,
+        .cor_select   = resources->amarelo,
+        .espacamento  = 90.0f
+    };
+    UiOpcaoDraw(resources->fonte_principal, (const char **)labels, TOTAL_OPC,
+                (int)self->opc_confirmacao, estilo, scream_height * 0.60f, scream_width);
+}
+
 void GameplayInit(GameplayBody *self) {
     self->interface_atual = TELA_INSTRUCOES;
     self->tempo_conclusao       = 0;
@@ -206,7 +235,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
-                GameplayCronometroUpdate(self);
+                GameplayTemporizadorUpdate(self);
 
                 int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC);
                 if (confirmado == VOLTAR_MENU) {
@@ -239,7 +268,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
     // ── Manual (M): o tempo continua, mas player e câmera ficam congelados ──
     if (self->manual_aberto || IsKeyPressed(KEY_M)) {
         GameplayManualUpdate(self);
-        GameplayCronometroUpdate(self);
+        GameplayTemporizadorUpdate(self);
         return;
     }
 
@@ -250,8 +279,8 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         return;
     }
 
-    // ── Cronômetro regressivo ──
-    GameplayCronometroUpdate(self);
+    // ── Temporizador ──
+    GameplayTemporizadorUpdate(self);
     if (self->terminou) return;
 
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
@@ -274,7 +303,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         //CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
 
-    if (*state == STATE_PLAYING && self->manual_aberto) {      // ← NOVO
+    if (*state == STATE_PLAYING && self->manual_aberto) {
         GameplayDrawManual(self, resources, scream_width, scream_height);
     }
 
@@ -283,29 +312,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     if (*state == STATE_INTERFACE) {
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
-                const char *labels[TOTAL_OPC] = { "DESISTIR", "VOLTAR AO JOGO" };
-
-                const char *msg = "Certeza que quer desistir?";
-                Vector2 msg_dim = MeasureTextEx(resources->fonte_principal, msg, 130.0f, 1);
-
-                DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){ 0, 0, 0, 150 });
-                DrawTextEx(resources->fonte_principal, msg,
-                    (Vector2){ (scream_width / 2.0f) - (msg_dim.x / 2.0f), scream_height * 0.30f },
-                    130.0f, 1, resources->branco);
-
-                UiOpcaoEstilo estilo = {
-                    .size_normal  = 60.0f,
-                    .size_select  = 72.0f,
-                    .cor_normal   = resources->branco,
-                    .cor_select   = resources->amarelo,
-                    .espacamento  = 90.0f
-                };
-                UiOpcaoDraw(resources->fonte_principal, (const char **)labels, TOTAL_OPC,
-                            (int)self->opc_confirmacao, estilo, scream_height * 0.60f, scream_width);
+                GameplayDrawVoltarMenu(self, resources, scream_width, scream_height);
                 break;
 
-            case TELA_INSTRUCOES:  
-                                
+            case TELA_INSTRUCOES:                   
                 GameplayDrawInstrucoes(resources, scream_width, scream_height);
                 break;
             
