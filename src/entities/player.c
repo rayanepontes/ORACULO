@@ -85,22 +85,22 @@ void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_
     // ── Calcula velocidade desejada ───────────────────────────────────────────
     if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         self->direction = LEFT;
-        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 2) : -PLAYER_SPEED;
+        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 10) : -PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = !correndo;
     } else if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
         self->direction = RIGHT;
-        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 2) : PLAYER_SPEED;
+        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 10) : PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = !correndo;
     }
 
     if (IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN)) {
-        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 2) : -PLAYER_SPEED;
+        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 10) : -PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = movendo || !correndo;
     } else if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_UP)) {
-        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 2) : PLAYER_SPEED;
+        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 10) : PLAYER_SPEED;
         correndo = IsKeyDown(KEY_LEFT_SHIFT);
         movendo  = movendo || !correndo;
     }

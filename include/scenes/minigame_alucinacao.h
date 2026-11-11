@@ -10,6 +10,7 @@
 
 #include <raylib.h>
 #include <stdbool.h>
+#include "core/interagivel.h"
 #include "core/resources.h"
 
 /** @brief Total de relatórios exibidos no minigame. */
@@ -56,8 +57,7 @@ typedef enum OpcConfirmacaoAluc {
  * @param relatorios          Texturas dos relatórios carregadas do disco.
  * @param background          Textura do fundo do minigame.
  * @param computador_sprite  Sprite do computador exibido no mapa.
- * @param computador_rect    Posição e tamanho do sprite do computador no mundo.
- * @param interacao_rect     Área onde o player pode pressionar E para interagir.
+ * @param computador  Objeto interativo do computador (posição, tamanho e área de interação).
  */
 typedef struct AlucinacaoBody {
     TelaAlucinacao    tela_atual;
@@ -69,8 +69,7 @@ typedef struct AlucinacaoBody {
     Texture2D         relatorios[ALUCINACAO_TOTAL_RELATORIOS];
     Texture2D         background;
     Texture2D         computador_sprite; 
-    Rectangle computador_rect;
-    Rectangle interacao_rect;     
+    Interagivel       computador;   
 } AlucinacaoBody;
 
 /** @brief Inicializa o minigame carregando as texturas dos relatórios.
@@ -104,13 +103,6 @@ void AlucinacaoDrawMundo(AlucinacaoBody *self);
  */
 void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
                     int scream_width, int scream_height);
-
-/** @brief Verifica se o player está dentro da área de interação do computador.
- * @param self       Ponteiro para o AlucinacaoBody ativo.
- * @param player_pos Posição atual do player no mundo.
- * @return True se o player estiver na área de interação.
- */
-bool AlucinacaoPoderInteragir(AlucinacaoBody *self, Vector2 player_pos);
 
 /** @brief Descarrega as texturas do minigame da memória.
  * @param self Ponteiro para o AlucinacaoBody a ser descarregado.

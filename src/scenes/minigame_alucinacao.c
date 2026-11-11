@@ -218,19 +218,9 @@ void AlucinacaoInit(AlucinacaoBody *self) {
 
     float comp_w = self->computador_sprite.width  / (MAP_ESCALA * 1.5f);
     float comp_h = self->computador_sprite.height / (MAP_ESCALA * 1.5f);
-    float comp_x = 1025 * MAP_ESCALA;
+    float comp_x = 1260 * MAP_ESCALA;
     float comp_y = 200  * MAP_ESCALA;
-
-    self->computador_rect = (Rectangle){ comp_x, comp_y, comp_w, comp_h };
-
-    // área de interação: 0px a mais em cada lado
-    float margem = 40.0f;
-    self->interacao_rect = (Rectangle){
-        comp_x - margem,
-        comp_y - margem,
-        comp_w + margem * 2,
-        comp_h + margem * 2
-    };
+    self->computador = InteragivelCriar(comp_x, comp_y, comp_w, comp_h, 40.0f);
 }
 
 void AlucinacaoUpdate(AlucinacaoBody *self) {
@@ -258,8 +248,8 @@ void AlucinacaoUpdate(AlucinacaoBody *self) {
 void AlucinacaoDrawIndicador(AlucinacaoBody *self, ResourcesBody *resources, Camera2D camera) {
     // Centro superior do computador em coordenadas de tela
     Vector2 pos_mundo = {
-        self->computador_rect.x + self->computador_rect.width / 2.0f,
-        self->computador_rect.y - 40.0f
+        self->computador.mundo_rect.x + self->computador.mundo_rect.width / 2.0f,
+        self->computador.mundo_rect.y - 40.0f
     };
     Vector2 pos_tela = GetWorldToScreen2D(pos_mundo, camera);
 
@@ -281,7 +271,7 @@ void AlucinacaoDrawMundo(AlucinacaoBody *self) {
         self->computador_sprite,
         (Rectangle){ 0, 0, (float)self->computador_sprite.width,
                            (float)self->computador_sprite.height },
-        self->computador_rect,
+        self->computador.mundo_rect,
         (Vector2){ 0, 0 }, 0.0f, WHITE
     );
 }
@@ -301,10 +291,6 @@ void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
         default:
             break;
     }
-}
-
-bool AlucinacaoPoderInteragir(AlucinacaoBody *self, Vector2 player_pos) {
-    return CheckCollisionPointRec(player_pos, self->interacao_rect);
 }
 
 void AlucinacaoUnload(AlucinacaoBody *self) {

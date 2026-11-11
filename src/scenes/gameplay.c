@@ -105,6 +105,7 @@ static void GameplayUpdateMinigameAlucinacao(GameplayBody *self, GameState *stat
     AlucinacaoUpdate(&self->alucinacao);
 
     if (self->alucinacao.concluido) {
+        self->alucinacao.computador.ativo = false;
         self->computador_usado = true;
         *state = STATE_PLAYING;
         GameplayMinigameConcluido(self, 0); // índice 0 = alucinação
@@ -343,7 +344,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         self->player.position.y + (PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE) / 2.0f
     };
 
-    if (!self->computador_usado && AlucinacaoPoderInteragir(&self->alucinacao, player_centro) && IsKeyPressed(KEY_E)) {
+    if (InteragivelPoderInteragir(&self->alucinacao.computador, player_centro) && IsKeyPressed(KEY_E)) {
         AlucinacaoInit(&self->alucinacao);
         self->interface_atual = TELA_MINIGAME_ALUCINACAO;
         *state = STATE_INTERFACE;
@@ -368,11 +369,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         MapDraw(&self->map);
         AlucinacaoDrawMundo(&self->alucinacao);
         PlayerDraw(&self->player);
-        //CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
+        CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
     //debug
-    //Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
-    //DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
+    Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
+    DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
 
     Vector2 player_centro = {
         self->player.position.x + (PLAYER_BASE_WIDTH  * PLAYER_BASE_SCALE) / 2.0f,
@@ -380,7 +381,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     };
 
     // Indicador de interação do computador
-    if (!self->computador_usado && AlucinacaoPoderInteragir(&self->alucinacao, player_centro)) {
+    if (InteragivelPoderInteragir(&self->alucinacao.computador, player_centro)) {
         AlucinacaoDrawIndicador(&self->alucinacao, resources, self->camera);
     }
 
