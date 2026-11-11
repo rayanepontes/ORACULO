@@ -33,6 +33,7 @@ typedef struct ResourcesBody {
     int      ranking_count;
     Color    amarelo;
     Color    branco;
+    Color    azul_escuro;
     Color    lilas_escuro;
     Color    lilas_claro;
     Color    letra_caixa;

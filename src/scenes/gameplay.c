@@ -17,7 +17,7 @@
 /** @brief Linhas exibidas na tela de instruções (edite livremente). */
 static const char *INSTRUCOES_LINHAS[] = {
     "Use as setas para andar pelo mapa e navegar em interfaces",
-    "Ache o computador do laboratorio e envie o relatorio correto",
+    "Ache o computador do laboratorio e envie o tela_alertaatorio correto",
     "ESC abre o menu de pausa (o tempo para)",
     "Clique M para ler o manual, ele ira te ajudar"
 };
@@ -45,7 +45,7 @@ static void GameplayDrawHUD(GameplayBody *self, ResourcesBody *resources, int sc
 
 /** @brief Desenha o overlay da tela de instruções. */
 static void GameplayDrawInstrucoes(ResourcesBody *resources, int scream_width, int scream_height) {
-    DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 0, 0, 180 });
+    DrawRectangle(0, 0, scream_width, scream_height, resources->azul_escuro);
 
     const char *titulo = "INSTRUCOES";
     Vector2 titulo_dim = MeasureTextEx(resources->fonte_principal, titulo, 130.0f, 1);
@@ -62,11 +62,44 @@ static void GameplayDrawInstrucoes(ResourcesBody *resources, int scream_width, i
         y += 70.0f;
     }
 
-    const char *iniciar = "ENTER para comecar";
+    const char *continuar = "ENTER para continuar";
+    Vector2 continuar_dim = MeasureTextEx(resources->fonte_principal, continuar, 72.0f, 1);
+
+    // Pisca duas vezes por segundo
+    bool visivel = ((int)(GetTime() * 2) % 2 == 0);
+    Color cor = visivel ? resources->amarelo : resources->branco;
+    DrawTextEx(resources->fonte_principal, continuar,
+               (Vector2){ (scream_width / 2.0f) - (continuar_dim.x / 2.0f), scream_height * 0.85f },
+               72.0f, 1, cor);
+}
+
+/** @brief Desenha a tela de alerta do laborátorio. */
+static void GameplayDrawnAlerta(ResourcesBody *resources, int scream_width, int scream_height) {
+    // Fundo
+    DrawRectangle(0, 0, scream_width, scream_height, resources->azul_escuro);
+
+    Texture2D tela_alerta = LoadTexture("assets/texture/Alerta.png");
+    if (tela_alerta.id != 0) {
+        float escala = fminf((scream_width  * 0.80f) / tela_alerta.width,
+                            (scream_height * 0.80f) / tela_alerta.height);
+        float dest_w = tela_alerta.width  * escala;
+        float dest_h = tela_alerta.height * escala;
+        Rectangle origem  = { 0.0f, 0.0f, (float)tela_alerta.width, (float)tela_alerta.height };
+        Rectangle destino = { (scream_width  - dest_w) / 2.0f,
+                                ((scream_height - dest_h) / 2.0f) - 55,
+                            dest_w, dest_h };
+        DrawTexturePro(tela_alerta, origem, destino, (Vector2){ 0.0f, 0.0f }, 0.0f, WHITE);
+    }
+
+    const char *iniciar = "ENTER para salvar o NEXUX Lab";
     Vector2 iniciar_dim = MeasureTextEx(resources->fonte_principal, iniciar, 72.0f, 1);
+
+    // Pisca duas vezes por segundo
+    bool visivel = ((int)(GetTime() * 2) % 2 == 0);
+    Color cor = visivel ? resources->amarelo : resources->branco;
     DrawTextEx(resources->fonte_principal, iniciar,
-               (Vector2){ (scream_width / 2.0f) - (iniciar_dim.x / 2.0f), scream_height * 0.85f },
-               72.0f, 1, resources->amarelo);
+            (Vector2){ (scream_width / 2.0f) - (iniciar_dim.x / 2.0f), scream_height * 0.85f },
+            72.0f, 1, cor);
 }
 
 /** @brief Caminhos dos PNGs do manual, na ordem das páginas (0 = capa). */
@@ -153,7 +186,7 @@ static void GameplayManualUpdate(GameplayBody *self) {
 static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
     DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 0, 0, 150 });
 
-    // Página centralizada, mantendo a proporção. Começa abaixo do relógio (HUD)
+    // Página centralizada, mantendo a proporção. Começa abaixo do tela_alertaógio (HUD)
     // e deixa a faixa de baixo livre para as instruções.
     Texture2D pag = self->manual_paginas[self->manual_pagina_atual];
     if (pag.id != 0) {
@@ -231,7 +264,7 @@ void GameplayInit(GameplayBody *self) {
     self->tempo_conclusao       = 0;
     self->tempo_restante    = GAMEPLAY_TEMPO_TOTAL;
     self->timer_ativo  = false;
-    self->instrucoes_vistas = false;
+    //self->instrucoes_vistas = false;
 
     self->manual_aberto = false;
     self->manual_pagina_atual = 0;
@@ -306,7 +339,12 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
                     
             case TELA_INSTRUCOES: 
                 if (IsKeyPressed(KEY_ENTER)) {
-                    self->instrucoes_vistas = true;
+                    self->interface_atual = TELA_ALERTA;
+                }
+                break;
+            
+            case TELA_ALERTA:
+                if (IsKeyPressed(KEY_ENTER)) {
                     self->timer_ativo  = true;  // o tempo começa a contar aqui
                     *state = STATE_PLAYING;
                 }
@@ -369,11 +407,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         MapDraw(&self->map);
         AlucinacaoDrawMundo(&self->alucinacao);
         PlayerDraw(&self->player);
-        CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
+        //CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
     //debug
-    Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
-    DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
+    //Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
+    //DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
 
     Vector2 player_centro = {
         self->player.position.x + (PLAYER_BASE_WIDTH  * PLAYER_BASE_SCALE) / 2.0f,
@@ -403,6 +441,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
 
             case TELA_INSTRUCOES:                   
                 GameplayDrawInstrucoes(resources, scream_width, scream_height);
+                break;
+
+            case TELA_ALERTA:
+                GameplayDrawnAlerta(resources, scream_width, scream_height);
+
                 break;
             
             default:

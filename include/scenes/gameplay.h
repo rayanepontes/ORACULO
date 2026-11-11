@@ -34,11 +34,13 @@
  *
  * @param TELA_VOLTAR_MENU Confirmação de saída para o menu principal.
  * @param TELA_INSTRUCOES  Instruções exibidas antes da partida começar.
+ * @param TELA_ALERTA      Alerta do protocolo zero.
  * @param TOTAL_TELAS      Quantidade total de telas de interface.
  */
 typedef enum TelaInterface {
     TELA_VOLTAR_MENU, // Confirmação de saída para o menu principal.
     TELA_INSTRUCOES,  // Instruções exibidas antes da partida começar.
+    TELA_ALERTA,      // Alerta do protocolo zero.
     TELA_MINIGAME_ALUCINACAO, // Minigame do Detector de Alucinação.
     TOTAL_TELAS       // Quantidade total de telas de interface.
 } TelaInterface;
