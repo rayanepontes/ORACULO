@@ -811,6 +811,12 @@ void MapInitCollision(MapBody *self){
         .tag  = "diag_K_20"
     };
     //Acabou...
+
+    // ── Computador da sala 2 (minigame de alucinação) ──────────────────────────
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1275*MAP_ESCALA, 210*MAP_ESCALA, 210*MAP_ESCALA, 116*MAP_ESCALA },
+        .tag  = "computador_alucinacao"
+    };
 }
 
 void MapInit(MapBody *self, MapType type, const char *texture_path) {

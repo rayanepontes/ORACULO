@@ -1,0 +1,7 @@
+erro 3
+b 10
+a 24
+aaaa 30
+Fulano 34
+teste 48
+aaaaaa 125
