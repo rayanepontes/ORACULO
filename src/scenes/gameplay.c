@@ -11,6 +11,7 @@
 #include "graphics/ui.h"
 #include "physics/collision.h"
 #include "map/map.h"
+#include "scenes/minigame_alucinacao.h"
 #include <math.h> 
 
 /** @brief Linhas exibidas na tela de instruções (edite livremente). */
@@ -90,6 +91,42 @@ static void GameplayTemporizadorUpdate(GameplayBody *self) {
         self->venceu           = false;
         self->terminou         = true;    // main troca para STATE_GAME_OVER
     }
+}
+
+/** @brief Processa o minigame de alucinação e reage ao resultado.
+ *
+ * @details Delega o input para AlucinacaoUpdate. Ao concluir, registra o
+ *          minigame e fecha a interface. Ao cancelar, apenas fecha.
+ *
+ * @param self  Ponteiro para o GameplayBody ativo.
+ * @param state Ponteiro para o estado global.
+ */
+static void GameplayUpdateMinigameAlucinacao(GameplayBody *self, GameState *state) {
+    AlucinacaoUpdate(&self->alucinacao);
+
+    if (self->alucinacao.concluido) {
+        self->computador_usado = true;
+        *state = STATE_PLAYING;
+        GameplayMinigameConcluido(self, 0); // índice 0 = alucinação
+        return;
+    }
+
+    if (self->alucinacao.cancelado) {
+        self->alucinacao.cancelado = false;
+        *state = STATE_PLAYING;
+    }
+}
+
+/** @brief Desenha o minigame de alucinação sobre o jogo.
+ *
+ * @param self          Ponteiro para o GameplayBody ativo.
+ * @param resources     Recursos visuais (fonte, cores).
+ * @param scream_width  Largura da tela em pixels.
+ * @param scream_height Altura da tela em pixels.
+ */
+static void GameplayDrawMinigameAlucinacao(GameplayBody *self, ResourcesBody *resources,
+                                           int scream_width, int scream_height) {
+    AlucinacaoDraw(&self->alucinacao, resources, scream_width, scream_height);
 }
 
 /** @brief Abre/fecha o manual (M) e troca de página (setas). */
@@ -205,6 +242,9 @@ void GameplayInit(GameplayBody *self) {
                  (int)self->manual_paginas[i].id);
     }
 
+    AlucinacaoInit(&self->alucinacao);
+    self->computador_usado = false;
+
     self->minigames_concluidos = 0;
     for (int i = 0; i < GAMEPLAY_TOTAL_MINIGAMES; i++) {
         self->minigames_completos[i] = false;
@@ -257,6 +297,11 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
                     *state = STATE_PLAYING;
                 }
                 break;
+
+            case TELA_MINIGAME_ALUCINACAO:
+                GameplayTemporizadorUpdate(self);
+                GameplayUpdateMinigameAlucinacao(self, state);
+                break;
                     
             case TELA_INSTRUCOES: 
                 if (IsKeyPressed(KEY_ENTER)) {
@@ -291,6 +336,20 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
     GameplayTemporizadorUpdate(self);
     if (self->terminou) return;
 
+    // ── Interação com o computador (minigame de alucinação) ──
+
+    Vector2 player_centro = {
+        self->player.position.x + (PLAYER_BASE_WIDTH  * PLAYER_BASE_SCALE) / 2.0f,
+        self->player.position.y + (PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE) / 2.0f
+    };
+
+    if (!self->computador_usado && AlucinacaoPoderInteragir(&self->alucinacao, player_centro) && IsKeyPressed(KEY_E)) {
+        AlucinacaoInit(&self->alucinacao);
+        self->interface_atual = TELA_MINIGAME_ALUCINACAO;
+        *state = STATE_INTERFACE;
+        return;
+    }
+
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
 
 
@@ -307,9 +366,23 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resources, int scream_width, int scream_height) {
     BeginMode2D(self->camera);
         MapDraw(&self->map);
+        AlucinacaoDrawMundo(&self->alucinacao);
         PlayerDraw(&self->player);
         //CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
+    //debug
+    //Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
+    //DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
+
+    Vector2 player_centro = {
+        self->player.position.x + (PLAYER_BASE_WIDTH  * PLAYER_BASE_SCALE) / 2.0f,
+        self->player.position.y + (PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE) / 2.0f
+    };
+
+    // Indicador de interação do computador
+    if (!self->computador_usado && AlucinacaoPoderInteragir(&self->alucinacao, player_centro)) {
+        AlucinacaoDrawIndicador(&self->alucinacao, resources, self->camera);
+    }
 
     if (*state == STATE_PLAYING && self->manual_aberto) {
         GameplayDrawManual(self, resources, scream_width, scream_height);
@@ -321,6 +394,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
                 GameplayDrawVoltarMenu(self, resources, scream_width, scream_height);
+                break;
+
+            case TELA_MINIGAME_ALUCINACAO:
+                GameplayDrawMinigameAlucinacao(self, resources, scream_width, scream_height);
                 break;
 
             case TELA_INSTRUCOES:                   
@@ -359,4 +436,5 @@ void GameplayUnload(GameplayBody *self) {
     }
     PlayerUnload(&self->player);
     MapUnload(&self->map);
+    AlucinacaoUnload(&self->alucinacao);
 }

@@ -15,6 +15,7 @@
 #include "core/resources.h"
 #include "entities/player.h"
 #include "map/map.h"
+#include "scenes/minigame_alucinacao.h"
 
 /** @brief Duração total de uma partida, em segundos (300 = 5 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 300.0f
@@ -38,6 +39,7 @@
 typedef enum TelaInterface {
     TELA_VOLTAR_MENU, // Confirmação de saída para o menu principal.
     TELA_INSTRUCOES,  // Instruções exibidas antes da partida começar.
+    TELA_MINIGAME_ALUCINACAO, // Minigame do Detector de Alucinação.
     TOTAL_TELAS       // Quantidade total de telas de interface.
 } TelaInterface;
 
@@ -68,6 +70,8 @@ typedef enum OpcVoltarMenu{
  * @param nickname          Nome do jogador copiado do menu (máx 6 chars + '\0').
  * @param minigames_concluidos   Quantos minigames o jogador já concluiu nesta partida.
  * @param minigames_completos    Flags por índice; evita contabilizar o mesmo minigame duas vezes.
+ * @param alucinacao        Estado do minigame de alucinação.
+ * @param computador_usado  True após o minigame ser concluído; impede reentrada.
  * @param terminou          True quando a partida chega ao fim (vitória ou derrota).
  * @param venceu            True se o jogador venceu; false se perdeu.
  * @param voltar_menu       True quando o jogador confirma que quer voltar ao menu.
@@ -87,6 +91,8 @@ typedef struct GameplayBody {
     char          nickname[7];       // copiado do menu antes de iniciar
     int           minigames_concluidos; // quantos minigames já foram finalizados
     bool          minigames_completos[GAMEPLAY_TOTAL_MINIGAMES]; // evita contar o mesmo duas vezes
+    AlucinacaoBody alucinacao;      // estado do minigame de alucinação
+    bool           computador_usado; // impede reentrada enquanto concluido
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu

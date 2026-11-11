@@ -87,6 +87,9 @@ int main(void)
                     GameData entrada;
                     strncpy(entrada.nickname, gameplay.nickname, 6);
                     entrada.nickname[6] = '\0';
+                    menu.nickname_input[0] = '\0';  
+                    menu.nickname_len = 0;           
+                    menu.nome_repetido = false; 
                     entrada.tempo = gameplay.tempo_conclusao;
                     // DataInsert retorna true só se a entrada entrou no top DATABASE_MAX_ENTRIES
                     if (DataInsert(resources.ranking, &resources.ranking_count, entrada)) {
