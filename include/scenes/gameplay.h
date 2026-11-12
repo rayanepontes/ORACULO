@@ -16,13 +16,14 @@
 #include "entities/player.h"
 #include "map/map.h"
 #include "scenes/minigame_alucinacao.h"
+#include "scenes/minigame_triador.h"
 
 /** @brief Duração total de uma partida, em segundos (300 = 5 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 300.0f
 /** @brief Quantidade de páginas do manual (a primeira é a capa). */
 #define MANUAL_TOTAL_PAGINAS 5
 /** @brief Número máximo de minigames diferentes no jogo. */
-#define GAMEPLAY_TOTAL_MINIGAMES 1
+#define GAMEPLAY_TOTAL_MINIGAMES 2
 
 /** @enum TelaInterface
  *
@@ -32,17 +33,20 @@
  *          qual overlay está visível e quais teclas são processadas.
  *          Adicione novos valores aqui à medida que novas telas forem criadas.
  *
- * @param TELA_VOLTAR_MENU Confirmação de saída para o menu principal.
- * @param TELA_INSTRUCOES  Instruções exibidas antes da partida começar.
- * @param TELA_ALERTA      Alerta do protocolo zero.
- * @param TOTAL_TELAS      Quantidade total de telas de interface.
+ * @param TELA_VOLTAR_MENU         Confirmação de saída para o menu principal.
+ * @param TELA_INSTRUCOES          Instruções exibidas antes da partida começar.
+ * @param TELA_ALERTA              Alerta do protocolo zero.
+ * @param TELA_MINIGAME_ALUCINACAO Minigame do Detector de Alucinação.
+ * @param TELA_MINIGAME_TRIADOR    Minigame de treinamento de IA.
+ * @param TOTAL_TELAS              Quantidade total de telas de interface E quando não a telas no momento.
  */
 typedef enum TelaInterface {
     TELA_VOLTAR_MENU, // Confirmação de saída para o menu principal.
     TELA_INSTRUCOES,  // Instruções exibidas antes da partida começar.
     TELA_ALERTA,      // Alerta do protocolo zero.
     TELA_MINIGAME_ALUCINACAO, // Minigame do Detector de Alucinação.
-    TOTAL_TELAS       // Quantidade total de telas de interface.
+    TELA_MINIGAME_TRIADOR, // Minigame de treinamento de IA.
+    TELA_NENHUMA      // Quantidade total de telas de interface E quando não a telas no momento.
 } TelaInterface;
 
 typedef enum OpcVoltarMenu{
@@ -94,7 +98,9 @@ typedef struct GameplayBody {
     int           minigames_concluidos; // quantos minigames já foram finalizados
     bool          minigames_completos[GAMEPLAY_TOTAL_MINIGAMES]; // evita contar o mesmo duas vezes
     AlucinacaoBody alucinacao;      // estado do minigame de alucinação
-    bool           computador_usado; // impede reentrada enquanto concluido
+    bool          computador_usado; // impede reentrada enquanto concluido
+    TriadorBody triador;
+    bool        triador_usado;
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
