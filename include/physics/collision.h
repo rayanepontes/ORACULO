@@ -11,7 +11,7 @@
 #include <raylib.h>
 #include <stdbool.h>
 
-#define MAX_COLISORES 400 // número máximo de retângulos de colisão por mapa
+#define MAX_COLISORES 600 // número máximo de retângulos de colisão por mapa
 
 /** @struct CollisionRect
  *

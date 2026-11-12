@@ -38,12 +38,14 @@ typedef struct ObjetosMapaBody {
     ObjetoMapa recepcao_puff_3;
     ObjetoMapa recepcao_sofa;
     ObjetoMapa recepcao_vaso;
+    ObjetoMapa mesa_de_centro;
 
-    // ── Sala ──────────────────────────────────────────────────────────────────
+    // ── Copa ──────────────────────────────────────────────────────────────────
     ObjetoMapa copa_balcao;
     ObjetoMapa copa_mesa;
+
+    // ── Sala cofre ──────────────────────────────────────────────────────────────────
     ObjetoMapa estante;
-    ObjetoMapa mesa_de_centro;
     ObjetoMapa pc;
 
     // ── Elétrica ──────────────────────────────────────────────────────────────

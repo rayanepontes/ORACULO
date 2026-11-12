@@ -445,6 +445,13 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         MapDraw(&self->map);
         ObjetosMapaDraw(&self->objetos);
         PlayerDraw(&self->player);
+        Rectangle player_hitbox = {
+            self->player.position.x + HITBOX_OFFSET_X,
+            self->player.position.y + HITBOX_OFFSET_Y,
+            HITBOX_WIDTH,
+            HITBOX_HEIGHT
+        };
+        DrawRectangleLinesEx(player_hitbox, 2, GREEN);
         CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
     //debug

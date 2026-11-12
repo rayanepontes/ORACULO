@@ -81,7 +81,7 @@ void MapInitCollision(MapBody *self){
     };  
 
     self->colisores[self->colisor_count++] = (CollisionRect){
-    .rect = { 1330*MAP_ESCALA, 792*MAP_ESCALA, 1345*MAP_ESCALA, 330*MAP_ESCALA },
+    .rect = { 1330*MAP_ESCALA, 792*MAP_ESCALA, 1345*MAP_ESCALA, 363*MAP_ESCALA },
     .tag  = "sala_4_parede_cima"
     };  
 
@@ -116,7 +116,7 @@ void MapInitCollision(MapBody *self){
     };
 
     self->colisores[self->colisor_count++] = (CollisionRect){
-    .rect = { 367*MAP_ESCALA, 1036*MAP_ESCALA, 887*MAP_ESCALA, 296*MAP_ESCALA },
+    .rect = { 367*MAP_ESCALA, 1036*MAP_ESCALA, 887*MAP_ESCALA, 279*MAP_ESCALA },
     .tag  = "corredor_1_cima"
     };
 
@@ -812,10 +812,162 @@ void MapInitCollision(MapBody *self){
     };
     //Acabou...
 
-    // ── Computador da sala 2 (minigame de alucinação) ──────────────────────────
+    // ── Recepção ──────────────────────────
+
     self->colisores[self->colisor_count++] = (CollisionRect){
-        .rect = { 1275*MAP_ESCALA, 210*MAP_ESCALA, 210*MAP_ESCALA, 116*MAP_ESCALA },
-        .tag  = "computador_alucinacao"
+        .rect = { 1549*MAP_ESCALA, 1309*MAP_ESCALA, (1852-1549)*MAP_ESCALA, (1315-1309)*MAP_ESCALA },
+        .tag  = "recepcao_balcao"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1324*MAP_ESCALA, 1531*MAP_ESCALA, (1453-1324)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_mesa"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1912*MAP_ESCALA, 1501*MAP_ESCALA, (1995-1912)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_poltrona_L"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2281*MAP_ESCALA, 1501*MAP_ESCALA, (2357-2281)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_poltrona_R"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2279*MAP_ESCALA, 1469*MAP_ESCALA, (2357-2279)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_puff_1"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1431*MAP_ESCALA, 1565*MAP_ESCALA, (1501-1431)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_puff_2"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1278*MAP_ESCALA, 1488*MAP_ESCALA, (1350-1278)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_puff_3"
+    };
+    
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2026*MAP_ESCALA, 1448*MAP_ESCALA, (2244-2026)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_sofa"
+    };
+    
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1957*MAP_ESCALA, 1458*MAP_ESCALA, (1999-1957)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "recepcao_vaso"
+    };
+    
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2029*MAP_ESCALA, 1604*MAP_ESCALA, (2239-2029)*MAP_ESCALA, (0)*MAP_ESCALA },
+        .tag  = "mesa_de_centro"
+    };
+
+    // ── Sala alucinação ──────────────────────────    
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1035*MAP_ESCALA, 556*MAP_ESCALA, (1349-1035)*MAP_ESCALA, (572-556)*MAP_ESCALA },
+        .tag  = "pc_L"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1474*MAP_ESCALA, 556*MAP_ESCALA, (1783-1474)*MAP_ESCALA, (572-556)*MAP_ESCALA },
+        .tag  = "pc_R"
+    };
+
+    // ── Copa ──────────────────────────────────────────────────────────────────
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 3426*MAP_ESCALA, 669*MAP_ESCALA, (3801-3426)*MAP_ESCALA, (700-669)*MAP_ESCALA },
+        .tag  = "copa_balcao"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 3070*MAP_ESCALA, 875*MAP_ESCALA, (3331-3070)*MAP_ESCALA, (906-875)*MAP_ESCALA },
+        .tag  = "copa_mesa"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 3565*MAP_ESCALA, 912*MAP_ESCALA, (3640-3565)*MAP_ESCALA, (1128-912)*MAP_ESCALA },
+        .tag  = "copa_mesa_estatica_1"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 3544*MAP_ESCALA, 958*MAP_ESCALA, (3669-3544)*MAP_ESCALA, (1075-958)*MAP_ESCALA },
+        .tag  = "copa_mesa_estatica_2"
+    };
+
+    // ── Sala cofre ──────────────────────────────────────────────────────────────────
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 480*MAP_ESCALA, 824*MAP_ESCALA, (747-480)*MAP_ESCALA, (833-824)*MAP_ESCALA },
+        .tag  = "estante"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 74*MAP_ESCALA, 764*MAP_ESCALA, (319-74)*MAP_ESCALA, (776-764)*MAP_ESCALA },
+        .tag  = "pc"
+    };
+
+    // ── Catraca ───────────────────────────────
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2053*MAP_ESCALA, 1170*MAP_ESCALA, (2084-2053)*MAP_ESCALA, (1176-1170)*MAP_ESCALA },
+        .tag  = "catraca_1"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2161*MAP_ESCALA, 1170*MAP_ESCALA, (2196-2161)*MAP_ESCALA, (1176-1170)*MAP_ESCALA },
+        .tag  = "catraca_2"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2086*MAP_ESCALA, 1139*MAP_ESCALA, (2158-2086)*MAP_ESCALA, (1153-1139)*MAP_ESCALA },
+        .tag  = "catraca_fechada"
+    };
+
+    // ── Triador ───────────────────────────────
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 310*MAP_ESCALA, 1984*MAP_ESCALA, (396-310)*MAP_ESCALA, (2045-1984)*MAP_ESCALA },
+        .tag  = "triador_capsula_1"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 410*MAP_ESCALA, 2027*MAP_ESCALA, (496-410)*MAP_ESCALA, (2049-2027)*MAP_ESCALA },
+        .tag  = "triador_capsula_2"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 603*MAP_ESCALA, 1993*MAP_ESCALA, (1164-603)*MAP_ESCALA, (2005-1993)*MAP_ESCALA },
+        .tag  = "triador_esteira"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 1112*MAP_ESCALA, 2050*MAP_ESCALA, (1160-1112)*MAP_ESCALA, (2116-2050)*MAP_ESCALA },
+        .tag  = "triador_lixo"
+    };
+
+    // ── Elétrica ───────────────────────────────
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2605*MAP_ESCALA, 1922*MAP_ESCALA, (2948-2605)*MAP_ESCALA, (1938-1922)*MAP_ESCALA },
+        .tag  = "eletrica_1"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2813*MAP_ESCALA, 2055*MAP_ESCALA, (3148-2813)*MAP_ESCALA, (2116-2055)*MAP_ESCALA },
+        .tag  = "eletrica_2"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 3417*MAP_ESCALA, 2060*MAP_ESCALA, (3472-3417)*MAP_ESCALA, (2061-2060)*MAP_ESCALA },
+        .tag  = "eletrica_esfregao"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 3319*MAP_ESCALA, 1990*MAP_ESCALA, (3434-3319)*MAP_ESCALA, (1992-1990)*MAP_ESCALA },
+        .tag  = "eletrica_maquina"
+    };
+
+    self->colisores[self->colisor_count++] = (CollisionRect){
+        .rect = { 2949*MAP_ESCALA, 1922*MAP_ESCALA, (3015-2949)*MAP_ESCALA, (1938-1922)*MAP_ESCALA },
+        .tag  = "eletrica_mini"
     };
 }
 
