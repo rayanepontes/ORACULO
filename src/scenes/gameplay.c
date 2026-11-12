@@ -318,6 +318,7 @@ void GameplayInit(GameplayBody *self) {
 
     // ── Mapa do jogo ──────────────────────────────────────────────────────────
     MapInit(&self->map, MAP_SINGLE, "assets/texture/mapa/mapa.png"); 
+    ObjetosMapaInit(&self->objetos);
     self->camera.target   = (Vector2){ 
         self->player.position.x + sprite_w / 2.0f,
         self->player.position.y + sprite_h / 2.0f };  // o que a câmera mira
@@ -442,13 +443,13 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resources, int scream_width, int scream_height) {
     BeginMode2D(self->camera);
         MapDraw(&self->map);
-        AlucinacaoDrawMundo(&self->alucinacao);
+        ObjetosMapaDraw(&self->objetos);
         PlayerDraw(&self->player);
-        //CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
+        CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
     EndMode2D();
     //debug
-    //Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
-    //DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
+    Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
+    DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
 
     Vector2 player_centro = {
         self->player.position.x + (PLAYER_BASE_WIDTH  * PLAYER_BASE_SCALE) / 2.0f,
@@ -525,6 +526,7 @@ void GameplayUnload(GameplayBody *self) {
     }
     PlayerUnload(&self->player);
     MapUnload(&self->map);
+    ObjetosMapaUnload(&self->objetos);
     AlucinacaoUnload(&self->alucinacao);
     TriadorUnload(&self->triador);
 }

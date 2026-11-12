@@ -15,6 +15,7 @@
 #include "core/resources.h"
 #include "entities/player.h"
 #include "map/map.h"
+#include "map/objetos.h"
 #include "scenes/minigame_alucinacao.h"
 #include "scenes/minigame_triador.h"
 
@@ -85,6 +86,7 @@ typedef enum OpcVoltarMenu{
 typedef struct GameplayBody {
     PlayerBody    player;
     MapBody       map;
+    ObjetosMapaBody  objetos;
     Camera2D      camera;
     TelaInterface interface_atual;   // subtela ativa quando state == STATE_INTERFACE
     int           tempo_conclusao;   // tempo de conclusão em segundos (preenchido ao vencer)

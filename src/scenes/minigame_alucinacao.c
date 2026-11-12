@@ -213,14 +213,7 @@ void AlucinacaoInit(AlucinacaoBody *self) {
     for (int i = 0; i < ALUCINACAO_TOTAL_RELATORIOS; i++) {
         self->relatorios[i] = LoadTexture(RELATORIO_CAMINHOS[i]);
     }
-
-    self->computador_sprite = LoadTexture("assets/texture/MiniGame_Alucinacao/Computador alucinacao.png");
-
-    float comp_w = self->computador_sprite.width  / (MAP_ESCALA * 1.5f);
-    float comp_h = self->computador_sprite.height / (MAP_ESCALA * 1.5f);
-    float comp_x = 1260 * MAP_ESCALA;
-    float comp_y = 200  * MAP_ESCALA;
-    self->computador = InteragivelCriar(comp_x, comp_y, comp_w, comp_h, 40.0f);
+    self->computador = InteragivelCriar(1025 * MAP_ESCALA, 200 * MAP_ESCALA, 483.0f, 362.0f, 40.0f);
 }
 
 void AlucinacaoUpdate(AlucinacaoBody *self) {
@@ -266,16 +259,6 @@ void AlucinacaoDrawIndicador(AlucinacaoBody *self, ResourcesBody *resources, Cam
                tamanho, 1, cor);
 }
 
-void AlucinacaoDrawMundo(AlucinacaoBody *self) {
-    DrawTexturePro(
-        self->computador_sprite,
-        (Rectangle){ 0, 0, (float)self->computador_sprite.width,
-                           (float)self->computador_sprite.height },
-        self->computador.mundo_rect,
-        (Vector2){ 0, 0 }, 0.0f, WHITE
-    );
-}
-
 void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
                     int scream_width, int scream_height) {
     switch (self->tela_atual) {
@@ -294,7 +277,6 @@ void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
 }
 
 void AlucinacaoUnload(AlucinacaoBody *self) {
-    UnloadTexture(self->computador_sprite);
     UnloadTexture(self->background);
     for (int i = 0; i < ALUCINACAO_TOTAL_RELATORIOS; i++) {
         UnloadTexture(self->relatorios[i]);

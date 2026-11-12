@@ -67,8 +67,7 @@ typedef struct AlucinacaoBody {
     bool              concluido;
     bool              cancelado;
     Texture2D         relatorios[ALUCINACAO_TOTAL_RELATORIOS];
-    Texture2D         background;
-    Texture2D         computador_sprite; 
+    Texture2D         background; 
     Interagivel       computador;   
 } AlucinacaoBody;
 
@@ -89,11 +88,6 @@ void AlucinacaoUpdate(AlucinacaoBody *self);
  * @param scream_width  Largura da tela em pixels.
  */
 void AlucinacaoDrawIndicador(AlucinacaoBody *self, ResourcesBody *resources, Camera2D camera);
-
-/** @brief Desenha o sprite do computador no mundo (chamar dentro de BeginMode2D).
- * @param self Ponteiro para o AlucinacaoBody ativo.
- */
-void AlucinacaoDrawMundo(AlucinacaoBody *self);
 
 /** @brief Desenha o minigame na tela.
  * @param self          Ponteiro para o AlucinacaoBody ativo.
