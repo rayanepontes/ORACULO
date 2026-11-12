@@ -182,6 +182,26 @@ static void GameplayManualUpdate(GameplayBody *self) {
     }
 }
 
+static void GameplayUpdateMinigameTriador(GameplayBody *self, GameState *state) {
+    TriadorUpdate(&self->triador);
+
+    if (self->triador.cancelado) {
+        self->triador.cancelado = false;
+        *state = STATE_PLAYING;
+        self->interface_atual = TELA_NENHUMA;
+        return;
+    }
+
+    if (self->triador.concluido) {
+        self->triador.objeto.ativo = false;
+        self->triador_usado = true;
+        *state = STATE_PLAYING;
+        self->interface_atual = TELA_NENHUMA;
+        GameplayMinigameConcluido(self, 1);
+        return;
+    }
+}
+
 /** @brief Desenha o manual: fundo escurecido, página atual e instruções de uso. */
 static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
     DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 0, 0, 150 });
@@ -279,6 +299,9 @@ void GameplayInit(GameplayBody *self) {
     AlucinacaoInit(&self->alucinacao);
     self->computador_usado = false;
 
+    TriadorInit(&self->triador);
+    self->triador_usado = false;
+
     self->minigames_concluidos = 0;
     for (int i = 0; i < GAMEPLAY_TOTAL_MINIGAMES; i++) {
         self->minigames_completos[i] = false;
@@ -336,6 +359,10 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
                 GameplayTemporizadorUpdate(self);
                 GameplayUpdateMinigameAlucinacao(self, state);
                 break;
+
+            case TELA_MINIGAME_TRIADOR:
+                GameplayUpdateMinigameTriador(self, state);
+                break;
                     
             case TELA_INSTRUCOES: 
                 if (IsKeyPressed(KEY_ENTER)) {
@@ -389,6 +416,16 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         return;
     }
 
+    // ── Interação com o triador ───────────────────────────────────────────────
+    if (!self->triador_usado) {
+        if (InteragivelPoderInteragir(&self->triador.objeto, player_centro) && IsKeyPressed(KEY_E)) {
+            TriadorInit(&self->triador);
+            self->interface_atual = TELA_MINIGAME_TRIADOR;
+            *state = STATE_INTERFACE;
+            return;
+        }
+    }
+
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
 
 
@@ -423,6 +460,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         AlucinacaoDrawIndicador(&self->alucinacao, resources, self->camera);
     }
 
+    if (InteragivelPoderInteragir(&self->triador.objeto, player_centro)) {
+        TriadorDrawIndicador(&self->triador, resources, self->camera);
+    }
+
     if (*state == STATE_PLAYING && self->manual_aberto) {
         GameplayDrawManual(self, resources, scream_width, scream_height);
     }
@@ -438,6 +479,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
             case TELA_MINIGAME_ALUCINACAO:
                 GameplayDrawMinigameAlucinacao(self, resources, scream_width, scream_height);
                 break;
+
+            case TELA_MINIGAME_TRIADOR:
+            TriadorDraw(&self->triador, resources, scream_width, scream_height);
+            break;
 
             case TELA_INSTRUCOES:                   
                 GameplayDrawInstrucoes(resources, scream_width, scream_height);
@@ -481,4 +526,5 @@ void GameplayUnload(GameplayBody *self) {
     PlayerUnload(&self->player);
     MapUnload(&self->map);
     AlucinacaoUnload(&self->alucinacao);
+    TriadorUnload(&self->triador);
 }

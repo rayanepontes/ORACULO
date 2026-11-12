@@ -25,6 +25,7 @@
  * @param branco          Branco puro.
  * @param lilas_escuro    Lilás escuro da paleta.
  * @param lilas_claro     Lilás claro da paleta.
+ * @param ciano_claro     Ciano clarinho.
  * @param letra_caixa     Cor das letras na caixa de nome.
  */
 typedef struct ResourcesBody {
@@ -36,6 +37,7 @@ typedef struct ResourcesBody {
     Color    azul_escuro;
     Color    lilas_escuro;
     Color    lilas_claro;
+    Color    ciano_claro; 
     Color    letra_caixa;
 } ResourcesBody;
 
