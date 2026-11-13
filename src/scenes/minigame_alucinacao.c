@@ -10,6 +10,7 @@
 #include "scenes/minigame_alucinacao.h"
 #include "graphics/ui.h"
 #include "map/map.h"
+#include "graphics/instrucoes.h"
 #include <math.h>
 
 /** @brief Caminhos dos PNGs dos relatórios, na ordem dos índices. */
@@ -202,6 +203,8 @@ static void AlucinacaoDrawErro(ResourcesBody *resources,
 // ─── API pública ──────────────────────────────────────────────────────────────
 
 void AlucinacaoInit(AlucinacaoBody *self) {
+    self->instrucoes = LoadTexture("assets/texture/MiniGame_Alucinacao/minigame03.png");
+    self->mostrando_instrucoes = true;
     self->background = LoadTexture("assets/texture/MiniGame_Alucinacao/Detector de Alucinacao BG.png");
     self->tela_atual        = TELA_ALUC_RELATORIOS;
     self->relatorio_atual   = 0;
@@ -220,6 +223,11 @@ void AlucinacaoInit(AlucinacaoBody *self) {
 }
 
 void AlucinacaoUpdate(AlucinacaoBody *self) {
+    if (self->mostrando_instrucoes) {
+        if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
+        else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
+        return;
+    }
     switch (self->tela_atual) {
         case TELA_ALUC_RELATORIOS:
             AlucinacaoUpdateRelatorios(self);
@@ -265,6 +273,10 @@ void AlucinacaoDrawIndicador(AlucinacaoBody *self, int indice, ResourcesBody *re
 
 void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
                     int scream_width, int scream_height) {
+    if (self->mostrando_instrucoes) {
+        InstrucoesDraw(self->instrucoes, resources, scream_width, scream_height);
+        return;
+    }
     switch (self->tela_atual) {
         case TELA_ALUC_RELATORIOS:
             AlucinacaoDrawRelatorios(self, resources, scream_width, scream_height);
@@ -281,6 +293,7 @@ void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
 }
 
 void AlucinacaoUnload(AlucinacaoBody *self) {
+    UnloadTexture(self->instrucoes);
     UnloadTexture(self->background);
     for (int i = 0; i < ALUCINACAO_TOTAL_RELATORIOS; i++) {
         UnloadTexture(self->relatorios[i]);

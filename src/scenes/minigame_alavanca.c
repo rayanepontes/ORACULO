@@ -3,6 +3,7 @@
  */
 #include "scenes/minigame_alavanca.h"
 #include "map/map.h"
+#include "graphics/instrucoes.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -33,6 +34,8 @@ static void AlavancaResetarPainel(AlavancaBody *self) {
 // ─── API pública ──────────────────────────────────────────────────────────────
 
 void AlavancaInit(AlavancaBody *self) {
+    self->instrucoes = LoadTexture(ALAVANCA_PATH "minigame02.png");
+    self->mostrando_instrucoes = true;
     AlavancaResetarPainel(self);
     self->concluido = false;
     self->cancelado = false;
@@ -50,6 +53,11 @@ void AlavancaInit(AlavancaBody *self) {
 }
 
 void AlavancaUpdate(AlavancaBody *self, float *tempo_restante) {
+    if (self->mostrando_instrucoes) {
+        if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
+        else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
+        return;
+    }
     // ── Animação de descida da alavanca ──────────────────────────────────────
     if (self->anim_rodando) {
         self->anim_timer += GetFrameTime();
@@ -160,7 +168,10 @@ void AlavancaDrawIndicador(AlavancaBody *self, ResourcesBody *resources, Camera2
 
 void AlavancaDraw(AlavancaBody *self, ResourcesBody *resources,
                   int screen_width, int screen_height) {
-
+    if (self->mostrando_instrucoes) {
+        InstrucoesDraw(self->instrucoes, resources, screen_width, screen_height);
+        return;
+    }
     // ── Fundo: alavanca_normal ou alavanca_puxada ocupa a tela inteira ────────
     bool mostrar_puxada = self->anim_rodando ||
                           (self->tela_atual == TELA_ALAVANCA_ACERTO) ||
@@ -351,6 +362,7 @@ void AlavancaDraw(AlavancaBody *self, ResourcesBody *resources,
 }
 
 void AlavancaUnload(AlavancaBody *self) {
+    UnloadTexture(self->instrucoes);
     UnloadTexture(self->alavanca_normal);
     UnloadTexture(self->alavanca_puxada);
     UnloadTexture(self->botao_confirmar_n);

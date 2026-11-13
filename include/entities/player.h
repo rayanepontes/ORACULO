@@ -10,7 +10,7 @@
 #include "graphics/animation.h"
 #include "physics/collision.h"
 
-#define PLAYER_SPEED 6.0f
+#define PLAYER_SPEED 8.0f
 #define PLAYER_BASE_SCALE 1.5f
 #define PLAYER_BASE_WIDTH 175.0f
 #define PLAYER_BASE_HEIGHT 257.0f

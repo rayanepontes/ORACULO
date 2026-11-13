@@ -42,6 +42,8 @@ typedef enum FocoAlavanca {
 
 /** @brief Estado completo do minigame Alavanca de Emergência. */
 typedef struct AlavancaBody {
+    Texture2D instrucoes;           ///< minigame02.png
+    bool      mostrando_instrucoes; ///< True até o jogador apertar ENTER
     TelaAlavanca tela_atual;
     FocoAlavanca foco;
 

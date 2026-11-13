@@ -54,6 +54,9 @@ typedef struct Colaborador {
 
 /** @brief Estado completo do minigame Triador de Treinamento. */
 typedef struct TriadorBody {
+    Texture2D instrucoes;          ///< minigame01.png
+    bool      mostrando_instrucoes;///< True até o jogador apertar ENTER
+
     TelaTriador tela_atual;
     FocoTriador foco;
 

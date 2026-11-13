@@ -4,6 +4,7 @@
 #include "scenes/minigame_triador.h"
 #include "graphics/ui.h"
 #include "map/map.h"
+#include "graphics/instrucoes.h"
 #include <math.h>
 
 // ─── Assets ───────────────────────────────────────────────────────────────────
@@ -453,6 +454,8 @@ static void TriadorDrawAcerto(TriadorBody *self, ResourcesBody *resources,
 // ─── API pública ──────────────────────────────────────────────────────────────
 
 void TriadorInit(TriadorBody *self) {
+    self->instrucoes = LoadTexture(TRIADOR_PATH "minigame01.png");
+    self->mostrando_instrucoes = true;
     self->tela_atual         = TELA_TRIADOR_PRINCIPAL;
     self->foco = FOCO_LISTA;
     self->cursor             = 0;
@@ -489,6 +492,11 @@ void TriadorInit(TriadorBody *self) {
 }
 
 void TriadorUpdate(TriadorBody *self) {
+    if (self->mostrando_instrucoes) {
+        if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
+        else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
+        return;
+    }
     switch (self->tela_atual) {
         case TELA_TRIADOR_PRINCIPAL: TriadorUpdatePrincipal(self); break;
         case TELA_TRIADOR_ERRO:      TriadorUpdateErro(self);      break;
@@ -519,6 +527,10 @@ void TriadorDrawIndicador(TriadorBody *self, ResourcesBody *resources, Camera2D 
 
 void TriadorDraw(TriadorBody *self, ResourcesBody *resources,
                  int screen_width, int screen_height) {
+    if (self->mostrando_instrucoes) {
+        InstrucoesDraw(self->instrucoes, resources, screen_width, screen_height);
+        return;
+    }
     switch (self->tela_atual) {
         case TELA_TRIADOR_PRINCIPAL:
             TriadorDrawPrincipal(self, resources, screen_width, screen_height);
@@ -535,6 +547,7 @@ void TriadorDraw(TriadorBody *self, ResourcesBody *resources,
 }
 
 void TriadorUnload(TriadorBody *self) {
+    UnloadTexture(self->instrucoes);
     UnloadTexture(self->background);
     UnloadTexture(self->campo_vazio);
     UnloadTexture(self->botao);

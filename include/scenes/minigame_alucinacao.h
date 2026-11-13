@@ -61,6 +61,8 @@ typedef enum OpcConfirmacaoAluc {
  * @param alucinacao_computadores  Objeto interativo do computador (posição, tamanho e área de interação).
  */
 typedef struct AlucinacaoBody {
+    Texture2D         instrucoes;           // minigame03.png
+    bool              mostrando_instrucoes; // True até o jogador apertar ENTER
     TelaAlucinacao    tela_atual;
     int               relatorio_atual;
     int               relatorio_correto;
