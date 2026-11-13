@@ -3,6 +3,7 @@
  */
 #include "scenes/minigame_triador.h"
 #include "graphics/ui.h"
+#include "map/map.h"
 #include <math.h>
 
 // ─── Assets ───────────────────────────────────────────────────────────────────
@@ -484,8 +485,7 @@ void TriadorInit(TriadorBody *self) {
         self->colaboradores[i].avatar_3x4 = LoadTexture(AVATAR_3X4_CAMINHOS[i]);
     }
 
-    // TODO: ajustar posição após mapa novo
-    self->objeto = InteragivelCriar(500 * 2.0f, 500 * 2.0f, 100.0f, 100.0f, 40.0f);
+    self->objeto = InteragivelCriar(1066 * MAP_ESCALA, 1695 * MAP_ESCALA, (1143-1066) * MAP_ESCALA, (1824-1695) * MAP_ESCALA, 40.0f);
 }
 
 void TriadorUpdate(TriadorBody *self) {
@@ -505,11 +505,16 @@ void TriadorDrawIndicador(TriadorBody *self, ResourcesBody *resources, Camera2D 
         camera
     );
 
-    const char *texto = "E - INTERAGIR";
-    Vector2 tamanho = MeasureTextEx(resources->fonte_principal, texto, 16, 1);
+    const char *texto = "E - interagir";
+    float tamanho = 36.0f;
+    Vector2 dim = MeasureTextEx(resources->fonte_principal, texto, tamanho, 1);
+
+    bool visivel = ((int)(GetTime() * 2) % 2 == 0);
+    Color cor = visivel ? resources->amarelo : resources->lilas_claro;
+
     DrawTextEx(resources->fonte_principal, texto,
-        (Vector2){ pos_tela.x - tamanho.x / 2.0f, pos_tela.y },
-        16, 1, WHITE);
+        (Vector2){ pos_tela.x - dim.x / 2.0f, pos_tela.y },
+        tamanho, 1, cor);
 }
 
 void TriadorDraw(TriadorBody *self, ResourcesBody *resources,

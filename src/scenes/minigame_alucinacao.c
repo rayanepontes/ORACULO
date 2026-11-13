@@ -213,14 +213,10 @@ void AlucinacaoInit(AlucinacaoBody *self) {
     for (int i = 0; i < ALUCINACAO_TOTAL_RELATORIOS; i++) {
         self->relatorios[i] = LoadTexture(RELATORIO_CAMINHOS[i]);
     }
-
-    self->computador_sprite = LoadTexture("assets/texture/MiniGame_Alucinacao/Computador alucinacao.png");
-
-    float comp_w = self->computador_sprite.width  / (MAP_ESCALA * 1.5f);
-    float comp_h = self->computador_sprite.height / (MAP_ESCALA * 1.5f);
-    float comp_x = 1260 * MAP_ESCALA;
-    float comp_y = 200  * MAP_ESCALA;
-    self->computador = InteragivelCriar(comp_x, comp_y, comp_w, comp_h, 40.0f);
+    self->alucinacao_computadores[0] = InteragivelCriar(1071 * MAP_ESCALA, 210 * MAP_ESCALA, (1238-1071) * MAP_ESCALA, (317-210) * MAP_ESCALA, 40.0f);
+    self->alucinacao_computadores[1] = InteragivelCriar(1522 * MAP_ESCALA, 199 * MAP_ESCALA, (1696-1522) * MAP_ESCALA, (323-199) * MAP_ESCALA, 40.0f);
+    self->alucinacao_computadores[2] = InteragivelCriar(1089 * MAP_ESCALA, 454 * MAP_ESCALA, (1244-1089) * MAP_ESCALA, (582-454) * MAP_ESCALA, 40.0f);
+    self->alucinacao_computadores[3] = InteragivelCriar(1589 * MAP_ESCALA, 458 * MAP_ESCALA, (1739-1589) * MAP_ESCALA, (588-458) * MAP_ESCALA, 40.0f);
 }
 
 void AlucinacaoUpdate(AlucinacaoBody *self) {
@@ -245,11 +241,13 @@ void AlucinacaoUpdate(AlucinacaoBody *self) {
  * @param camera        Câmera 2D atual (para converter posição do mundo para tela).
  * @param scream_width  Largura da tela em pixels.
  */
-void AlucinacaoDrawIndicador(AlucinacaoBody *self, ResourcesBody *resources, Camera2D camera) {
-    // Centro superior do computador em coordenadas de tela
+void AlucinacaoDrawIndicador(AlucinacaoBody *self, int indice, ResourcesBody *resources, Camera2D camera) {
+    // Offset Y por índice — aumente para subir, diminua para descer (padrão: 40.0f)
+    float offsets_y[ALUCINACAO_TOTAL_COMPUTADORES] = { 40.0f, 40.0f, 50.0f, 60.0f };
+
     Vector2 pos_mundo = {
-        self->computador.mundo_rect.x + self->computador.mundo_rect.width / 2.0f,
-        self->computador.mundo_rect.y - 40.0f
+        self->alucinacao_computadores[indice].mundo_rect.x + self->alucinacao_computadores[indice].mundo_rect.width / 2.0f,
+        self->alucinacao_computadores[indice].mundo_rect.y - offsets_y[indice]
     };
     Vector2 pos_tela = GetWorldToScreen2D(pos_mundo, camera);
 
@@ -257,23 +255,12 @@ void AlucinacaoDrawIndicador(AlucinacaoBody *self, ResourcesBody *resources, Cam
     float tamanho = 36.0f;
     Vector2 dim = MeasureTextEx(resources->fonte_principal, texto, tamanho, 1);
 
-    // Pisca 2x por segundo
     bool visivel = ((int)(GetTime() * 2) % 2 == 0);
     Color cor = visivel ? resources->amarelo : resources->lilas_claro;
 
     DrawTextEx(resources->fonte_principal, texto,
                (Vector2){ pos_tela.x - dim.x / 2.0f, pos_tela.y },
                tamanho, 1, cor);
-}
-
-void AlucinacaoDrawMundo(AlucinacaoBody *self) {
-    DrawTexturePro(
-        self->computador_sprite,
-        (Rectangle){ 0, 0, (float)self->computador_sprite.width,
-                           (float)self->computador_sprite.height },
-        self->computador.mundo_rect,
-        (Vector2){ 0, 0 }, 0.0f, WHITE
-    );
 }
 
 void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
@@ -294,7 +281,6 @@ void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
 }
 
 void AlucinacaoUnload(AlucinacaoBody *self) {
-    UnloadTexture(self->computador_sprite);
     UnloadTexture(self->background);
     for (int i = 0; i < ALUCINACAO_TOTAL_RELATORIOS; i++) {
         UnloadTexture(self->relatorios[i]);
