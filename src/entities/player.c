@@ -32,20 +32,6 @@ static void InitAnimations(PlayerBody *self){
     .spr_height       = 274.0f,  // altura total da imagem
     .type             = REPEATING
     };
-
-    self->textures[run] = LoadTexture("assets/texture/sprites_teste/tiny_heroes_spr/3 Dude_Monster/Dude_Monster_Run_6.png");
-    self->anims[run] = (AnimationBody){
-            .first_idx = 0,
-            .last_idx = 5,
-            .frame_atual_idx = 0,
-            .step = 1,
-            .speed = 0.1,
-            .duration_left = 0.1,
-            .frames_por_linha = 5,
-            .spr_width = 32.0,
-            .spr_height = 32.0,           
-            .type = REPEATING
-        };
 }
 
 //Reseta o quadro de todas as animações do player para o estado inicial delas.
@@ -77,7 +63,6 @@ void PLayerReset(PlayerBody *self, Vector2 posicao_inicial){
 
 void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_count) {
     bool movendo  = false;
-    bool correndo = false;
 
     float vel_x = 0.0f;
     float vel_y = 0.0f;
@@ -85,24 +70,20 @@ void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_
     // ── Calcula velocidade desejada ───────────────────────────────────────────
     if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         self->direction = LEFT;
-        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 10) : -PLAYER_SPEED;
-        correndo = IsKeyDown(KEY_LEFT_SHIFT);
-        movendo  = !correndo;
+        vel_x = -PLAYER_SPEED;
+        movendo  = true;
     } else if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
         self->direction = RIGHT;
-        vel_x = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 10) : PLAYER_SPEED;
-        correndo = IsKeyDown(KEY_LEFT_SHIFT);
-        movendo  = !correndo;
+        vel_x = PLAYER_SPEED;
+        movendo  = true;
     }
 
     if (IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN)) {
-        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? -(PLAYER_SPEED * 10) : -PLAYER_SPEED;
-        correndo = IsKeyDown(KEY_LEFT_SHIFT);
-        movendo  = movendo || !correndo;
+        vel_y = -PLAYER_SPEED;
+        movendo  = true;
     } else if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_UP)) {
-        vel_y = IsKeyDown(KEY_LEFT_SHIFT) ? (PLAYER_SPEED * 10) : PLAYER_SPEED;
-        correndo = IsKeyDown(KEY_LEFT_SHIFT);
-        movendo  = movendo || !correndo;
+        vel_y = PLAYER_SPEED;
+        movendo  = true;
     }
 
     // ── Resolve colisão no eixo X ─────────────────────────────────────────────
@@ -132,9 +113,7 @@ void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_
     self->position.y = hitbox.y - HITBOX_OFFSET_Y;
 
     // ── Atualiza animação ─────────────────────────────────────────────────────
-    if (correndo) {
-        self->action_atual = run;
-    } else if (movendo) {
+    if (movendo) {
         self->action_atual = walk;
     } else {
         self->action_atual = idle;
