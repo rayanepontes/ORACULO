@@ -19,6 +19,8 @@
 /** @brief Índice (0-based) do relatório correto. */
 #define ALUCINACAO_RELATORIO_CORRETO 0
 
+#define ALUCINACAO_TOTAL_COMPUTADORES 4
+
 /** @enum TelaAlucinacao
  * @brief Subtelas internas do minigame de alucinação.
  *
@@ -56,8 +58,7 @@ typedef enum OpcConfirmacaoAluc {
  * @param cancelado           True quando o jogador sai com ESC — gameplay lê para fechar.
  * @param relatorios          Texturas dos relatórios carregadas do disco.
  * @param background          Textura do fundo do minigame.
- * @param computador_sprite  Sprite do computador exibido no mapa.
- * @param computador  Objeto interativo do computador (posição, tamanho e área de interação).
+ * @param alucinacao_computadores  Objeto interativo do computador (posição, tamanho e área de interação).
  */
 typedef struct AlucinacaoBody {
     TelaAlucinacao    tela_atual;
@@ -68,7 +69,7 @@ typedef struct AlucinacaoBody {
     bool              cancelado;
     Texture2D         relatorios[ALUCINACAO_TOTAL_RELATORIOS];
     Texture2D         background; 
-    Interagivel       computador;   
+    Interagivel alucinacao_computadores[ALUCINACAO_TOTAL_COMPUTADORES];
 } AlucinacaoBody;
 
 /** @brief Inicializa o minigame carregando as texturas dos relatórios.
@@ -87,7 +88,7 @@ void AlucinacaoUpdate(AlucinacaoBody *self);
  * @param camera        Câmera 2D atual.
  * @param scream_width  Largura da tela em pixels.
  */
-void AlucinacaoDrawIndicador(AlucinacaoBody *self, ResourcesBody *resources, Camera2D camera);
+void AlucinacaoDrawIndicador(AlucinacaoBody *self, int indice, ResourcesBody *resources, Camera2D camera);
 
 /** @brief Desenha o minigame na tela.
  * @param self          Ponteiro para o AlucinacaoBody ativo.

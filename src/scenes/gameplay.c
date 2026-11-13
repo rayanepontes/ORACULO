@@ -138,7 +138,9 @@ static void GameplayUpdateMinigameAlucinacao(GameplayBody *self, GameState *stat
     AlucinacaoUpdate(&self->alucinacao);
 
     if (self->alucinacao.concluido) {
-        self->alucinacao.computador.ativo = false;
+        for (int i = 0; i < ALUCINACAO_TOTAL_COMPUTADORES; i++){
+            self->alucinacao.alucinacao_computadores[i].ativo = false;
+        }
         self->computador_usado = true;
         *state = STATE_PLAYING;
         GameplayMinigameConcluido(self, 0); // índice 0 = alucinação
@@ -410,11 +412,22 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         self->player.position.y + (PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE) / 2.0f
     };
 
-    if (InteragivelPoderInteragir(&self->alucinacao.computador, player_centro) && IsKeyPressed(KEY_E)) {
-        AlucinacaoInit(&self->alucinacao);
-        self->interface_atual = TELA_MINIGAME_ALUCINACAO;
-        *state = STATE_INTERFACE;
-        return;
+
+    // ── Interação com os computadores (minigame de alucinação) ──
+    if (!self->computador_usado) {
+        bool pode_interagir = false;
+        for (int i = 0; i < ALUCINACAO_TOTAL_COMPUTADORES; i++) {
+            if (InteragivelPoderInteragir(&self->alucinacao.alucinacao_computadores[i], player_centro)) {
+                pode_interagir = true;
+                break;
+            }
+        }
+        if (pode_interagir && IsKeyPressed(KEY_E)) {
+            AlucinacaoInit(&self->alucinacao);
+            self->interface_atual = TELA_MINIGAME_ALUCINACAO;
+            *state = STATE_INTERFACE;
+            return;
+        }
     }
 
     // ── Interação com o triador ───────────────────────────────────────────────
@@ -463,9 +476,16 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         self->player.position.y + (PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE) / 2.0f
     };
 
-    // Indicador de interação do computador
-    if (InteragivelPoderInteragir(&self->alucinacao.computador, player_centro)) {
-        AlucinacaoDrawIndicador(&self->alucinacao, resources, self->camera);
+    // Indicador de interação dos computadores
+    int comp_proximo = -1;
+    for (int i = 0; i < ALUCINACAO_TOTAL_COMPUTADORES; i++) {
+        if (InteragivelPoderInteragir(&self->alucinacao.alucinacao_computadores[i], player_centro)) {
+            comp_proximo = i;
+            break;
+        }
+    }
+    if (comp_proximo >= 0) {
+        AlucinacaoDrawIndicador(&self->alucinacao, comp_proximo, resources, self->camera);
     }
 
     if (InteragivelPoderInteragir(&self->triador.objeto, player_centro)) {
