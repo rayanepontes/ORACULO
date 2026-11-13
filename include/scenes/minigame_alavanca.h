@@ -53,8 +53,7 @@ typedef struct AlavancaBody {
     bool  anim_rodando; ///< True enquanto a animação de 2s está acontecendo
     bool  anim_acertou; ///< True = alavanca desceu por acerto; False = por erro
 
-    Texture2D painel_design;      ///< alavanca_design.png (fundo do painel)
-    Texture2D alavanca_normal;    ///< alavanca_normal.png
+    Texture2D alavanca_normal;    ///< alavanca_normal.png (fundo normal)
     Texture2D alavanca_puxada;    ///< alavanca_puxada.png
     Texture2D botao_confirmar_n;  ///< botao_confirmar_normal.png
     Texture2D botao_confirmar_s;  ///< botao_confirnar_slected.png
