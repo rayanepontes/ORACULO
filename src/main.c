@@ -20,9 +20,22 @@
 #include "scenes/menu.h"
 #include <string.h>
 
+/**
+ * @brief Escolhe qual música de fundo deve tocar em cada estado do jogo.
+ * @param resources Ponteiro para os recursos globais (contém as músicas).
+ * @param state     Estado atual do jogo.
+ * @return Ponteiro para a música do estado, ou NULL se o estado não tem música.
+ */
+static Music *MusicaDoEstado(ResourcesBody *resources, GameState state) {
+    if (state == STATE_MENU) return &resources->musica_menu;
+    if (state == STATE_PLAYING || state == STATE_INTERFACE) return &resources->musica_gameplay;
+    return NULL;   // STATE_WIN e STATE_GAME_OVER: silêncio
+}
+
 int main(void)
 {
     InitWindow(900, 450, "Oráculo");
+    InitAudioDevice();   // antes do ResourcesInit, senão as músicas não carregam
     SetExitKey(KEY_NULL); // desativa o ESC nativo do Raylib
     ToggleFullscreen();
     SetTargetFPS(60);
@@ -40,6 +53,7 @@ int main(void)
 
     // ── Estado do jogo ────────────────────────────────────────────────────────
     GameState state = STATE_MENU;
+    Music *musica_atual = NULL;   // música tocando agora (NULL = nenhuma)
 
     // ── Gameplay  ─────────────────────────────────────────────────────────────
     GameplayBody gameplay;
@@ -106,6 +120,15 @@ int main(void)
             }
         }
 
+        // -- Música: troca só quando o estado pede uma música diferente --
+        Music *musica_desejada = MusicaDoEstado(&resources, state);
+        if (musica_desejada != musica_atual) {
+            if (musica_atual)     StopMusicStream(*musica_atual);
+            if (musica_desejada)  PlayMusicStream(*musica_desejada);
+            musica_atual = musica_desejada;
+        }
+        if (musica_atual) UpdateMusicStream(*musica_atual);   // obrigatório todo frame
+
         // -- Draw --
         BeginDrawing();
             ClearBackground(BLACK);
@@ -136,6 +159,7 @@ int main(void)
     MenuUnload(&menu);
     GameplayUnload(&gameplay);
     ResourcesUnload(&resources);
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }

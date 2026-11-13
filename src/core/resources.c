@@ -16,8 +16,16 @@ void ResourcesInit(ResourcesBody *self) {
     self->lilas_claro  = GetColor(0x9988BBFF);
     self->ciano_claro  = GetColor(0xAEFFFAFF);
     self->letra_caixa  = GetColor(0x2A1F4EFF);
+    self->musica_menu     = LoadMusicStream(RESOURCES_MUSICA_MENU_PATH);
+    self->musica_gameplay = LoadMusicStream(RESOURCES_MUSICA_GAMEPLAY_PATH);
+    self->musica_menu.looping     = true;
+    self->musica_gameplay.looping = true;
+    SetMusicVolume(self->musica_menu,     RESOURCES_MUSICA_VOLUME);
+    SetMusicVolume(self->musica_gameplay, RESOURCES_MUSICA_VOLUME);
 }
 
 void ResourcesUnload(ResourcesBody *self) {
     UnloadFont(self->fonte_principal);
+    UnloadMusicStream(self->musica_menu);
+    UnloadMusicStream(self->musica_gameplay);
 }

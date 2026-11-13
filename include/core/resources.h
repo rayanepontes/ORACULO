@@ -14,6 +14,10 @@
 
 #define RESOURCES_FONTE_PATH "assets/fonts/VT323/VT323-Regular.ttf"
 #define RESOURCES_FONTE_SIZE 64
+#define RESOURCES_MUSICA_MENU_PATH     "assets/audio/music/oraculo_menu_music.wav"
+#define RESOURCES_MUSICA_GAMEPLAY_PATH "assets/audio/music/oraculo_gameplay_music.wav"
+/** @brief Volume das músicas de fundo (0.0 a 1.0). */
+#define RESOURCES_MUSICA_VOLUME 0.6f
 
 /**
  * @struct ResourcesBody
@@ -39,6 +43,8 @@ typedef struct ResourcesBody {
     Color    lilas_claro;
     Color    ciano_claro; 
     Color    letra_caixa;
+    Music    musica_menu;
+    Music    musica_gameplay;
 } ResourcesBody;
 
 /**
