@@ -269,8 +269,8 @@ static void GameplayDrawMundo(GameplayBody *self) {
         ObjetoMapa *cur = visiveis[i];
         int j = i - 1;
         while (j >= 0 &&
-               (visiveis[j]->mundo_rect.y + visiveis[j]->mundo_rect.height) >
-               (cur->mundo_rect.y + cur->mundo_rect.height)) {
+            (visiveis[j]->hitbox.y + visiveis[j]->hitbox.height) >
+            (cur->hitbox.y + cur->hitbox.height)) {
             visiveis[j + 1] = visiveis[j];
             j--;
         }
@@ -279,7 +279,7 @@ static void GameplayDrawMundo(GameplayBody *self) {
 
     // Desenha intercalando player na posição correta
     for (int i = 0; i < total_visiveis; i++) {
-        float obj_base = visiveis[i]->mundo_rect.y + visiveis[i]->mundo_rect.height;
+        float obj_base = visiveis[i]->hitbox.y + visiveis[i]->hitbox.height;
         if (!player_desenhado && player_base <= obj_base) {
             PlayerDraw(&self->player);
             player_desenhado = true;
@@ -498,7 +498,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     BeginMode2D(self->camera);
         GameplayDrawMundo(self);
         // ── Debug ──────────────────────────────────────────────────
-        /*
+        
         Rectangle player_hitbox = {
             self->player.position.x + HITBOX_OFFSET_X,
             self->player.position.y + HITBOX_OFFSET_Y,
@@ -507,7 +507,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         };
         DrawRectangleLinesEx(player_hitbox, 2, GREEN);
         CollisionDrawDebug(self->map.colisores, self->map.colisor_count);
-        */
+        
     EndMode2D();
     //debug
     //Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);

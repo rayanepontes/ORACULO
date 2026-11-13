@@ -19,6 +19,7 @@
 typedef struct ObjetoMapa {
     Texture2D sprite;
     Rectangle mundo_rect;  ///< Posição e tamanho no mundo (já com MAP_ESCALA)
+    Rectangle hitbox;      ///< Área de colisão física (base do objeto, já com MAP_ESCALA)
     bool      visivel;
 } ObjetoMapa;
 
