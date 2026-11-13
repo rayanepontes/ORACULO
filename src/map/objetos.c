@@ -32,18 +32,6 @@ static ObjetoMapa ObjetoMapaCriar(const char *path,
     return obj;
 }
 
-// ─── Helper de desenho ────────────────────────────────────────────────────────
-
-static void ObjetoMapaDraw(ObjetoMapa *obj) {
-    if (!obj->visivel) return;
-    DrawTexturePro(
-        obj->sprite,
-        (Rectangle){ 0, 0, (float)obj->sprite.width, (float)obj->sprite.height },
-        obj->mundo_rect,
-        (Vector2){ 0, 0 }, 0.0f, WHITE
-    );
-}
-
 // ─── API pública ──────────────────────────────────────────────────────────────
 
 void ObjetosMapaInit(ObjetosMapaBody *self) {
@@ -96,48 +84,51 @@ void ObjetosMapaInit(ObjetosMapaBody *self) {
     self->rectangle_149 = ObjetoMapaCriar(OBJETOS_PATH "Rectangle 149.png", 1639, 1286, 0, 0, true);
 }
 
-void ObjetosMapaDraw(ObjetosMapaBody *self) {
-    // ── Minigame Alucinação ───────────────────────────────────────────────────
-    ObjetoMapaDraw(&self->alucinacao_pc_l);
-    ObjetoMapaDraw(&self->alucinacao_pc_r);
+void ObjetoMapaDrawSingle(ObjetoMapa *obj) {
+    if (!obj->visivel) return;
+    DrawTexturePro(
+        obj->sprite,
+        (Rectangle){ 0, 0, (float)obj->sprite.width, (float)obj->sprite.height },
+        obj->mundo_rect,
+        (Vector2){ 0, 0 }, 0.0f, WHITE
+    );
+}
 
-    // ── Recepção ──────────────────────────────────────────────────────────────
-    ObjetoMapaDraw(&self->recepcao_balcao);
-    ObjetoMapaDraw(&self->recepcao_puff_3);
-    ObjetoMapaDraw(&self->recepcao_mesa);
-    ObjetoMapaDraw(&self->recepcao_puff_2);
-    ObjetoMapaDraw(&self->recepcao_vaso);
-    ObjetoMapaDraw(&self->recepcao_poltrona_l);
-    ObjetoMapaDraw(&self->recepcao_puff_1);
-    ObjetoMapaDraw(&self->recepcao_poltrona_r);
-    ObjetoMapaDraw(&self->recepcao_sofa);
+void ObjetosMapaColetarVisiveis(ObjetosMapaBody *self, ObjetoMapa **out, int *count) {
+    *count = 0;
 
-    // ── Sala ──────────────────────────────────────────────────────────────────
-    ObjetoMapaDraw(&self->copa_balcao);
-    ObjetoMapaDraw(&self->copa_mesa);
-    ObjetoMapaDraw(&self->estante);
-    ObjetoMapaDraw(&self->mesa_de_centro);
-    ObjetoMapaDraw(&self->pc);
+#define ADD(obj) if ((obj).visivel && *count < OBJETOS_MAX_VISIVEIS) out[(*count)++] = &(obj)
 
-    // ── Elétrica ──────────────────────────────────────────────────────────────
-    ObjetoMapaDraw(&self->eletrica_1);
-    ObjetoMapaDraw(&self->eletrica_2);
-    ObjetoMapaDraw(&self->eletrica_maquina);
-    ObjetoMapaDraw(&self->eletrica_esfregao);
-    ObjetoMapaDraw(&self->eletrica_mini);
+    ADD(self->alucinacao_pc_l);
+    ADD(self->alucinacao_pc_r);
+    ADD(self->recepcao_balcao);
+    ADD(self->recepcao_puff_3);
+    ADD(self->recepcao_mesa);
+    ADD(self->recepcao_puff_2);
+    ADD(self->recepcao_vaso);
+    ADD(self->recepcao_poltrona_l);
+    ADD(self->recepcao_puff_1);
+    ADD(self->recepcao_poltrona_r);
+    ADD(self->recepcao_sofa);
+    ADD(self->mesa_de_centro);
+    ADD(self->copa_balcao);
+    ADD(self->copa_mesa);
+    ADD(self->estante);
+    ADD(self->pc);
+    ADD(self->eletrica_1);
+    ADD(self->eletrica_2);
+    ADD(self->eletrica_maquina);
+    ADD(self->eletrica_esfregao);
+    ADD(self->eletrica_mini);
+    ADD(self->triador_capsula_1);
+    ADD(self->triador_capsula_2);
+    ADD(self->triador_esteira);
+    ADD(self->triador_lixo);
+    ADD(self->catraca_fechada);
+    ADD(self->catraca_aberta);
+    ADD(self->rectangle_149);
 
-    // ── Triador ───────────────────────────────────────────────────────────────
-    ObjetoMapaDraw(&self->triador_capsula_1);
-    ObjetoMapaDraw(&self->triador_capsula_2);
-    ObjetoMapaDraw(&self->triador_esteira);
-    ObjetoMapaDraw(&self->triador_lixo);
-
-    // ── Catraca ───────────────────────────────────────────────────────────────
-    ObjetoMapaDraw(&self->catraca_fechada);
-    ObjetoMapaDraw(&self->catraca_aberta);
-
-    // ── Outros ────────────────────────────────────────────────────────────────
-    ObjetoMapaDraw(&self->rectangle_149);
+#undef ADD
 }
 
 void ObjetosMapaUnload(ObjetosMapaBody *self) {

@@ -74,8 +74,16 @@ typedef struct ObjetosMapaBody {
 /** @brief Carrega todos os sprites e define posições e visibilidade iniciais. */
 void ObjetosMapaInit(ObjetosMapaBody *self);
 
-/** @brief Desenha todos os objetos visíveis no mundo (dentro de BeginMode2D). */
-void ObjetosMapaDraw(ObjetosMapaBody *self);
+/** @brief Desenha um único ObjetoMapa (usado pelo depth sorting em gameplay). */
+void ObjetoMapaDrawSingle(ObjetoMapa *obj);
+
+/** @brief Preenche um array de ponteiros com todos os objetos visíveis para depth sorting.
+ *  @param self   Ponteiro para o ObjetosMapaBody.
+ *  @param out    Array de saída (deve ter espaço para OBJETOS_MAX_VISIVEIS entradas).
+ *  @param count  Saída: quantos objetos foram escritos no array.
+ */
+#define OBJETOS_MAX_VISIVEIS 32
+void ObjetosMapaColetarVisiveis(ObjetosMapaBody *self, ObjetoMapa **out, int *count);
 
 /** @brief Descarrega todos os sprites da memória. */
 void ObjetosMapaUnload(ObjetosMapaBody *self);

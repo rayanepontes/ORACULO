@@ -13,6 +13,9 @@
 #include "map/map.h"
 #include "scenes/minigame_alucinacao.h"
 #include <math.h> 
+#include <stdlib.h>
+
+// ─── Helper interno ───────────────────────────────────────────────────────────
 
 /** @brief Linhas exibidas na tela de instruções (edite livremente). */
 static const char *INSTRUCOES_LINHAS[] = {
@@ -250,6 +253,44 @@ static void GameplayDrawManual(GameplayBody *self, ResourcesBody *resources, int
                50.0f, 1, resources->amarelo);
 }
 
+static void GameplayDrawMundo(GameplayBody *self) {
+    MapDraw(&self->map);
+
+    // ── Depth sorting: objetos + player ordenados pela base (Y + altura) ──    
+    ObjetoMapa *visiveis[OBJETOS_MAX_VISIVEIS];
+    int total_visiveis = 0;
+    ObjetosMapaColetarVisiveis(&self->objetos, visiveis, &total_visiveis);
+
+    float player_base = self->player.position.y + HITBOX_OFFSET_Y + HITBOX_HEIGHT;
+    bool player_desenhado = false;
+
+    // Insertion sort por base
+    for (int i = 1; i < total_visiveis; i++) {
+        ObjetoMapa *cur = visiveis[i];
+        int j = i - 1;
+        while (j >= 0 &&
+               (visiveis[j]->mundo_rect.y + visiveis[j]->mundo_rect.height) >
+               (cur->mundo_rect.y + cur->mundo_rect.height)) {
+            visiveis[j + 1] = visiveis[j];
+            j--;
+        }
+        visiveis[j + 1] = cur;
+    }
+
+    // Desenha intercalando player na posição correta
+    for (int i = 0; i < total_visiveis; i++) {
+        float obj_base = visiveis[i]->mundo_rect.y + visiveis[i]->mundo_rect.height;
+        if (!player_desenhado && player_base <= obj_base) {
+            PlayerDraw(&self->player);
+            player_desenhado = true;
+        }
+        ObjetoMapaDrawSingle(visiveis[i]);
+    }
+    if (!player_desenhado) PlayerDraw(&self->player);
+}
+
+
+
 /** @brief Desenha o overlay de confirmação de desistência.
  * @param self         Ponteiro para o GameplayBody.
  * @param resources    Recursos visuais (fonte, cores).
@@ -455,9 +496,9 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 
 void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resources, int scream_width, int scream_height) {
     BeginMode2D(self->camera);
-        MapDraw(&self->map);
-        ObjetosMapaDraw(&self->objetos);
-        PlayerDraw(&self->player);
+        GameplayDrawMundo(self);
+        // ── Debug ──────────────────────────────────────────────────
+        /*
         Rectangle player_hitbox = {
             self->player.position.x + HITBOX_OFFSET_X,
             self->player.position.y + HITBOX_OFFSET_Y,
@@ -465,11 +506,12 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
             HITBOX_HEIGHT
         };
         DrawRectangleLinesEx(player_hitbox, 2, GREEN);
-        CollisionDrawDebug(self->map.colisores, self->map.colisor_count); // ← debug
+        CollisionDrawDebug(self->map.colisores, self->map.colisor_count);
+        */
     EndMode2D();
     //debug
-    Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
-    DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
+    //Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
+    //DrawText(TextFormat("x: %.0f  y: %.0f", world.x / MAP_ESCALA, world.y / MAP_ESCALA), 10, 10, 24, GREEN);
 
     Vector2 player_centro = {
         self->player.position.x + (PLAYER_BASE_WIDTH  * PLAYER_BASE_SCALE) / 2.0f,
