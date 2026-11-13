@@ -20,8 +20,8 @@
 /** @brief Linhas exibidas na tela de instruções (edite livremente). */
 static const char *INSTRUCOES_LINHAS[] = {
     "Use as setas para andar pelo mapa e navegar em interfaces",
-    "Ache o computador do laboratorio e envie o tela_alertaatorio correto",
-    "ESC abre o menu de pausa (o tempo para)",
+    "Realize as tarefas do laboratório",
+    "ESC desiste da partida",
     "Clique M para ler o manual, ele ira te ajudar"
 };
 #define INSTRUCOES_TOTAL_LINHAS (int)(sizeof(INSTRUCOES_LINHAS) / sizeof(INSTRUCOES_LINHAS[0]))
@@ -110,8 +110,7 @@ static const char *MANUAL_CAMINHOS[MANUAL_TOTAL_PAGINAS] = {
     "assets/texture/manual_jogador/manual_capa.png",
     "assets/texture/manual_jogador/manual_pag_1.png",
     "assets/texture/manual_jogador/manual_pag_2.png",
-    "assets/texture/manual_jogador/manual_pag_3.png",
-    "assets/texture/manual_jogador/manual_pag_4.png"
+    "assets/texture/manual_jogador/manual_pag_3.png"
 };
 
 /** @brief Desconta o tempo da partida; ao zerar, encerra com derrota. */
