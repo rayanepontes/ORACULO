@@ -95,6 +95,10 @@ int main(void)
                     if (DataInsert(resources.ranking, &resources.ranking_count, entrada)) {
                         DataSave(resources.ranking, resources.ranking_count);
                     }
+                }else if (state == STATE_GAME_OVER) {
+                    menu.nickname_input[0] = '\0';  
+                    menu.nickname_len = 0;           
+                    menu.nome_repetido = false;
                 }
                 GameplayUnload(&gameplay);
                 GameplayInit(&gameplay);

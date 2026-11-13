@@ -12,6 +12,7 @@
 #include "physics/collision.h"
 #include "map/map.h"
 #include "scenes/minigame_alucinacao.h"
+#include "scenes/minigame_alavanca.h"
 #include <math.h> 
 #include <stdlib.h>
 
@@ -344,6 +345,9 @@ void GameplayInit(GameplayBody *self) {
     TriadorInit(&self->triador);
     self->triador_usado = false;
 
+    AlavancaInit(&self->alavanca);
+    self->alavanca_usada = false;
+
     self->minigames_concluidos = 0;
     for (int i = 0; i < GAMEPLAY_TOTAL_MINIGAMES; i++) {
         self->minigames_completos[i] = false;
@@ -404,7 +408,22 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
                 break;
 
             case TELA_MINIGAME_TRIADOR:
+                GameplayTemporizadorUpdate(self);
                 GameplayUpdateMinigameTriador(self, state);
+                break;
+
+            case TELA_MINIGAME_ALAVANCA:
+                GameplayTemporizadorUpdate(self);
+                AlavancaUpdate(&self->alavanca, &self->tempo_restante);
+                if (self->alavanca.concluido) {
+                    self->alavanca.objeto.ativo = false;
+                    self->alavanca_usada = true;
+                    *state = STATE_PLAYING;
+                    GameplayMinigameConcluido(self, 2);
+                } else if (self->alavanca.cancelado) {
+                    self->alavanca.cancelado = false;
+                    *state = STATE_PLAYING;
+                }
                 break;
                     
             case TELA_INSTRUCOES: 
@@ -480,6 +499,16 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
         }
     }
 
+    // ── Interação com a alavanca ──────────────────────────────────────────────
+    if (!self->alavanca_usada) {
+        if (InteragivelPoderInteragir(&self->alavanca.objeto, player_centro) && IsKeyPressed(KEY_E)) {
+            AlavancaInit(&self->alavanca);
+            self->interface_atual = TELA_MINIGAME_ALAVANCA;
+            *state = STATE_INTERFACE;
+            return;
+        }
+    }
+
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
 
 
@@ -497,7 +526,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     BeginMode2D(self->camera);
         GameplayDrawMundo(self);
         // ── Debug ──────────────────────────────────────────────────
-        
+        /*
         Rectangle player_hitbox = {
             self->player.position.x + HITBOX_OFFSET_X,
             self->player.position.y + HITBOX_OFFSET_Y,
@@ -506,7 +535,7 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         };
         DrawRectangleLinesEx(player_hitbox, 2, GREEN);
         CollisionDrawDebug(self->map.colisores, self->map.colisor_count);
-        
+        */
     EndMode2D();
     //debug
     //Vector2 world = GetScreenToWorld2D(GetMousePosition(), self->camera);
@@ -533,6 +562,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         TriadorDrawIndicador(&self->triador, resources, self->camera);
     }
 
+    if (!self->alavanca_usada &&
+        InteragivelPoderInteragir(&self->alavanca.objeto, player_centro)) {
+        AlavancaDrawIndicador(&self->alavanca, resources, self->camera);
+    }
+
     if (*state == STATE_PLAYING && self->manual_aberto) {
         GameplayDrawManual(self, resources, scream_width, scream_height);
     }
@@ -552,6 +586,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
             case TELA_MINIGAME_TRIADOR:
             TriadorDraw(&self->triador, resources, scream_width, scream_height);
             break;
+
+            case TELA_MINIGAME_ALAVANCA:
+                AlavancaDraw(&self->alavanca, resources, scream_width, scream_height);
+                break;
 
             case TELA_INSTRUCOES:                   
                 GameplayDrawInstrucoes(resources, scream_width, scream_height);
@@ -597,4 +635,5 @@ void GameplayUnload(GameplayBody *self) {
     ObjetosMapaUnload(&self->objetos);
     AlucinacaoUnload(&self->alucinacao);
     TriadorUnload(&self->triador);
+    AlavancaUnload(&self->alavanca);
 }

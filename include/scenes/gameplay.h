@@ -18,13 +18,14 @@
 #include "map/objetos.h"
 #include "scenes/minigame_alucinacao.h"
 #include "scenes/minigame_triador.h"
+#include "scenes/minigame_alavanca.h"
 
 /** @brief Duração total de uma partida, em segundos (300 = 5 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 300.0f
 /** @brief Quantidade de páginas do manual (a primeira é a capa). */
 #define MANUAL_TOTAL_PAGINAS 4
 /** @brief Número máximo de minigames diferentes no jogo. */
-#define GAMEPLAY_TOTAL_MINIGAMES 2
+#define GAMEPLAY_TOTAL_MINIGAMES 3
 
 /** @enum TelaInterface
  *
@@ -47,6 +48,7 @@ typedef enum TelaInterface {
     TELA_ALERTA,      // Alerta do protocolo zero.
     TELA_MINIGAME_ALUCINACAO, // Minigame do Detector de Alucinação.
     TELA_MINIGAME_TRIADOR, // Minigame de treinamento de IA.
+    TELA_MINIGAME_ALAVANCA,
     TELA_NENHUMA      // Quantidade total de telas de interface E quando não a telas no momento.
 } TelaInterface;
 
@@ -103,6 +105,8 @@ typedef struct GameplayBody {
     bool          computador_usado; // impede reentrada enquanto concluido
     TriadorBody triador;
     bool        triador_usado;
+    AlavancaBody  alavanca;
+    bool          alavanca_usada;
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
