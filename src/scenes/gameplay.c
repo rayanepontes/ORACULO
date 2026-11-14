@@ -95,7 +95,7 @@ static void GameplayDrawnAlerta(ResourcesBody *resources, int scream_width, int 
         DrawTexturePro(tela_alerta, origem, destino, (Vector2){ 0.0f, 0.0f }, 0.0f, WHITE);
     }
 
-    const char *iniciar = "ENTER para salvar o NEXUX Lab";
+    const char *iniciar = "ENTER para salvar o NEXUS Lab";
     Vector2 iniciar_dim = MeasureTextEx(resources->fonte_principal, iniciar, 72.0f, 1);
 
     // Pisca duas vezes por segundo

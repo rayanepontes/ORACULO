@@ -20,8 +20,8 @@
 #include "scenes/minigame_triador.h"
 #include "scenes/minigame_alavanca.h"
 
-/** @brief Duração total de uma partida, em segundos (300 = 5 minutos). */
-#define GAMEPLAY_TEMPO_TOTAL 300.0f
+/** @brief Duração total de uma partida, em segundos (600 = 10 minutos). */
+#define GAMEPLAY_TEMPO_TOTAL 600.0f
 /** @brief Quantidade de páginas do manual (a primeira é a capa). */
 #define MANUAL_TOTAL_PAGINAS 4
 /** @brief Número máximo de minigames diferentes no jogo. */
