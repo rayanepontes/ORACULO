@@ -10,7 +10,7 @@
 #define RESOURCES_H
 
 #include <raylib.h>
-#include "database/database.h"
+#include "include/database/database.h"
 
 #define RESOURCES_FONTE_PATH "assets/fonts/VT323/VT323-Regular.ttf"
 #define RESOURCES_FONTE_SIZE 64

@@ -1,9 +1,5 @@
 #include <raylib.h>
-#include <stdbool.h>
-#include <ctype.h>
 #include "scenes/menu.h"
-#include "core/resources.h"
-#include "graphics/ui.h"
 
 // ─── Funções internas ─────────────────────────────────────────────────────────
 
@@ -12,26 +8,8 @@
  */
 static void InitBackgrounds(MenuBody *self) {
     self->backgrounds[TELA_PRINCIPAL] = LoadTexture("assets/texture/menu/tela_principal.png");
-    self->backgrounds[TELA_NOME]      = LoadTexture("assets/texture/menu/tela_principal.png");
-    self->backgrounds[TELA_RANKING]   = LoadTexture("assets/texture/menu/tela_vazia.png");
-    self->backgrounds[TELA_CONFIRMA_SAIR] = LoadTexture("assets/texture/menu/tela_principal.png");
-    self->caixa_nome = LoadTexture("assets/texture/menu/Rectangle 122.png");
-}
-
-static bool NomeJaExiste(const ResourcesBody *resources, const char *nome) {
-    for (int i = 0; i < resources->ranking_count; i++) {
-        const char *existente = resources->ranking[i].nickname;
-        int j = 0;
-
-        while (existente[j] != '\0' && nome[j] != '\0' &&
-               tolower((unsigned char)existente[j]) == tolower((unsigned char)nome[j])) {
-            j++;
-        }
-
-        // chegou ao fim das duas strings juntas = iguais ignorando maiúscula/minúscula
-        if (existente[j] == '\0' && nome[j] == '\0') return true;
-    }
-    return false;
+    self->backgrounds[TELA_NOME]      = LoadTexture("assets/texture/menu/tela_nome.png");
+    self->backgrounds[TELA_RANKING]   = LoadTexture("assets/texture/menu/frame 3.png");
 }
 
 /** @brief Processa a entrada de texto na tela de digitação do nickname.
@@ -290,23 +268,30 @@ static void MenuDrawConfirmaSair(MenuBody *self, ResourcesBody *resources,
 
 void MenuInit(MenuBody *self) {
     InitBackgrounds(self);
-    self->nickname_input[0] = '\0';
-    self->nickname_len = 0;
-    self->nome_repetido = false;
     self->tela_atual  = TELA_PRINCIPAL;
     self->opcao_atual = MENU_OPC_INICIAR;
     self->confirmado  = false;
-    self->sair = false;
-    self->opc_confirmacao = 0;
 }
 
-void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
+void MenuUpdate(MenuBody *self) {
     switch (self->tela_atual) {
         case TELA_PRINCIPAL:
-            int confirmado = UiOpcaoUpdate((int*)&self->opcao_atual, MENU_TOTAL_OPC);
-            if (confirmado == MENU_OPC_INICIAR) { self->tela_atual = TELA_NOME; }
-            if (confirmado == MENU_OPC_RANKING) { self->tela_atual = TELA_RANKING; }
-            if (confirmado == MENU_OPC_SAIR)    { self->tela_atual = TELA_CONFIRMA_SAIR; }
+        
+            if (IsKeyPressed(KEY_DOWN)) {
+                self->opcao_atual = (self->opcao_atual + 1) % MENU_TOTAL_OPC;
+            }
+
+            if (IsKeyPressed(KEY_UP)) {
+                self->opcao_atual = (self->opcao_atual - 1 + MENU_TOTAL_OPC) % MENU_TOTAL_OPC;
+            }
+
+            if (IsKeyPressed(KEY_ENTER)) {
+                if (self->opcao_atual == MENU_OPC_RANKING){
+                    self->tela_atual = TELA_RANKING;
+                }else {
+                    self->confirmado = true; // inicia partida
+                }
+            }
             break;
 
         case TELA_NOME: 
@@ -314,6 +299,7 @@ void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
             break;
             
         case TELA_RANKING: 
+
             if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER)) {
                 self->tela_atual = TELA_PRINCIPAL;
             }
@@ -329,6 +315,10 @@ void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
 }
 
 void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
+    //lembrar depois de começar a adicionar as cores nos recursos globais (resources)
+    Color amarelo = GetColor(0xEFB239FF);
+    Color branco  = GetColor(0xE5E0EBFF);
+
     // Fundo da subtela ativa
     Texture2D bg = self->backgrounds[self->tela_atual];
     DrawTexturePro(
@@ -360,13 +350,12 @@ void MenuDraw(MenuBody *self, ResourcesBody *resources, int scream_width, int sc
     
         default:
             break;
-    }    
+    }
 }
 
 void MenuUnload(MenuBody *self) {
     for (int i = 0; i < TELA_TOTAL; i++) {
         UnloadTexture(self->backgrounds[i]);
     }
-    UnloadTexture(self->caixa_nome);
     // fonte não é descarregada aqui — pertence ao ResourcesBody
 }

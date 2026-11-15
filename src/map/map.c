@@ -974,6 +974,7 @@ void MapInitCollision(MapBody *self){
 void MapInit(MapBody *self, MapType type, const char *texture_path) {
     self->type          = type;
     self->texture       = LoadTexture(texture_path);
+    self->camera_offset = (Vector2){ 0.0f, 0.0f };
     self->crop.source   = (Rectangle){ 0.0f, 0.0f, 0.0f, 0.0f };
     self->crop.dest     = (Rectangle){ 0.0f, 0.0f, 0.0f, 0.0f };
     MapInitCollision(self);
@@ -982,6 +983,10 @@ void MapInit(MapBody *self, MapType type, const char *texture_path) {
 void MapSetCrop(MapBody *self, Rectangle source, Rectangle dest) {
     self->crop.source = source;
     self->crop.dest   = dest;
+}
+
+void MapSetCamera(MapBody *self, Vector2 offset) {
+    self->camera_offset = offset;
 }
 
 void MapDraw(MapBody *self) {
