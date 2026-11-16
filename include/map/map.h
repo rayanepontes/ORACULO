@@ -9,6 +9,7 @@
 #include <raylib.h>
 #include "physics/collision.h"
 
+/** @brief Fator de escala global do mapa (pixels do tileset → pixels de tela). */
 #define MAP_ESCALA 2.0f
 
 /** @enum MapType
@@ -18,10 +19,10 @@
  * @details Cada tipo determina como o mapa será recortado e desenhado na tela.
  */
 typedef enum MapType {
-    MAP_SINGLE,    // imagem enorme, sem recorte
-    MAP_CROP,  // recorte manual de uma região
-    MAP_TILEMAP,  // grade de tiles (futuro)
-    MAP_COUNT // Quantidade de tipos de mapa. //
+    MAP_SINGLE,    ///< Imagem única sem recorte.
+    MAP_CROP,      ///< Recorte manual de uma região.
+    MAP_TILEMAP,   ///< Grade de tiles (implementação futura).
+    MAP_COUNT      ///< Quantidade de tipos de mapa.
 } MapType;
 
 /** @struct MapCrop
@@ -32,8 +33,8 @@ typedef enum MapType {
  * @param dest    Onde e com qual tamanho o recorte será desenhado na tela.
  */
 typedef struct MapCrop {
-    Rectangle source;   // coordenadas na imagem fonte
-    Rectangle dest;  // onde e como desenhar na tela
+    Rectangle source;   ///< Região recortada dentro da textura de origem.
+    Rectangle dest;     ///< Onde e com qual tamanho o recorte será desenhado na tela.
 } MapCrop;
 
 /** @struct MapBody
@@ -47,6 +48,8 @@ typedef struct MapCrop {
  * @param type          Tipo de mapa que determina como ele será desenhado.
  * @param texture       Textura principal do mapa.
  * @param crop          Dados de recorte, usado quando type == MAP_CROP.
+ * @param colisores      Array de colisores fixos do mapa.
+ * @param colisor_count  Quantidade de colisores ativos em colisores[].
  */
 typedef struct MapBody {
     MapType  type;
@@ -58,6 +61,15 @@ typedef struct MapBody {
     int           colisor_count;            
 } MapBody;
 
+
+/** @brief Popula o array de colisores do mapa com todos os retângulos fixos.
+ *
+ * @details Define paredes, móveis e objetos sólidos de cada sala usando
+ *          coordenadas em unidades do tileset multiplicadas por MAP_ESCALA.
+ *          Deve ser chamada internamente por MapInit.
+ *
+ * @param self Ponteiro para o MapBody a ser inicializado.
+ */
 void MapInitCollision(MapBody *self);
 
 /** @brief Carrega a textura e inicializa o estado do mapa.
