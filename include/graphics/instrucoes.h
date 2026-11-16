@@ -8,7 +8,12 @@
 #include <math.h>
 #include "core/resources.h"
 
-/** @brief Desenha a imagem de instruções ajustada à tela e o "ENTER" piscando no canto inferior direito. */
+/** @brief Desenha a imagem de instruções ajustada à tela e o "ENTER" piscando no canto inferior direito. 
+ * @param tex           Textura da imagem de instruções a exibir.
+ * @param resources     Recursos visuais (fonte, cores).
+ * @param screen_width  Largura da tela em pixels.
+ * @param screen_height Altura da tela em pixels.
+*/
 static inline void InstrucoesDraw(Texture2D tex, ResourcesBody *resources,
                                   int screen_width, int screen_height) {
     DrawRectangle(0, 0, screen_width, screen_height, BLACK);

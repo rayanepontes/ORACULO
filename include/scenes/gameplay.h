@@ -48,14 +48,20 @@ typedef enum TelaInterface {
     TELA_ALERTA,      // Alerta do protocolo zero.
     TELA_MINIGAME_ALUCINACAO, // Minigame do Detector de Alucinação.
     TELA_MINIGAME_TRIADOR, // Minigame de treinamento de IA.
-    TELA_MINIGAME_ALAVANCA,
+    TELA_MINIGAME_ALAVANCA,  ///< Minigame da alavanca de emergência.
     TELA_NENHUMA      // Quantidade total de telas de interface E quando não a telas no momento.
 } TelaInterface;
 
+/** @enum OpcVoltarMenu
+ * @brief Opções do diálogo de confirmação de desistência.
+ * @param VOLTAR_MENU  O jogador confirma que quer sair para o menu.
+ * @param VOLTAR_JOGO  O jogador cancela e retorna ao jogo.
+ * @param TOTAL_OPC    Quantidade total de opções.
+ */
 typedef enum OpcVoltarMenu{
-    VOLTAR_MENU,
-    VOLTAR_JOGO,
-    TOTAL_OPC
+    VOLTAR_MENU, ///< Confirma saída para o menu.
+    VOLTAR_JOGO, ///< Cancela e volta ao jogo.
+    TOTAL_OPC    ///< Quantidade total de opções.
 }OpcVoltarMenu;
 
 /** @struct GameplayBody
@@ -83,7 +89,12 @@ typedef enum OpcVoltarMenu{
  * @param computador_usado  True após o minigame ser concluído; impede reentrada.
  * @param terminou          True quando a partida chega ao fim (vitória ou derrota).
  * @param venceu            True se o jogador venceu; false se perdeu.
- * @param voltar_menu       True quando o jogador confirma que quer voltar ao menu.
+ * @param voltar_menu       True quando o jogador confirma que quer voltar ao menu. 
+ * @param triador          Estado do minigame Triador de Treinamento.
+ * @param triador_usado     true após o minigame do triador ser concluído.
+ * @param alavanca          Estado do minigame Alavanca de Emergência.
+ * @param alavanca_usada    true após o minigame da alavanca ser concluído.
+ * @param opc_confirmacao   Opção selecionada no diálogo de confirmação de saída.
  */
 typedef struct GameplayBody {
     PlayerBody    player;

@@ -19,10 +19,12 @@
 
 /**
  * @brief Dados de uma entrada do ranking.
+ * @param nickname Nome do jogador (máx chars + '\0')
+ * @param tempo Tempo de conclusão em segundos (menor = melhor)
  */
 typedef struct GameData {
-    char nickname[7]; // Nickname do jogador (máx 6 chars + '\0').
-    int  tempo;       // Tempo de conclusão em segundos (menor = melhor).
+    char nickname[7]; ///< Nickname do jogador (máx 6 chars + '\0').
+    int  tempo;       ///< Tempo de conclusão em segundos (menor = melhor).
 } GameData;
 
 /**
@@ -44,6 +46,7 @@ void DataSave(GameData entries[], int count);
  * @param data_saved Array de GameData existente.
  * @param count   Ponteiro para a quantidade atual de dados (pode ser incrementado).
  * @param new_entry Nova entrada a inserir.
+ * @return true se a entrada foi inserida no ranking; false se o tempo ficou fora do top DATABASE_MAX_ENTRIES.
  */
 bool DataInsert(GameData data_saved[], int *count, GameData new_entry);
 

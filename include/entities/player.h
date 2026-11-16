@@ -10,14 +10,29 @@
 #include "graphics/animation.h"
 #include "physics/collision.h"
 
+/** @brief Velocidade de movimento do player em pixels por frame. */
 #define PLAYER_SPEED 8.0f
+
+/** @brief Fator de escala aplicado ao sprite do player. */
 #define PLAYER_BASE_SCALE 1.5f
+
+/** @brief Largura base do sprite do player (antes da escala), em pixels. */
 #define PLAYER_BASE_WIDTH 175.0f
+
+/** @brief Altura base do sprite do player (antes da escala), em pixels. */
 #define PLAYER_BASE_HEIGHT 257.0f
-#define HITBOX_WIDTH    140.0f  // largura da hitbox
-#define HITBOX_HEIGHT   130.0f  // altura da hitbox
-#define HITBOX_OFFSET_X  61.0f  // centraliza horizontalmente no sprite
-#define HITBOX_OFFSET_Y 235.0f  // ancora na base do sprite
+
+/** @brief Largura da hitbox do player em pixels (escala já aplicada). */
+#define HITBOX_WIDTH    140.0f
+
+/** @brief Altura da hitbox do player em pixels (escala já aplicada). */
+#define HITBOX_HEIGHT   130.0f
+
+/** @brief Deslocamento horizontal da hitbox em relação à origem do sprite. */
+#define HITBOX_OFFSET_X  61.0f
+
+/** @brief Deslocamento vertical da hitbox em relação à origem do sprite (ancora na base). */
+#define HITBOX_OFFSET_Y 235.0f
 
 /** @enum PlayerDirection
  * 
@@ -94,6 +109,8 @@ void PLayerReset(PlayerBody *self, Vector2 posicao_inicial);
  *          animação será gerada a depender da ação que está acontecendo.
  * 
  * @param self Ponteiro para uma entidade player.
+ * @param colisores      Array de retângulos de colisão do mapa.
+ * @param colisor_count  Quantidade de colisores no array.
  */
 void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_count);
 

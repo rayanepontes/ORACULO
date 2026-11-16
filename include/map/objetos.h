@@ -11,19 +11,31 @@
 #include <stdbool.h>
 #include "map/map.h"
 
+/** @brief Prefixo do caminho para as texturas dos objetos do mapa. */
 #define OBJETOS_PATH "assets/texture/mapa/objetos/"
 
 // ─── Structs ──────────────────────────────────────────────────────────────────
 
-/** @brief Representa um objeto visual posicionado no mundo. */
+/** @brief Representa um objeto visual posicionado no mundo. 
+ * @param sprite    Textura carregada do objeto.
+ * @param mundo_rect Posição e tamanho no mundo (já com MAP_ESCALA).
+ * @param hitbox Área de colisão física (base do objeto, já com MAP_ESCALA).
+ * @param visivel   Controla se o objeto deve ser desenhado (false = oculto).
+**/
 typedef struct ObjetoMapa {
-    Texture2D sprite;
-    Rectangle mundo_rect;  ///< Posição e tamanho no mundo (já com MAP_ESCALA)
-    Rectangle hitbox;      ///< Área de colisão física (base do objeto, já com MAP_ESCALA)
-    bool      visivel;
+    Texture2D sprite;      ///< Textura do objeto.
+    Rectangle mundo_rect;  ///< Posição e tamanho no mundo (já com MAP_ESCALA).
+    Rectangle hitbox;      ///< Área de colisão física (base do objeto, já com MAP_ESCALA).
+    bool      visivel;     ///< Se falso, o objeto não é desenhado nem coletado.
 } ObjetoMapa;
 
-/** @brief Estado completo de todos os objetos do mapa. */
+/** @struct ObjetosMapaBody
+ * @brief Conjunto de todos os objetos de mapa da cena de gameplay.
+ * @details Cada campo é um ObjetoMapa individualizado com sprite,
+ *          hitbox e visibilidade próprios. ObjetosMapaInit() popula
+ *          todos os campos; ObjetosMapaColetarVisiveis() filtra os
+ *          visíveis para o depth-sorting.
+ **/
 typedef struct ObjetosMapaBody {
     // ── Minigame Alucinação ───────────────────────────────────────────────────
     ObjetoMapa alucinacao_pc_l;
@@ -78,12 +90,14 @@ void ObjetosMapaInit(ObjetosMapaBody *self);
 /** @brief Desenha um único ObjetoMapa (usado pelo depth sorting em gameplay). */
 void ObjetoMapaDrawSingle(ObjetoMapa *obj);
 
+/** @brief Número máximo de objetos visíveis simultâneos na cena. */
+#define OBJETOS_MAX_VISIVEIS 32
+
 /** @brief Preenche um array de ponteiros com todos os objetos visíveis para depth sorting.
  *  @param self   Ponteiro para o ObjetosMapaBody.
  *  @param out    Array de saída (deve ter espaço para OBJETOS_MAX_VISIVEIS entradas).
  *  @param count  Saída: quantos objetos foram escritos no array.
  */
-#define OBJETOS_MAX_VISIVEIS 32
 void ObjetosMapaColetarVisiveis(ObjetosMapaBody *self, ObjetoMapa **out, int *count);
 
 /** @brief Descarrega todos os sprites da memória. */
