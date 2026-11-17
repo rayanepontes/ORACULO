@@ -79,7 +79,10 @@ int main(void)
 
         } else if (state == STATE_PLAYING || state == STATE_INTERFACE) {
 
-            GameplayUpdate(&gameplay, &state);
+            GameplayUpdate(&gameplay, &state, &resources);
+
+            // DEBUG: Tecle 'O' para reduzir o tempo restante para 10 segundos
+            //if (IsKeyPressed(KEY_O)) gameplay.tempo_restante = 10.0f;
 
             if (gameplay.voltar_menu) {
                 gameplay.voltar_menu = false;
@@ -90,7 +93,12 @@ int main(void)
                 menu.nickname_len = 0;           
                 menu.nome_repetido = false;      
             } else if (gameplay.terminou) {
-                state = gameplay.venceu ? STATE_WIN : STATE_GAME_OVER;
+                if (gameplay.venceu) {
+                    state = STATE_WIN;
+                } else {
+                    state = STATE_GAME_OVER;
+                    PlaySound(resources.som_gameover);
+                }
             }
 
         } else if (state == STATE_WIN || state == STATE_GAME_OVER) {
