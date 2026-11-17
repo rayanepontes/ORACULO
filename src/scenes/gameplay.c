@@ -137,8 +137,8 @@ static void GameplayTemporizadorUpdate(GameplayBody *self) {
  * @param self  Ponteiro para o GameplayBody ativo.
  * @param state Ponteiro para o estado global.
  */
-static void GameplayUpdateMinigameAlucinacao(GameplayBody *self, GameState *state) {
-    AlucinacaoUpdate(&self->alucinacao);
+static void GameplayUpdateMinigameAlucinacao(GameplayBody *self, GameState *state, ResourcesBody *resources) {
+    AlucinacaoUpdate(&self->alucinacao, resources);
 
     if (self->alucinacao.concluido) {
         for (int i = 0; i < ALUCINACAO_TOTAL_COMPUTADORES; i++){
@@ -381,15 +381,14 @@ void GameplayInit(GameplayBody *self) {
     self->opc_confirmacao = VOLTAR_MENU;
 }
 
-void GameplayUpdate(GameplayBody *self, GameState *state) {
-
+void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resources) {
      if (*state == STATE_INTERFACE) {
 
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
                 GameplayTemporizadorUpdate(self);
 
-                int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC);
+                int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC, &resources->som_selecao, &resources->som_confirmacao);
                 if (confirmado == VOLTAR_MENU) {
                     self->voltar_menu = true; // SIM
                 } else if (confirmado == VOLTAR_JOGO) {
@@ -404,7 +403,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state) {
 
             case TELA_MINIGAME_ALUCINACAO:
                 GameplayTemporizadorUpdate(self);
-                GameplayUpdateMinigameAlucinacao(self, state);
+                GameplayUpdateMinigameAlucinacao(self, state, resources);
                 break;
 
             case TELA_MINIGAME_TRIADOR:

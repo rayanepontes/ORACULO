@@ -48,9 +48,10 @@ static void AlucinacaoUpdateRelatorios(AlucinacaoBody *self) {
 
 /** @brief Processa a confirmação ou cancelamento da escolha do relatório.
  * @param self Ponteiro para o AlucinacaoBody ativo.
+ * @param resources Ponteiro para os recursos globais (som de seleção).
  */
-static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self) {
-    int resultado = UiOpcaoUpdate((int *)&self->opc_confirmacao, ALUC_TOTAL_OPC);
+static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self, ResourcesBody *resources) {
+    int resultado = UiOpcaoUpdate((int *)&self->opc_confirmacao, ALUC_TOTAL_OPC, &resources->som_selecao, &resources->som_confirmacao);
 
     if (IsKeyPressed(KEY_ESCAPE) || resultado == ALUC_CANCELAR) {
         self->opc_confirmacao = ALUC_CONFIRMAR;
@@ -222,8 +223,8 @@ void AlucinacaoInit(AlucinacaoBody *self) {
     self->alucinacao_computadores[3] = InteragivelCriar(1589 * MAP_ESCALA, 458 * MAP_ESCALA, (1739-1589) * MAP_ESCALA, (588-458) * MAP_ESCALA, 40.0f);
 }
 
-void AlucinacaoUpdate(AlucinacaoBody *self) {
-    if (self->mostrando_instrucoes) {
+void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources) {
+        if (self->mostrando_instrucoes) {
         if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
         else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
         return;
@@ -233,7 +234,7 @@ void AlucinacaoUpdate(AlucinacaoBody *self) {
             AlucinacaoUpdateRelatorios(self);
             break;
         case TELA_ALUC_CONFIRMACAO:
-            AlucinacaoUpdateConfirmacao(self);
+            AlucinacaoUpdateConfirmacao(self, resources);
             break;
         case TELA_ALUC_ERRO:
             AlucinacaoUpdateErro(self);

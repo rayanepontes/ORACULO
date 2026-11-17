@@ -37,9 +37,11 @@ typedef struct UiOpcaoEstilo {
  *
  * @param opcao_atual  Ponteiro para o índice atual — atualizado internamente.
  * @param total        Quantidade total de opções.
+ * @param som          Ponteiro para o Sound tocado ao trocar de opção, ou NULL para silêncio.
+ * @param som_confirm  Ponteiro para o Sound tocado ao confirmar (ENTER), ou NULL para silêncio.
  * @return             Índice da opção confirmada com ENTER, ou -1 se nada foi confirmado.
  */
-int UiOpcaoUpdate(int *opcao_atual, int total);
+int UiOpcaoUpdate(int *opcao_atual, int total, Sound *som, Sound *som_confirm);
 
 /**
  * @brief Desenha uma lista de opções navegável, centralizada horizontalmente.

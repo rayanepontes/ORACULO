@@ -78,9 +78,10 @@ static void MenuUpdateNome(MenuBody *self, const ResourcesBody *resources) {
 
 /** @brief Processa a confirmação de saída do jogo.
  * @param self Ponteiro para o MenuBody.
+ * @param resources Ponteiro para os recursos globais.
  */
-static void MenuUpdateConfirmaSair(MenuBody *self) {
-    int confirmado = UiOpcaoUpdate(&self->opc_confirmacao, 2);
+static void MenuUpdateConfirmaSair(MenuBody *self, const ResourcesBody *resources) {
+    int confirmado = UiOpcaoUpdate(&self->opc_confirmacao, 2, (Sound *)&resources->som_selecao, (Sound *)&resources->som_confirmacao);
     if (confirmado == 0) {
         self->sair = true;
     } else if (confirmado == 1) {
@@ -303,7 +304,7 @@ void MenuInit(MenuBody *self) {
 void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
     switch (self->tela_atual) {
         case TELA_PRINCIPAL:
-            int confirmado = UiOpcaoUpdate((int*)&self->opcao_atual, MENU_TOTAL_OPC);
+            int confirmado = UiOpcaoUpdate((int*)&self->opcao_atual, MENU_TOTAL_OPC, (Sound *)&resources->som_selecao, (Sound *)&resources->som_confirmacao);
             if (confirmado == MENU_OPC_INICIAR) { self->tela_atual = TELA_NOME; }
             if (confirmado == MENU_OPC_RANKING) { self->tela_atual = TELA_RANKING; }
             if (confirmado == MENU_OPC_SAIR)    { self->tela_atual = TELA_CONFIRMA_SAIR; }
@@ -320,7 +321,7 @@ void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
             break;
 
         case TELA_CONFIRMA_SAIR: 
-            MenuUpdateConfirmaSair(self);
+            MenuUpdateConfirmaSair(self, resources);
             break;
 
         default:

@@ -137,8 +137,9 @@ void GameplayInit  (GameplayBody *self);
  *
  * @param self  Ponteiro para o GameplayBody ativo.
  * @param state Ponteiro para o estado global — pode ser alterado internamente.
+ * @param resources Ponteiro para os recursos globais.
  */
-void GameplayUpdate(GameplayBody *self, GameState *state);
+void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resources);
 
 /** @brief Desenha a partida e, se aplicável, a tela de interface sobreposta.
  *

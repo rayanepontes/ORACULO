@@ -24,8 +24,20 @@
 /** @brief Caminho para a música do gameplay. */
 #define RESOURCES_MUSICA_GAMEPLAY_PATH "assets/audio/music/oraculo_gameplay_music.wav"
 
-/** @brief Volume das músicas de fundo (0.0 a 1.0). */
-#define RESOURCES_MUSICA_VOLUME 0.6f
+/** @brief Caminho para o efeito sonoro de troca de opção nos menus. */
+#define RESOURCES_SOM_SELECAO_PATH     "assets/audio/sfx/select_sound.wav"
+
+/** @brief Caminho para o efeito sonoro de confirmação de seleção nos menus. */
+#define RESOURCES_SOM_CONFIRMACAO_PATH "assets/audio/sfx/selected_confirm_sound.wav"
+
+/** @brief Volume das músicas de fundo do menu (0.0 a 1.0). */
+#define RESOURCES_MUSICA_MENU_VOLUME 0.6f
+
+/** @brief Volume das músicas de fundo da gameplay (0.0 a 1.0). */
+#define RESOURCES_MUSICA_GAMEPLAY_VOLUME 0.4f
+
+/** @brief Volume dos efeitos sonoros (0.0 a 1.0). */
+#define RESOURCES_SFX_VOLUME 0.8f
 
 /**
  * @struct ResourcesBody
@@ -39,6 +51,10 @@
  * @param lilas_claro     Lilás claro da paleta.
  * @param ciano_claro     Ciano clarinho.
  * @param letra_caixa     Cor das letras na caixa de nome.
+ * @param musica_menu     Musica tema do menu.
+ * @param musica_gameplay Musica tema da gameplay.
+ * @param som_selecao     Efeito sonoro tocado ao navegar entre opções de menu.
+ * @param som_confirmacao  Efeito sonoro tocado ao confirmar uma opção (ENTER).
  */
 typedef struct ResourcesBody {
     Font     fonte_principal;
@@ -53,6 +69,8 @@ typedef struct ResourcesBody {
     Color    letra_caixa;
     Music    musica_menu;
     Music    musica_gameplay;
+    Sound    som_selecao;
+    Sound    som_confirmacao;
 } ResourcesBody;
 
 /**

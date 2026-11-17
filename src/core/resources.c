@@ -20,12 +20,18 @@ void ResourcesInit(ResourcesBody *self) {
     self->musica_gameplay = LoadMusicStream(RESOURCES_MUSICA_GAMEPLAY_PATH);
     self->musica_menu.looping     = true;
     self->musica_gameplay.looping = true;
-    SetMusicVolume(self->musica_menu,     RESOURCES_MUSICA_VOLUME);
-    SetMusicVolume(self->musica_gameplay, RESOURCES_MUSICA_VOLUME);
+    SetMusicVolume(self->musica_menu,     RESOURCES_MUSICA_MENU_VOLUME);
+    SetMusicVolume(self->musica_gameplay, RESOURCES_MUSICA_GAMEPLAY_VOLUME);
+    self->som_selecao = LoadSound(RESOURCES_SOM_SELECAO_PATH);
+    SetSoundVolume(self->som_selecao, RESOURCES_SFX_VOLUME);
+    self->som_confirmacao = LoadSound(RESOURCES_SOM_CONFIRMACAO_PATH);
+    SetSoundVolume(self->som_confirmacao, RESOURCES_SFX_VOLUME);
 }
 
 void ResourcesUnload(ResourcesBody *self) {
     UnloadFont(self->fonte_principal);
     UnloadMusicStream(self->musica_menu);
     UnloadMusicStream(self->musica_gameplay);
+    UnloadSound(self->som_selecao);
+    UnloadSound(self->som_confirmacao);
 }

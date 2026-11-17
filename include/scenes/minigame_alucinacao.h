@@ -81,8 +81,9 @@ void AlucinacaoInit(AlucinacaoBody *self);
 
 /** @brief Processa o input do jogador dentro do minigame.
  * @param self Ponteiro para o AlucinacaoBody ativo.
+ * @param resources Ponteiro para os recursos globais (som de seleção).
  */
-void AlucinacaoUpdate(AlucinacaoBody *self);
+void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources);
 
 /** @brief Desenha o indicador de interação acima do computador (chamar fora de BeginMode2D).
  * @param self          Ponteiro para o AlucinacaoBody ativo.

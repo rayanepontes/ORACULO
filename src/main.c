@@ -79,7 +79,7 @@ int main(void)
 
         } else if (state == STATE_PLAYING || state == STATE_INTERFACE) {
 
-            GameplayUpdate(&gameplay, &state);
+            GameplayUpdate(&gameplay, &state, &resources);
 
             if (gameplay.voltar_menu) {
                 gameplay.voltar_menu = false;

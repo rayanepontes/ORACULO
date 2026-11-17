@@ -5,14 +5,19 @@
 
 #include "graphics/ui.h"
 
-int UiOpcaoUpdate(int *opcao_atual, int total) {
+int UiOpcaoUpdate(int *opcao_atual, int total, Sound *som, Sound *som_confirm) {
+    bool mudou = false;
     if (IsKeyPressed(KEY_DOWN)) {
         *opcao_atual = (*opcao_atual + 1) % total;
+        mudou = true;
     }
     if (IsKeyPressed(KEY_UP)) {
         *opcao_atual = (*opcao_atual - 1 + total) % total;
+        mudou = true;
     }
+    if (mudou && som) PlaySound(*som);
     if (IsKeyPressed(KEY_ENTER)) {
+        if (som_confirm) PlaySound(*som_confirm);
         return *opcao_atual;
     }
     return -1;
