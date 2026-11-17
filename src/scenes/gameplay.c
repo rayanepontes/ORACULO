@@ -187,7 +187,7 @@ static void GameplayManualUpdate(GameplayBody *self) {
     }
 }
 
-static void GameplayUpdateMinigameTriador(GameplayBody *self, GameState *state) {
+static void GameplayUpdateMinigameTriador(GameplayBody *self, GameState *state, ResourcesBody *resources) {
     TriadorUpdate(&self->triador);
 
     if (self->triador.cancelado) {
@@ -204,6 +204,19 @@ static void GameplayUpdateMinigameTriador(GameplayBody *self, GameState *state) 
         self->interface_atual = TELA_NENHUMA;
         GameplayMinigameConcluido(self, 1);
         return;
+    }
+}
+
+static void GameplayUpdateMinigameAlavanca(GameplayBody *self, GameState *state, ResourcesBody *resources) {
+    AlavancaUpdate(&self->alavanca, &self->tempo_restante);
+    if (self->alavanca.concluido) {
+        self->alavanca.objeto.ativo = false;
+        self->alavanca_usada = true;
+        *state = STATE_PLAYING;
+        GameplayMinigameConcluido(self, 2);
+    } else if (self->alavanca.cancelado) {
+        self->alavanca.cancelado = false;
+        *state = STATE_PLAYING;
     }
 }
 
@@ -408,21 +421,12 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
 
             case TELA_MINIGAME_TRIADOR:
                 GameplayTemporizadorUpdate(self);
-                GameplayUpdateMinigameTriador(self, state);
+                GameplayUpdateMinigameTriador(self, state, resources);
                 break;
 
             case TELA_MINIGAME_ALAVANCA:
                 GameplayTemporizadorUpdate(self);
-                AlavancaUpdate(&self->alavanca, &self->tempo_restante);
-                if (self->alavanca.concluido) {
-                    self->alavanca.objeto.ativo = false;
-                    self->alavanca_usada = true;
-                    *state = STATE_PLAYING;
-                    GameplayMinigameConcluido(self, 2);
-                } else if (self->alavanca.cancelado) {
-                    self->alavanca.cancelado = false;
-                    *state = STATE_PLAYING;
-                }
+                GameplayUpdateMinigameAlavanca(self, state, resources);
                 break;
                     
             case TELA_INSTRUCOES: 
@@ -481,6 +485,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
             }
         }
         if (pode_interagir && IsKeyPressed(KEY_E)) {
+            PlaySound(resources->som_entry_minigame);
             AlucinacaoInit(&self->alucinacao);
             self->interface_atual = TELA_MINIGAME_ALUCINACAO;
             *state = STATE_INTERFACE;
@@ -491,6 +496,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     // ── Interação com o triador ───────────────────────────────────────────────
     if (!self->triador_usado) {
         if (InteragivelPoderInteragir(&self->triador.objeto, player_centro) && IsKeyPressed(KEY_E)) {
+            PlaySound(resources->som_entry_minigame);
             TriadorInit(&self->triador);
             self->interface_atual = TELA_MINIGAME_TRIADOR;
             *state = STATE_INTERFACE;
@@ -501,6 +507,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     // ── Interação com a alavanca ──────────────────────────────────────────────
     if (!self->alavanca_usada) {
         if (InteragivelPoderInteragir(&self->alavanca.objeto, player_centro) && IsKeyPressed(KEY_E)) {
+            PlaySound(resources->som_entry_minigame);
             AlavancaInit(&self->alavanca);
             self->interface_atual = TELA_MINIGAME_ALAVANCA;
             *state = STATE_INTERFACE;

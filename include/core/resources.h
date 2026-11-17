@@ -30,6 +30,12 @@
 /** @brief Caminho para o efeito sonoro de confirmação de seleção nos menus. */
 #define RESOURCES_SOM_CONFIRMACAO_PATH "assets/audio/sfx/selected_confirm_sound.wav"
 
+/** @brief Caminho para o efeito sonoro de game over. */
+#define RESOURCES_SOM_GAMEOVER_PATH "assets/audio/sfx/gameover_sound.wav"
+
+/** @brief Caminho para o efeito sonoro de entrada em minigames. */
+#define RESOURCES_SOM_MINIGAME_ENTRY "assets/audio/sfx/minigame_entry.wav"
+
 /** @brief Volume das músicas de fundo do menu (0.0 a 1.0). */
 #define RESOURCES_MUSICA_MENU_VOLUME 0.6f
 
@@ -42,19 +48,21 @@
 /**
  * @struct ResourcesBody
  * @brief Recursos globais compartilhados por todas as cenas.
- * @param fonte_principal Fonte VT323, usada em todas as cenas.
- * @param ranking         Entradas do ranking carregadas do arquivo.
- * @param ranking_count   Número de entradas válidas em ranking.
- * @param amarelo         Cor amarela da paleta do jogo.
- * @param branco          Branco puro.
- * @param lilas_escuro    Lilás escuro da paleta.
- * @param lilas_claro     Lilás claro da paleta.
- * @param ciano_claro     Ciano clarinho.
- * @param letra_caixa     Cor das letras na caixa de nome.
- * @param musica_menu     Musica tema do menu.
- * @param musica_gameplay Musica tema da gameplay.
- * @param som_selecao     Efeito sonoro tocado ao navegar entre opções de menu.
- * @param som_confirmacao  Efeito sonoro tocado ao confirmar uma opção (ENTER).
+ * @param fonte_principal    Fonte VT323, usada em todas as cenas.
+ * @param ranking            Entradas do ranking carregadas do arquivo.
+ * @param ranking_count      Número de entradas válidas em ranking.
+ * @param amarelo            Cor amarela da paleta do jogo.
+ * @param branco             Branco puro.
+ * @param lilas_escuro       Lilás escuro da paleta.
+ * @param lilas_claro        Lilás claro da paleta.
+ * @param ciano_claro        Ciano clarinho.
+ * @param letra_caixa        Cor das letras na caixa de nome.
+ * @param musica_menu        Musica tema do menu.
+ * @param musica_gameplay    Musica tema da gameplay.
+ * @param som_selecao        Efeito sonoro tocado ao navegar entre opções de menu.
+ * @param som_confirmacao    Efeito sonoro tocado ao confirmar uma opção (ENTER).
+ * @param som_gameover       Efeito sonoro tocado ao entrar na tela de game over.
+ * @param som_entry_minigame Efeito sonoro tocado ao entrar em um minigame qualquer.
  */
 typedef struct ResourcesBody {
     Font     fonte_principal;
@@ -71,6 +79,8 @@ typedef struct ResourcesBody {
     Music    musica_gameplay;
     Sound    som_selecao;
     Sound    som_confirmacao;
+    Sound    som_gameover;
+    Sound    som_entry_minigame;
 } ResourcesBody;
 
 /**
