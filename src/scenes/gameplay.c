@@ -180,9 +180,9 @@ static void GameplayManualUpdate(GameplayBody *self) {
 
     if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
         self->manual_aberto = false;
-    } else if (IsKeyPressed(KEY_RIGHT) && self->manual_pagina_atual < MANUAL_TOTAL_PAGINAS - 1) {
+    } else if (InputDireita() && self->manual_pagina_atual < MANUAL_TOTAL_PAGINAS - 1) {
         self->manual_pagina_atual++;
-    } else if (IsKeyPressed(KEY_LEFT) && self->manual_pagina_atual > 0) {
+    } else if (InputEsquerda() && self->manual_pagina_atual > 0) {
         self->manual_pagina_atual--;
     }
 }

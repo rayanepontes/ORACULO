@@ -31,12 +31,11 @@ static void AlucinacaoUpdateRelatorios(AlucinacaoBody *self) {
         return;
     }
 
-    if (IsKeyPressed(KEY_RIGHT) &&
-        self->relatorio_atual < ALUCINACAO_TOTAL_RELATORIOS - 1) {
+    if (InputDireita() && self->relatorio_atual < ALUCINACAO_TOTAL_RELATORIOS - 1) {
         self->relatorio_atual++;
     }
 
-    if (IsKeyPressed(KEY_LEFT) && self->relatorio_atual > 0) {
+    if (InputEsquerda() && self->relatorio_atual > 0) {
         self->relatorio_atual--;
     }
 

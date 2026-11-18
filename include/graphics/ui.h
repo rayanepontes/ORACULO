@@ -10,6 +10,15 @@
 
 #include <raylib.h>
 
+/** @brief Retorna true se UP ou W foi pressionado neste frame. */
+static inline bool InputCima(void)    { return IsKeyPressed(KEY_UP)    || IsKeyPressed(KEY_W); }
+/** @brief Retorna true se DOWN ou S foi pressionado neste frame. */
+static inline bool InputBaixo(void)   { return IsKeyPressed(KEY_DOWN)  || IsKeyPressed(KEY_S); }
+/** @brief Retorna true se LEFT ou A foi pressionado neste frame. */
+static inline bool InputEsquerda(void){ return IsKeyPressed(KEY_LEFT)  || IsKeyPressed(KEY_A); }
+/** @brief Retorna true se RIGHT ou D foi pressionado neste frame. */
+static inline bool InputDireita(void) { return IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D); }
+
 /** @struct UiOpcaoEstilo
  *
  * @brief Define a aparência visual de um seletor de opções.

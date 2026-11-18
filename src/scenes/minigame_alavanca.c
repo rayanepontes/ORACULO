@@ -4,6 +4,7 @@
 #include "scenes/minigame_alavanca.h"
 #include "map/map.h"
 #include "graphics/instrucoes.h"
+#include "graphics/ui.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -98,7 +99,7 @@ void AlavancaUpdate(AlavancaBody *self, float *tempo_restante) {
     }
 
     // Navegar entre áreas com setas verticais
-    if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN)) {
+    if (InputCima() || InputBaixo()) {
         self->foco = (self->foco == FOCO_ALAVANCA_PIN)
                      ? FOCO_ALAVANCA_EVACUAR
                      : FOCO_ALAVANCA_PIN;

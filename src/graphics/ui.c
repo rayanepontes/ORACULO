@@ -7,11 +7,11 @@
 
 int UiOpcaoUpdate(int *opcao_atual, int total, Sound *som, Sound *som_confirm) {
     bool mudou = false;
-    if (IsKeyPressed(KEY_DOWN)) {
+    if (InputBaixo()) {
         *opcao_atual = (*opcao_atual + 1) % total;
         mudou = true;
     }
-    if (IsKeyPressed(KEY_UP)) {
+    if (InputCima()) {
         *opcao_atual = (*opcao_atual - 1 + total) % total;
         mudou = true;
     }

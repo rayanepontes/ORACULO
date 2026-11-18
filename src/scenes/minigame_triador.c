@@ -76,14 +76,14 @@ static void TriadorUpdatePrincipal(TriadorBody *self) {
 
     if (self->foco == FOCO_LISTA) {
         // navegar lista
-        if (IsKeyPressed(KEY_DOWN)) {
+        if (InputBaixo()) {
             if (self->cursor < TRIADOR_TOTAL_COLABORADORES - 1) {
                 self->cursor++;
                 if (self->cursor >= self->scroll_offset + LISTA_VISIVEIS)
                     self->scroll_offset++;
             }
         }
-        if (IsKeyPressed(KEY_UP)) {
+        if (InputCima()) {
             if (self->cursor > 0) {
                 self->cursor--;
                 if (self->cursor < self->scroll_offset)
@@ -106,13 +106,13 @@ static void TriadorUpdatePrincipal(TriadorBody *self) {
         }
 
         // ir para o botão
-        if (IsKeyPressed(KEY_RIGHT)) {
+        if (InputDireita()) {
             self->foco = FOCO_BOTAO;
         }
 
     } else { // FOCO_BOTAO
         // voltar para a lista
-        if (IsKeyPressed(KEY_LEFT)) {
+        if (InputEsquerda()) {
             self->foco = FOCO_LISTA;
         }
 

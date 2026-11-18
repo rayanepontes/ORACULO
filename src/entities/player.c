@@ -68,22 +68,27 @@ void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_
     float vel_y = 0.0f;
 
     // ── Calcula velocidade desejada ───────────────────────────────────────────
-    if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
+    bool pressionou_esq = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
+    bool pressionou_dir = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
+    bool pressionou_cim = IsKeyDown(KEY_UP)   || IsKeyDown(KEY_W);
+    bool pressionou_bai = IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S);
+
+    if (pressionou_esq && !pressionou_dir) {
         self->direction = LEFT;
         vel_x = -PLAYER_SPEED;
-        movendo  = true;
-    } else if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
+        movendo = true;
+    } else if (pressionou_dir && !pressionou_esq) {
         self->direction = RIGHT;
         vel_x = PLAYER_SPEED;
-        movendo  = true;
+        movendo = true;
     }
 
-    if (IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN)) {
+    if (pressionou_cim && !pressionou_bai) {
         vel_y = -PLAYER_SPEED;
-        movendo  = true;
-    } else if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_UP)) {
+        movendo = true;
+    } else if (pressionou_bai && !pressionou_cim) {
         vel_y = PLAYER_SPEED;
-        movendo  = true;
+        movendo = true;
     }
 
     // ── Resolve colisão no eixo X ─────────────────────────────────────────────
