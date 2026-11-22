@@ -378,13 +378,13 @@ QUESTIONAR A IA
 TOMAR UMA DECISÃO
 ```
 
-A combinação entre o ambiente digital e o material físico faz parte da própria mecânica de investigação.
+A dinâmica entre explorar o jogo e consultar os arquivos digitais faz parte da própria mecânica de investigação.
 
 ---
 
 # Arquitetura & Tecnologias
 
-O projeto combina **C**, **Haskell**, **Raylib** e uma **API de Inteligência Artificial Generativa**.
+O projeto combina **C** e **Raylib**.
 
 ```text
 ┌─────────────────────────────────────────────┐
@@ -399,26 +399,6 @@ O projeto combina **C**, **Haskell**, **Raylib** e uma **API de Inteligência Ar
 │ • Interface gráfica com Raylib               │
 │ • Entrada de teclado e mouse                │
 └──────────────────────┬──────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────┐
-│                  HASKELL                    │
-├─────────────────────────────────────────────┤
-│ • Funções e lógica funcional                │
-│ • Processamento de informações              │
-│ • Validações específicas                     │
-│ • Apoio à lógica dos desafios                │
-└──────────────────────┬──────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────┐
-│          API DE IA GENERATIVA               │
-├─────────────────────────────────────────────┤
-│ • Geração de relatórios                     │
-│ • Conteúdo narrativo                         │
-│ • Respostas do ORÁCULO                      │
-│ • Elementos variáveis da investigação       │
-└─────────────────────────────────────────────┘
 ```
 
 ---
@@ -474,10 +454,8 @@ Cada minigame apresenta um problema diferente, mas todos seguem a mesma lógica:
 
 # Tecnologias
 
-* **C** — motor principal e lógica do jogo
-* **Haskell** — lógica funcional e processamento
+* **C** — motor principal e lógica do jogoo
 * **Raylib** — interface gráfica e interação
-* **API de IA Generativa** — geração de conteúdo e respostas do ORÁCULO
 * **Git/GitHub** — versionamento e colaboração
 
 ---
@@ -530,17 +508,18 @@ Projeto desenvolvido por:
 
 * **[Rayane M. de Pontes Gomes - rmpg@cesar.school - rynemaria@gmail.com]**
 * **[Luann Gabriel Flôr Alves da Silva - lgfas@cesar.school]**
-* **[Luan Marcos Alves da Silva]**
+* **[Luan Marcos Alves da Silva] - lmas@cesar.school**
 * **[Everton Luan Gomes Batista - elgb@cesar.school]**
 * **[Mirella de Sousa Albuquerque - msa5@cesar.school]**
-* **[Marina Silva Mendes]**
-* **[Anamel Thaís Ferreira Lima]**
+* **[Marina Silva Mendes] - msm4@cesar.school** 
+* **[Anamel Thaís Ferreira Lima] - atfl@cesar.school**
 * **[Maria Giovanna Oliveira Carvalho - mgoc@cesar.school]**
 
 ## Contribuiçāo
 ```
-Mirella Albuquerque e Anamel - Documentação e Entregas
-Luan Marcos, Luann Flôr, Everton Luan - Codificando 
+Mirella Albuquerque e Anamel - Gestão do projeto, Documentação e Entregas das disciplinas 
+Luan Marcos e Luann Flôr - Consultores, Criadores dos Minigames e Desenvolvedores da trilha sonora
+Everton Luan - Desenvolvedor
 Rayane Pontes, Maria Giovanna e Marina Mendes - Design
 ```
 ---
