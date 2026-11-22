@@ -82,7 +82,7 @@ Durante seu primeiro plantão, um alerta crítico é disparado:
 
 > ATENÇÃO: As portas foram seladas.
 > TEMPO PARA BLOQUEIO DEFINITIVO E PURGA DE DADOS:
-> 05:00 MINUTOS.
+> 10:00 MINUTOS.
 
 [ORÁCULO_AI]:
 "Não há motivo para pânico.
@@ -94,7 +94,7 @@ O problema é que o **ORÁCULO não é necessariamente confiável**.
 
 Para escapar antes que o protocolo seja concluído, você precisará resolver desafios, analisar informações e confrontar as decisões da IA com evidências encontradas no laboratório.
 
-O jogo utiliza um **Manual de Segurança/Investigação físico** como parte da experiência. Algumas respostas e regras necessárias para resolver os desafios estão escondidas nele, fazendo com que o jogador precise conectar informações digitais e físicas.
+O jogo utiliza um **Manual de Segurança/Investigação online** como parte da experiência. Algumas respostas e regras necessárias para resolver os desafios estão escondidas nele, fazendo com que o jogador precise conectar informações.
 
 ---
 
@@ -360,7 +360,7 @@ A Raylib é utilizada para representar:
 * portas e estados de segurança;
 * feedback de sucesso e erro.
 
-### Manual físico
+### Manual online
 
 O manual funciona como uma espécie de **"documentação interna" do NEXUS Labs**.
 
