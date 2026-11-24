@@ -138,8 +138,10 @@ void GameplayInit  (GameplayBody *self);
  * @param self  Ponteiro para o GameplayBody ativo.
  * @param state Ponteiro para o estado global — pode ser alterado internamente.
  * @param resources Ponteiro para os recursos globais.
+ * @param scream_width  Largura atual da tela em pixels.
+ * @param scream_height Altura atual da tela em pixels.
  */
-void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resources);
+void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resources, int scream_width, int scream_height);
 
 /** @brief Desenha a partida e, se aplicável, a tela de interface sobreposta.
  *

@@ -79,8 +79,10 @@ void MenuInit(MenuBody *self);
 /** @brief Processa o input e atualiza o estado do menu.
  * @param self Ponteiro para o MenuBody ativo.
  * @param resources Ponteiro para os recursos globais (fonte, etc).
+ * @param scream_width  Largura atual da tela em pixels.
+ * @param scream_height Altura atual da tela em pixels.
  */
-void MenuUpdate(MenuBody *self, const ResourcesBody *resources);
+void MenuUpdate(MenuBody *self, const ResourcesBody *resources, int scream_width, int scream_height);
 
 /** @brief Desenha a cena de menu na tela.
  * @param self      Ponteiro para o MenuBody ativo.

@@ -82,8 +82,10 @@ void AlucinacaoInit(AlucinacaoBody *self);
 /** @brief Processa o input do jogador dentro do minigame.
  * @param self Ponteiro para o AlucinacaoBody ativo.
  * @param resources Ponteiro para os recursos globais (som de seleção).
+ * @param scream_width  Largura da tela em pixels.
+ * @param scream_height Altura da tela em pixels.
  */
-void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources);
+void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources, int scream_width, int scream_height);
 
 /** @brief Desenha o indicador de interação acima do computador (chamar fora de BeginMode2D).
  * @param self          Ponteiro para o AlucinacaoBody ativo.

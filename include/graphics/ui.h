@@ -38,6 +38,22 @@ typedef struct UiOpcaoEstilo {
 } UiOpcaoEstilo;
 
 /**
+ * @brief Calcula os retângulos de cada opção com a mesma fórmula usada pelo Draw.
+ * @details Usado para detecção de hover e clique do mouse.
+ *
+ * @param fonte         Fonte usada na renderização.
+ * @param labels        Array de strings com os textos das opções.
+ * @param total         Quantidade de opções.
+ * @param estilo        Tamanhos e espaçamento do seletor.
+ * @param pos_y_inicial Posição Y do primeiro item na tela.
+ * @param scream_width  Largura da tela em pixels.
+ * @param rects_out     Array de Rectangle a ser preenchido (deve ter `total` entradas).
+ */
+void UiOpcaoCalcRects(Font fonte, const char **labels, int total,
+                      UiOpcaoEstilo estilo, float pos_y_inicial,
+                      int scream_width, Rectangle *rects_out);
+
+/**
  * @brief Processa o input de navegação de um seletor de opções.
  *
  * @details Escuta KEY_UP e KEY_DOWN para mover o índice (com wrap circular)
@@ -48,9 +64,10 @@ typedef struct UiOpcaoEstilo {
  * @param total        Quantidade total de opções.
  * @param som          Ponteiro para o Sound tocado ao trocar de opção, ou NULL para silêncio.
  * @param som_confirm  Ponteiro para o Sound tocado ao confirmar (ENTER), ou NULL para silêncio.
+ * @param rects        Array de Rectangle das opções (de UiOpcaoCalcRects), ou NULL.
  * @return             Índice da opção confirmada com ENTER, ou -1 se nada foi confirmado.
  */
-int UiOpcaoUpdate(int *opcao_atual, int total, Sound *som, Sound *som_confirm);
+int UiOpcaoUpdate(int *opcao_atual, int total, Sound *som, Sound *som_confirm, Rectangle *rects);
 
 /**
  * @brief Desenha uma lista de opções navegável, centralizada horizontalmente.

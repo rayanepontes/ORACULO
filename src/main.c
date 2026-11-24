@@ -65,7 +65,7 @@ int main(void)
         // -- Update --
         if (state == STATE_MENU) {
 
-            MenuUpdate(&menu, &resources);
+            MenuUpdate(&menu, &resources, scream_width, scream_height);
 
             // jogador confirmou o nome: transfere nickname e inicia a partida
             if (menu.confirmado) {
@@ -79,7 +79,7 @@ int main(void)
 
         } else if (state == STATE_PLAYING || state == STATE_INTERFACE) {
 
-            GameplayUpdate(&gameplay, &state, &resources);
+            GameplayUpdate(&gameplay, &state, &resources, scream_width, scream_height);
 
             // DEBUG: Tecle 'O' para reduzir o tempo restante para 10 segundos
             //if (IsKeyPressed(KEY_O)) gameplay.tempo_restante = 10.0f;

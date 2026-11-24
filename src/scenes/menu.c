@@ -80,8 +80,22 @@ static void MenuUpdateNome(MenuBody *self, const ResourcesBody *resources) {
  * @param self Ponteiro para o MenuBody.
  * @param resources Ponteiro para os recursos globais.
  */
-static void MenuUpdateConfirmaSair(MenuBody *self, const ResourcesBody *resources) {
-    int confirmado = UiOpcaoUpdate(&self->opc_confirmacao, 2, (Sound *)&resources->som_selecao, (Sound *)&resources->som_confirmacao);
+static void MenuUpdateConfirmaSair(MenuBody *self, const ResourcesBody *resources,
+                                   int scream_width, int scream_height) {
+    const char *labels[2] = { "Sair do jogo", "Voltar ao menu" };
+    UiOpcaoEstilo estilo = {
+        .size_normal = 48.0f, .size_select = 60.0f,
+        .cor_normal  = resources->branco, .cor_select = resources->amarelo,
+        .espacamento = 70.0f
+    };
+    Rectangle rects[2];
+    UiOpcaoCalcRects(resources->fonte_principal, (const char **)labels, 2,
+                     estilo, scream_height * 0.65f, scream_width, rects);
+
+    int confirmado = UiOpcaoUpdate(&self->opc_confirmacao, 2,
+                                   (Sound *)&resources->som_selecao,
+                                   (Sound *)&resources->som_confirmacao,
+                                   rects);
     if (confirmado == 0) {
         self->sair = true;
     } else if (confirmado == 1) {
@@ -301,14 +315,26 @@ void MenuInit(MenuBody *self) {
     self->opc_confirmacao = 0;
 }
 
-void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
+void MenuUpdate(MenuBody *self, const ResourcesBody *resources,  int scream_width, int scream_height) {
     switch (self->tela_atual) {
-        case TELA_PRINCIPAL:
-            int confirmado = UiOpcaoUpdate((int*)&self->opcao_atual, MENU_TOTAL_OPC, (Sound *)&resources->som_selecao, (Sound *)&resources->som_confirmacao);
-            if (confirmado == MENU_OPC_INICIAR) { self->tela_atual = TELA_NOME; }
+        case TELA_PRINCIPAL: {
+            const char *labels[MENU_TOTAL_OPC] = { "INICIAR PARTIDA", "RANKING", "SAIR" };
+            UiOpcaoEstilo estilo = {
+                .size_normal = 60.0f, .size_select = 72.0f,
+                .cor_normal  = resources->branco, .cor_select = resources->amarelo,
+                .espacamento = 90.0f
+            };
+            Rectangle rects[MENU_TOTAL_OPC];
+            UiOpcaoCalcRects(resources->fonte_principal, (const char **)labels, MENU_TOTAL_OPC,
+                             estilo, scream_height * 0.55f, scream_width, rects);
+            int confirmado = UiOpcaoUpdate((int*)&self->opcao_atual, MENU_TOTAL_OPC,
+                                           (Sound *)&resources->som_selecao,
+                                           (Sound *)&resources->som_confirmacao,
+                                           rects);            if (confirmado == MENU_OPC_INICIAR) { self->tela_atual = TELA_NOME; }
             if (confirmado == MENU_OPC_RANKING) { self->tela_atual = TELA_RANKING; }
             if (confirmado == MENU_OPC_SAIR)    { self->tela_atual = TELA_CONFIRMA_SAIR; }
             break;
+        }
 
         case TELA_NOME: 
             MenuUpdateNome(self, resources);
@@ -321,7 +347,7 @@ void MenuUpdate(MenuBody *self, const ResourcesBody *resources) {
             break;
 
         case TELA_CONFIRMA_SAIR: 
-            MenuUpdateConfirmaSair(self, resources);
+            MenuUpdateConfirmaSair(self, resources, scream_width, scream_height);
             break;
 
         default:

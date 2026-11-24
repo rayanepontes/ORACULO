@@ -136,9 +136,11 @@ static void GameplayTemporizadorUpdate(GameplayBody *self) {
  *
  * @param self  Ponteiro para o GameplayBody ativo.
  * @param state Ponteiro para o estado global.
+ * @param scream_width  Largura atual da tela em pixels.
+ * @param scream_height Altura atual da tela em pixels.
  */
-static void GameplayUpdateMinigameAlucinacao(GameplayBody *self, GameState *state, ResourcesBody *resources) {
-    AlucinacaoUpdate(&self->alucinacao, resources);
+static void GameplayUpdateMinigameAlucinacao(GameplayBody *self, GameState *state, ResourcesBody *resources, int scream_width, int scream_height) {
+    AlucinacaoUpdate(&self->alucinacao, resources, scream_width, scream_height);
 
     if (self->alucinacao.concluido) {
         for (int i = 0; i < ALUCINACAO_TOTAL_COMPUTADORES; i++){
@@ -394,14 +396,26 @@ void GameplayInit(GameplayBody *self) {
     self->opc_confirmacao = VOLTAR_MENU;
 }
 
-void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resources) {
+void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resources, int scream_width, int scream_height) {
      if (*state == STATE_INTERFACE) {
 
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
                 GameplayTemporizadorUpdate(self);
 
-                int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC, &resources->som_selecao, &resources->som_confirmacao);
+                const char *labels_vol[TOTAL_OPC] = { "DESISTIR", "VOLTAR AO JOGO" };
+                UiOpcaoEstilo estilo_vol = {
+                    .size_normal = 60.0f, .size_select = 72.0f,
+                    .cor_normal  = resources->branco, .cor_select = resources->amarelo,
+                    .espacamento = 90.0f
+                };
+                Rectangle rects_vol[TOTAL_OPC];
+                UiOpcaoCalcRects(resources->fonte_principal, (const char **)labels_vol, TOTAL_OPC,
+                                estilo_vol, scream_height * 0.60f, scream_width, rects_vol);
+                int confirmado = UiOpcaoUpdate((int*)&self->opc_confirmacao, TOTAL_OPC,
+                                            &resources->som_selecao, &resources->som_confirmacao,
+                                            rects_vol);
+
                 if (confirmado == VOLTAR_MENU) {
                     self->voltar_menu = true; // SIM
                 } else if (confirmado == VOLTAR_JOGO) {
@@ -416,7 +430,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
 
             case TELA_MINIGAME_ALUCINACAO:
                 GameplayTemporizadorUpdate(self);
-                GameplayUpdateMinigameAlucinacao(self, state, resources);
+                GameplayUpdateMinigameAlucinacao(self, state, resources, scream_width, scream_height);
                 break;
 
             case TELA_MINIGAME_TRIADOR:

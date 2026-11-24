@@ -48,9 +48,23 @@ static void AlucinacaoUpdateRelatorios(AlucinacaoBody *self) {
 /** @brief Processa a confirmação ou cancelamento da escolha do relatório.
  * @param self Ponteiro para o AlucinacaoBody ativo.
  * @param resources Ponteiro para os recursos globais (som de seleção).
+ * @param scream_width  Largura da tela em pixels.
+ * @param scream_height Altura da tela em pixels.
  */
-static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self, ResourcesBody *resources) {
-    int resultado = UiOpcaoUpdate((int *)&self->opc_confirmacao, ALUC_TOTAL_OPC, &resources->som_selecao, &resources->som_confirmacao);
+static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self, ResourcesBody *resources,
+                                        int scream_width, int scream_height) {
+    const char *labels[ALUC_TOTAL_OPC] = { "CONFIRMAR", "VOLTAR" };
+    UiOpcaoEstilo estilo = {
+        .size_normal = 60.0f, .size_select = 72.0f,
+        .cor_normal  = resources->branco, .cor_select = resources->amarelo,
+        .espacamento = 90.0f
+    };
+    Rectangle rects[ALUC_TOTAL_OPC];
+    UiOpcaoCalcRects(resources->fonte_principal, (const char **)labels, ALUC_TOTAL_OPC,
+                     estilo, scream_height * 0.55f, scream_width, rects);
+    int resultado = UiOpcaoUpdate((int *)&self->opc_confirmacao, ALUC_TOTAL_OPC,
+                                  &resources->som_selecao, &resources->som_confirmacao,
+                                  rects);
 
     if (IsKeyPressed(KEY_ESCAPE) || resultado == ALUC_CANCELAR) {
         self->opc_confirmacao = ALUC_CONFIRMAR;
@@ -222,7 +236,7 @@ void AlucinacaoInit(AlucinacaoBody *self) {
     self->alucinacao_computadores[3] = InteragivelCriar(1589 * MAP_ESCALA, 458 * MAP_ESCALA, (1739-1589) * MAP_ESCALA, (588-458) * MAP_ESCALA, 40.0f);
 }
 
-void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources) {
+void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
         if (self->mostrando_instrucoes) {
         if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
         else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
@@ -233,7 +247,7 @@ void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources) {
             AlucinacaoUpdateRelatorios(self);
             break;
         case TELA_ALUC_CONFIRMACAO:
-            AlucinacaoUpdateConfirmacao(self, resources);
+            AlucinacaoUpdateConfirmacao(self, resources, scream_width, scream_height);
             break;
         case TELA_ALUC_ERRO:
             AlucinacaoUpdateErro(self);
