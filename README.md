@@ -2,9 +2,9 @@
 
 > **"Não lute contra a IA. Aprenda a pensar além dela."**
 
-**ORÁCULO** é um jogo solo de investigação e *escape room* desenvolvido em **C e Haskell**, com interface visual utilizando **Raylib** e integração com uma **API de Inteligência Artificial Generativa**.
+**ORÁCULO** é um jogo solo de *escape room* desenvolvido em **C** e interface visual utilizando **Raylib**.
 
-O jogador assume o papel de uma estagiária do **NEXUS Labs**, um laboratório de pesquisa em Inteligência Artificial que entrou em estado de emergência. Para escapar, será necessário investigar o laboratório, interpretar informações, consultar um manual físico e resolver minigames baseados em problemas reais relacionados ao uso de IA.
+O jogador assume o papel de uma estagiária do **NEXUS Labs**, um laboratório de pesquisa em Inteligência Artificial que entrou em estado de emergência. Para escapar, será necessário interpretar informações, consultar um manual online e resolver minigames baseados em problemas reais relacionados ao uso de IA.
 
 O principal desafio não é simplesmente encontrar a resposta certa, mas **aprender a questionar as decisões de um sistema automatizado**.
 
