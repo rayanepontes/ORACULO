@@ -95,6 +95,7 @@ int main(void)
             } else if (gameplay.terminou) {
                 if (gameplay.venceu) {
                     state = STATE_WIN;
+                    PlaySound(resources.som_win);
                 } else {
                     state = STATE_GAME_OVER;
                     PlaySound(resources.som_gameover);

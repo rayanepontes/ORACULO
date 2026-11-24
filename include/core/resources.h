@@ -33,6 +33,9 @@
 /** @brief Caminho para o efeito sonoro de game over. */
 #define RESOURCES_SOM_GAMEOVER_PATH "assets/audio/sfx/gameover_sound.wav"
 
+/** @brief Caminho para o efeito sonoro de vitória. */
+#define RESOURCES_SOM_WIN "assets/audio/sfx/win_sound.wav"
+
 /** @brief Caminho para o efeito sonoro de entrada em minigames. */
 #define RESOURCES_SOM_MINIGAME_ENTRY "assets/audio/sfx/minigame_entry.wav"
 
@@ -62,6 +65,7 @@
  * @param som_selecao        Efeito sonoro tocado ao navegar entre opções de menu.
  * @param som_confirmacao    Efeito sonoro tocado ao confirmar uma opção (ENTER).
  * @param som_gameover       Efeito sonoro tocado ao entrar na tela de game over.
+ * @param som_win            Efeito sonoro tocado ao entrar na tela de vitória.
  * @param som_entry_minigame Efeito sonoro tocado ao entrar em um minigame qualquer.
  */
 typedef struct ResourcesBody {
@@ -80,6 +84,7 @@ typedef struct ResourcesBody {
     Sound    som_selecao;
     Sound    som_confirmacao;
     Sound    som_gameover;
+    Sound    som_win;
     Sound    som_entry_minigame;
 } ResourcesBody;
 

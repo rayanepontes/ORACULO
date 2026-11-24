@@ -18,15 +18,6 @@
 
 // ─── Helper interno ───────────────────────────────────────────────────────────
 
-/** @brief Linhas exibidas na tela de instruções (edite livremente). */
-static const char *INSTRUCOES_LINHAS[] = {
-    "Use as setas para andar pelo mapa e navegar em interfaces",
-    "Realize as tarefas do laboratório",
-    "ESC desiste da partida",
-    "Clique M para ler o manual, ele ira te ajudar"
-};
-#define INSTRUCOES_TOTAL_LINHAS (int)(sizeof(INSTRUCOES_LINHAS) / sizeof(INSTRUCOES_LINHAS[0]))
-
 /** @brief Desenha o cronômetro (MM:SS) no canto superior direito da tela. */
 static void GameplayDrawHUD(GameplayBody *self, ResourcesBody *resources, int scream_width) {
     int total_seg = (int)ceilf(self->tempo_restante);
@@ -49,32 +40,31 @@ static void GameplayDrawHUD(GameplayBody *self, ResourcesBody *resources, int sc
 
 /** @brief Desenha o overlay da tela de instruções. */
 static void GameplayDrawInstrucoes(ResourcesBody *resources, int scream_width, int scream_height) {
+    // Fundo
     DrawRectangle(0, 0, scream_width, scream_height, resources->azul_escuro);
 
-    const char *titulo = "INSTRUCOES";
-    Vector2 titulo_dim = MeasureTextEx(resources->fonte_principal, titulo, 130.0f, 1);
-    DrawTextEx(resources->fonte_principal, titulo,
-               (Vector2){ (scream_width / 2.0f) - (titulo_dim.x / 2.0f), scream_height * 0.12f },
-               130.0f, 1, resources->branco);
-
-    float y = scream_height * 0.32f;
-    for (int i = 0; i < INSTRUCOES_TOTAL_LINHAS; i++) {
-        Vector2 dim = MeasureTextEx(resources->fonte_principal, INSTRUCOES_LINHAS[i], 50.0f, 1);
-        DrawTextEx(resources->fonte_principal, INSTRUCOES_LINHAS[i],
-                   (Vector2){ (scream_width / 2.0f) - (dim.x / 2.0f), y },
-                   50.0f, 1, resources->branco);
-        y += 70.0f;
+    Texture2D tela_tutorial = LoadTexture("assets/texture/Tutorial.png");
+    if (tela_tutorial.id != 0) {
+        float escala = fminf((scream_width  * 0.80f) / tela_tutorial.width,
+                            (scream_height * 0.80f) / tela_tutorial.height);
+        float dest_w = tela_tutorial.width  * escala;
+        float dest_h = tela_tutorial.height * escala;
+        Rectangle origem  = { 0.0f, 0.0f, (float)tela_tutorial.width, (float)tela_tutorial.height };
+        Rectangle destino = { (scream_width  - dest_w) / 2.0f,
+                                ((scream_height - dest_h) / 2.0f) - 55,
+                            dest_w, dest_h };
+        DrawTexturePro(tela_tutorial, origem, destino, (Vector2){ 0.0f, 0.0f }, 0.0f, WHITE);
     }
 
-    const char *continuar = "ENTER para continuar";
-    Vector2 continuar_dim = MeasureTextEx(resources->fonte_principal, continuar, 72.0f, 1);
+    const char *iniciar = "ENTER para salvar o NEXUS Lab";
+    Vector2 iniciar_dim = MeasureTextEx(resources->fonte_principal, iniciar, 72.0f, 1);
 
     // Pisca duas vezes por segundo
     bool visivel = ((int)(GetTime() * 2) % 2 == 0);
     Color cor = visivel ? resources->amarelo : resources->branco;
-    DrawTextEx(resources->fonte_principal, continuar,
-               (Vector2){ (scream_width / 2.0f) - (continuar_dim.x / 2.0f), scream_height * 0.85f },
-               72.0f, 1, cor);
+    DrawTextEx(resources->fonte_principal, iniciar,
+            (Vector2){ (scream_width / 2.0f) - (iniciar_dim.x / 2.0f), scream_height * 0.85f },
+            72.0f, 1, cor);
 }
 
 /** @brief Desenha a tela de alerta do laborátorio. */

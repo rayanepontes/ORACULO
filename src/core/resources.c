@@ -32,6 +32,8 @@ void ResourcesInit(ResourcesBody *self) {
     SetSoundVolume(self->som_confirmacao, RESOURCES_SFX_VOLUME);
     self->som_gameover = LoadSound(RESOURCES_SOM_GAMEOVER_PATH);
     SetSoundVolume(self->som_gameover, RESOURCES_SFX_VOLUME);
+    self->som_win = LoadSound(RESOURCES_SOM_WIN);
+    SetSoundVolume(self->som_win, RESOURCES_SFX_VOLUME);
     self->som_entry_minigame = LoadSound(RESOURCES_SOM_MINIGAME_ENTRY);
     SetSoundVolume(self->som_entry_minigame, RESOURCES_SFX_VOLUME);
 }
@@ -43,5 +45,6 @@ void ResourcesUnload(ResourcesBody *self) {
     UnloadSound(self->som_selecao);
     UnloadSound(self->som_confirmacao);
     UnloadSound(self->som_gameover);
+    UnloadSound(self->som_win);
     UnloadSound(self->som_entry_minigame);
 }
