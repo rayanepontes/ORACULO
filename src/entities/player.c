@@ -1,6 +1,12 @@
 #include <raylib.h>
 #include "entities/player.h"
 
+// TODO: ajuste para o sprite de corrida real
+#define RUN_SPRITE_PATH "assets/texture/player_sprites/Personagem_Principal_Run_4.png"
+#define RUN_FRAMES      4
+#define RUN_SPR_WIDTH   222.0f   // largura total da imagem ÷ RUN_FRAMES
+#define RUN_SPR_HEIGHT  274.0f   // altura total da imagem
+
 //----------- Funções internas (não expostas no .h) - Essas são de uso exclusivo desse arquivo .c
 
 //Inicializa as animações carregando as texturas e montando os corpos dos tipos de animações do player.
@@ -32,6 +38,20 @@ static void InitAnimations(PlayerBody *self){
     .spr_height       = 274.0f,  // altura total da imagem
     .type             = REPEATING
     };
+
+    self->textures[run] = LoadTexture("assets/texture/player_sprites/Personagem_Principal_Walk_5.png");
+    self->anims[walk] = (AnimationBody){
+    .first_idx        = 0,
+    .last_idx         = 4,       // 5 frames: índices 0 a 4
+    .frame_atual_idx  = 0,
+    .step             = 1,
+    .speed            = 0.1f,
+    .duration_left    = 0.1f,
+    .frames_por_linha = 5,
+    .spr_width        = 177.6f,  // largura total ÷ 5
+    .spr_height       = 274.0f,  // altura total da imagem
+    .type             = REPEATING
+    };
 }
 
 //Reseta o quadro de todas as animações do player para o estado inicial delas.
@@ -40,6 +60,7 @@ static void ResetAnimations(PlayerBody *self){
         self->anims[i].frame_atual_idx = self->anims[i].first_idx;
         self->anims[i].duration_left = self->anims[i].speed;
     }
+    self->correndo = false;
 }
 
 // -------- Funções visiveis para qualquer lugar que importalas.
@@ -50,6 +71,7 @@ void PlayerInit(PlayerBody *self, Vector2 posicao_inicial){
     self->position = posicao_inicial;
     self->direction = RIGHT;
     self->action_atual = idle;
+    self->correndo = false;
 }
 
 void PLayerReset(PlayerBody *self, Vector2 posicao_inicial){
@@ -62,28 +84,34 @@ void PLayerReset(PlayerBody *self, Vector2 posicao_inicial){
 }
 
 void PlayerUpdateAction(PlayerBody *self, CollisionRect *colisores, int colisor_count) {
+    float velocidade = self->correndo ? PLAYER_RUN_SPEED : PLAYER_SPEED;
     bool movendo  = false;
 
     float vel_x = 0.0f;
     float vel_y = 0.0f;
 
     // ── Calcula velocidade desejada ───────────────────────────────────────────
-    if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
+    bool pressionou_esq = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
+    bool pressionou_dir = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
+    bool pressionou_cim = IsKeyDown(KEY_UP)   || IsKeyDown(KEY_W);
+    bool pressionou_bai = IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S);
+
+    if (pressionou_esq && !pressionou_dir) {
         self->direction = LEFT;
-        vel_x = -PLAYER_SPEED;
-        movendo  = true;
-    } else if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
+        vel_x = -velocidade;
+        movendo = true;
+    } else if (pressionou_dir && !pressionou_esq) {
         self->direction = RIGHT;
-        vel_x = PLAYER_SPEED;
-        movendo  = true;
+        vel_x = velocidade;
+        movendo = true;
     }
 
-    if (IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN)) {
-        vel_y = -PLAYER_SPEED;
-        movendo  = true;
-    } else if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_UP)) {
-        vel_y = PLAYER_SPEED;
-        movendo  = true;
+    if (pressionou_cim && !pressionou_bai) {
+        vel_y = -velocidade;
+        movendo = true;
+    } else if (pressionou_bai && !pressionou_cim) {
+        vel_y = velocidade;
+        movendo = true;
     }
 
     // ── Resolve colisão no eixo X ─────────────────────────────────────────────

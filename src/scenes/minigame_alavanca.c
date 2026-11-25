@@ -4,6 +4,7 @@
 #include "scenes/minigame_alavanca.h"
 #include "map/map.h"
 #include "graphics/instrucoes.h"
+#include "graphics/ui.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -52,8 +53,8 @@ void AlavancaInit(AlavancaBody *self) {
                                     (3278 - 3177) * MAP_ESCALA, (1836 - 1757) * MAP_ESCALA, 40.0f);
 }
 
-void AlavancaUpdate(AlavancaBody *self, float *tempo_restante) {
-    if (self->mostrando_instrucoes) {
+void AlavancaUpdate(AlavancaBody *self, float *tempo_restante, ResourcesBody *resources) {
+        if (self->mostrando_instrucoes) {
         if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
         else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
         return;
@@ -78,6 +79,7 @@ void AlavancaUpdate(AlavancaBody *self, float *tempo_restante) {
     // ── Tela de erro: aguarda ENTER pra tentar de novo ────────────────────────
     if (self->tela_atual == TELA_ALAVANCA_ERRO) {
         if (IsKeyPressed(KEY_ENTER)) {
+            PlaySound(resources->som_confirmacao);
             AlavancaResetarPainel(self);
         }
         return;
@@ -86,6 +88,7 @@ void AlavancaUpdate(AlavancaBody *self, float *tempo_restante) {
     // ── Tela de acerto: aguarda ENTER ────────────────────────────────────────
     if (self->tela_atual == TELA_ALAVANCA_ACERTO) {
         if (IsKeyPressed(KEY_ENTER)) {
+            PlaySound(resources->som_confirmacao);
             self->concluido = true;
         }
         return;
@@ -98,10 +101,37 @@ void AlavancaUpdate(AlavancaBody *self, float *tempo_restante) {
     }
 
     // Navegar entre áreas com setas verticais
-    if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN)) {
+    if (InputCima() || InputBaixo()) {
         self->foco = (self->foco == FOCO_ALAVANCA_PIN)
                      ? FOCO_ALAVANCA_EVACUAR
                      : FOCO_ALAVANCA_PIN;
+        PlaySound(resources->som_selecao);
+    }
+
+    // Mouse: hover muda foco, clique ativa
+    Vector2 mouse = GetMousePosition();
+    if (CheckCollisionPointRec(mouse, self->rect_botao_confirmar)) {
+        if (self->foco != FOCO_ALAVANCA_PIN) PlaySound(resources->som_selecao);
+        self->foco = FOCO_ALAVANCA_PIN;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (!self->pin_confirmado && self->cursor_digito == ALAVANCA_PIN_DIGITOS) {
+                self->pin_confirmado = true;
+                PlaySound(resources->som_confirmacao);
+            } else if (self->pin_confirmado) {
+                self->pin_confirmado = false;
+                PlaySound(resources->som_selecao);
+            }
+        }
+    }
+    if (CheckCollisionPointRec(mouse, self->rect_botao_evacuar)) {
+        if (self->foco != FOCO_ALAVANCA_EVACUAR) PlaySound(resources->som_selecao);
+        self->foco = FOCO_ALAVANCA_EVACUAR;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            PlaySound(resources->som_confirmacao);
+            self->anim_rodando = true;
+            self->anim_timer   = 0.0f;
+            self->anim_acertou = (AlavancaGetPin(self) == ALAVANCA_PIN_CORRETO);
+        }
     }
 
     if (self->foco == FOCO_ALAVANCA_PIN) {
@@ -133,14 +163,17 @@ void AlavancaUpdate(AlavancaBody *self, float *tempo_restante) {
         if (IsKeyPressed(KEY_ENTER)) {
             if (!self->pin_confirmado && self->cursor_digito == ALAVANCA_PIN_DIGITOS) {
                 self->pin_confirmado = true;
+                PlaySound(resources->som_confirmacao);
             } else if (self->pin_confirmado) {
-                // desconfirma para editar de novo
                 self->pin_confirmado = false;
+                PlaySound(resources->som_selecao);
             }
         }
+
     } else {
         // ── Área EVACUAR: ENTER dispara a animação ────────────────────────────
         if (IsKeyPressed(KEY_ENTER)) {
+            PlaySound(resources->som_confirmacao);
             self->anim_rodando = true;
             self->anim_timer   = 0.0f;
             self->anim_acertou = (AlavancaGetPin(self) == ALAVANCA_PIN_CORRETO);
@@ -251,6 +284,7 @@ void AlavancaDraw(AlavancaBody *self, ResourcesBody *resources,
     float conf_h = (float)botao_conf.height * escala_painel;
     float conf_x = painel_x + 951.0f * escala_painel;
     float conf_y = painel_y + 741.0f * escala_painel;
+    self->rect_botao_confirmar = (Rectangle){ conf_x, conf_y, conf_w, conf_h };
     if (botao_conf.id != 0) {
         DrawTexturePro(botao_conf,
                        (Rectangle){ 0, 0, (float)botao_conf.width, (float)botao_conf.height },
@@ -268,6 +302,7 @@ void AlavancaDraw(AlavancaBody *self, ResourcesBody *resources,
     float evac_h = (float)botao_evac.height * escala_painel;
     float evac_x = painel_x + 926.0f * escala_painel;
     float evac_y = painel_y + 846.0f * escala_painel;
+    self->rect_botao_evacuar = (Rectangle){ evac_x, evac_y, evac_w, evac_h };
     if (botao_evac.id != 0) {
         DrawTexturePro(botao_evac,
                        (Rectangle){ 0, 0, (float)botao_evac.width, (float)botao_evac.height },

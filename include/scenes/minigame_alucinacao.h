@@ -27,11 +27,13 @@
  * @param TELA_ALUC_RELATORIOS    Navegação entre os relatórios (◄ ►).
  * @param TELA_ALUC_CONFIRMACAO   Confirmação antes de enviar o relatório escolhido.
  * @param TELA_ALUC_ERRO          Mensagem de erro ao escolher o relatório errado.
+ * @param TELA_ALUC_ACERTO        Mensagem de sucesso ao escolher o relatório correto.
  */
 typedef enum TelaAlucinacao {
     TELA_ALUC_RELATORIOS,  // Navegação entre os relatórios
     TELA_ALUC_CONFIRMACAO, // Confirmação de escolha
-    TELA_ALUC_ERRO         // Feedback de resposta errada
+    TELA_ALUC_ERRO,         // Feedback de resposta errada
+    TELA_ALUC_ACERTO       // Feedback de resposta certa
 } TelaAlucinacao;
 
 /** @enum OpcConfirmacaoAluc
@@ -72,6 +74,13 @@ typedef struct AlucinacaoBody {
     Texture2D         relatorios[ALUCINACAO_TOTAL_RELATORIOS];
     Texture2D         background; 
     Interagivel alucinacao_computadores[ALUCINACAO_TOTAL_COMPUTADORES];
+
+    Rectangle rect_seta_esq;    // <<< ADICIONAR
+    Rectangle rect_seta_dir;    // <<< ADICIONAR
+    Rectangle rect_relatorio;   // <<< ADICIONAR
+
+    bool        hover_seta_esq;  // <<< ADICIONAR
+    bool        hover_seta_dir;  // <<< ADICIONAR
 } AlucinacaoBody;
 
 /** @brief Inicializa o minigame carregando as texturas dos relatórios.
@@ -81,8 +90,11 @@ void AlucinacaoInit(AlucinacaoBody *self);
 
 /** @brief Processa o input do jogador dentro do minigame.
  * @param self Ponteiro para o AlucinacaoBody ativo.
+ * @param resources Ponteiro para os recursos globais (som de seleção).
+ * @param scream_width  Largura da tela em pixels.
+ * @param scream_height Altura da tela em pixels.
  */
-void AlucinacaoUpdate(AlucinacaoBody *self);
+void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources, int scream_width, int scream_height);
 
 /** @brief Desenha o indicador de interação acima do computador (chamar fora de BeginMode2D).
  * @param self          Ponteiro para o AlucinacaoBody ativo.

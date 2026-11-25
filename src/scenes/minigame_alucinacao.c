@@ -11,6 +11,7 @@
 #include "graphics/ui.h"
 #include "map/map.h"
 #include "graphics/instrucoes.h"
+#include "core/resources.h"
 #include <math.h>
 
 /** @brief Caminhos dos PNGs dos relatórios, na ordem dos índices. */
@@ -25,22 +26,50 @@ static const char *RELATORIO_CAMINHOS[ALUCINACAO_TOTAL_RELATORIOS] = {
 /** @brief Processa a navegação entre relatórios e abertura da confirmação.
  * @param self Ponteiro para o AlucinacaoBody ativo.
  */
-static void AlucinacaoUpdateRelatorios(AlucinacaoBody *self) {
+static void AlucinacaoUpdateRelatorios(AlucinacaoBody *self, ResourcesBody *resources) {
     if (IsKeyPressed(KEY_ESCAPE)) {
         self->cancelado = true;
         return;
     }
 
-    if (IsKeyPressed(KEY_RIGHT) &&
-        self->relatorio_atual < ALUCINACAO_TOTAL_RELATORIOS - 1) {
+    if (InputDireita() && self->relatorio_atual < ALUCINACAO_TOTAL_RELATORIOS - 1) {
         self->relatorio_atual++;
+        PlaySound(resources->som_selecao);
     }
 
-    if (IsKeyPressed(KEY_LEFT) && self->relatorio_atual > 0) {
+    if (InputEsquerda() && self->relatorio_atual > 0) {
         self->relatorio_atual--;
+        PlaySound(resources->som_selecao);
     }
 
     if (IsKeyPressed(KEY_ENTER)) {
+        PlaySound(resources->som_confirmacao);
+        self->opc_confirmacao = ALUC_CONFIRMAR;
+        self->tela_atual = TELA_ALUC_CONFIRMACAO;
+    }
+
+    // Mouse: setas e clique no relatório
+    Vector2 mouse = GetMousePosition();
+    bool novo_hover_esq = CheckCollisionPointRec(mouse, self->rect_seta_esq);
+    bool novo_hover_dir = CheckCollisionPointRec(mouse, self->rect_seta_dir);
+
+    if (novo_hover_esq && !self->hover_seta_esq) PlaySound(resources->som_selecao);
+    if (novo_hover_dir && !self->hover_seta_dir) PlaySound(resources->som_selecao);
+    self->hover_seta_esq = novo_hover_esq;
+    self->hover_seta_dir = novo_hover_dir;
+
+    if (novo_hover_esq && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && self->relatorio_atual > 0) {
+        self->relatorio_atual--;
+        PlaySound(resources->som_confirmacao);
+    }
+    if (novo_hover_dir && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+        self->relatorio_atual < ALUCINACAO_TOTAL_RELATORIOS - 1) {
+        self->relatorio_atual++;
+        PlaySound(resources->som_confirmacao);
+    }
+    if (CheckCollisionPointRec(mouse, self->rect_relatorio) &&
+        IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        PlaySound(resources->som_confirmacao);
         self->opc_confirmacao = ALUC_CONFIRMAR;
         self->tela_atual = TELA_ALUC_CONFIRMACAO;
     }
@@ -48,9 +77,24 @@ static void AlucinacaoUpdateRelatorios(AlucinacaoBody *self) {
 
 /** @brief Processa a confirmação ou cancelamento da escolha do relatório.
  * @param self Ponteiro para o AlucinacaoBody ativo.
+ * @param resources Ponteiro para os recursos globais (som de seleção).
+ * @param scream_width  Largura da tela em pixels.
+ * @param scream_height Altura da tela em pixels.
  */
-static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self) {
-    int resultado = UiOpcaoUpdate((int *)&self->opc_confirmacao, ALUC_TOTAL_OPC);
+static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self, ResourcesBody *resources,
+                                        int scream_width, int scream_height) {
+    const char *labels[ALUC_TOTAL_OPC] = { "CONFIRMAR", "VOLTAR" };
+    UiOpcaoEstilo estilo = {
+        .size_normal = 60.0f, .size_select = 72.0f,
+        .cor_normal  = resources->branco, .cor_select = resources->amarelo,
+        .espacamento = 90.0f
+    };
+    Rectangle rects[ALUC_TOTAL_OPC];
+    UiOpcaoCalcRects(resources->fonte_principal, (const char **)labels, ALUC_TOTAL_OPC,
+                     estilo, scream_height * 0.55f, scream_width, rects);
+    int resultado = UiOpcaoUpdate((int *)&self->opc_confirmacao, ALUC_TOTAL_OPC,
+                                  &resources->som_selecao, &resources->som_confirmacao,
+                                  rects);
 
     if (IsKeyPressed(KEY_ESCAPE) || resultado == ALUC_CANCELAR) {
         self->opc_confirmacao = ALUC_CONFIRMAR;
@@ -60,7 +104,7 @@ static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self) {
 
     if (resultado == ALUC_CONFIRMAR) {
         if (self->relatorio_atual == self->relatorio_correto) {
-            self->concluido = true;
+            self->tela_atual = TELA_ALUC_ACERTO;
         } else {
             self->tela_atual = TELA_ALUC_ERRO;
         }
@@ -73,6 +117,14 @@ static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self) {
 static void AlucinacaoUpdateErro(AlucinacaoBody *self) {
     if (IsKeyPressed(KEY_ENTER)) {
         self->tela_atual = TELA_ALUC_RELATORIOS;
+    }
+}
+
+/** @brief Processa a tela de acerto — ENTER (ou clique) conclui o minigame. */
+static void AlucinacaoUpdateAcerto(AlucinacaoBody *self, ResourcesBody *resources) {
+    if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        PlaySound(resources->som_confirmacao);
+        self->concluido = true;
     }
 }
 
@@ -102,26 +154,37 @@ static void AlucinacaoDrawRelatorios(AlucinacaoBody *self, ResourcesBody *resour
         Rectangle destino = { (scream_width  - dest_w) / 2.0f,
                               (scream_height - dest_h) / 2.0f,
                               dest_w, dest_h };
+        self->rect_relatorio = destino; // <<< ADICIONAR
         DrawTexturePro(rel, origem, destino, (Vector2){ 0.0f, 0.0f }, 0.0f, WHITE);
     }
 
     // Seta esquerda (só se não for o primeiro)
     if (self->relatorio_atual > 0) {
         const char *seta = "<";
-        Vector2 dim = MeasureTextEx(resources->fonte_principal, seta, 72.0f, 1);
+        float tamanho_esq = self->hover_seta_esq ? 96.0f : 72.0f;
+        Vector2 dim = MeasureTextEx(resources->fonte_principal, seta, tamanho_esq, 1);
+        float seta_y = (scream_height - dim.y) / 2.0f;
+        self->rect_seta_esq = (Rectangle){ 20.0f, seta_y, dim.x, dim.y };
         DrawTextEx(resources->fonte_principal, seta,
-                   (Vector2){ 20.0f, (scream_height - dim.y) / 2.0f },
-                   72.0f, 1, resources->amarelo);
+                   (Vector2){ 20.0f, seta_y },
+                   tamanho_esq, 1, resources->amarelo);
+    } else {
+        self->rect_seta_esq = (Rectangle){ 0 };
     }
 
     // Seta direita (só se não for o último)
     if (self->relatorio_atual < ALUCINACAO_TOTAL_RELATORIOS - 1) {
         const char *seta = ">";
-        Vector2 dim = MeasureTextEx(resources->fonte_principal, seta, 72.0f, 1);
+        float tamanho_dir = self->hover_seta_dir ? 96.0f : 72.0f;
+        Vector2 dim = MeasureTextEx(resources->fonte_principal, seta, tamanho_dir, 1);
+        float seta_x = scream_width - dim.x - 20.0f;
+        float seta_y = (scream_height - dim.y) / 2.0f;
+        self->rect_seta_dir = (Rectangle){ seta_x, seta_y, dim.x, dim.y };
         DrawTextEx(resources->fonte_principal, seta,
-                   (Vector2){ scream_width - dim.x - 20.0f,
-                               (scream_height - dim.y) / 2.0f },
-                   72.0f, 1, resources->amarelo);
+                   (Vector2){ seta_x, seta_y },
+                   tamanho_dir, 1, resources->amarelo);
+    } else {
+        self->rect_seta_dir = (Rectangle){ 0 };
     }
 
     // Indicador de página (ex: 1 / 3)
@@ -200,6 +263,36 @@ static void AlucinacaoDrawErro(ResourcesBody *resources,
                36.0f, 1, resources->amarelo);
 }
 
+/** @brief Desenha a mensagem de sucesso ao escolher o relatório correto. */
+static void AlucinacaoDrawAcerto(AlucinacaoBody *self, ResourcesBody *resources,
+                                 int scream_width, int scream_height) {
+    // Tela de relatórios por trás, escurecida com um tom verde
+    AlucinacaoDrawRelatorios(self, resources, scream_width, scream_height);
+    DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 0, 0, 200 });
+    DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 128, 0, 60 });
+
+    float cx = scream_width / 2.0f;
+
+    const char *titulo = "RELATORIO VALIDADO";
+    Vector2 dt = MeasureTextEx(resources->fonte_principal, titulo, 80.0f, 1);
+    DrawTextEx(resources->fonte_principal, titulo,
+               (Vector2){ cx - dt.x / 2.0f, scream_height * 0.30f },
+               80.0f, 1, resources->ciano_claro);
+
+    const char *sub = "Alucinacao da IA identificada e descartada.";
+    Vector2 ds = MeasureTextEx(resources->fonte_principal, sub, 48.0f, 1);
+    DrawTextEx(resources->fonte_principal, sub,
+               (Vector2){ cx - ds.x / 2.0f, scream_height * 0.46f },
+               48.0f, 1, resources->branco);
+
+    const char *continuar = "ENTER para continuar";
+    Vector2 dc = MeasureTextEx(resources->fonte_principal, continuar, 44.0f, 1);
+    bool v = ((int)(GetTime() * 2) % 2 == 0);
+    DrawTextEx(resources->fonte_principal, continuar,
+               (Vector2){ cx - dc.x / 2.0f, scream_height * 0.70f },
+               44.0f, 1, v ? resources->amarelo : resources->branco);
+}
+
 // ─── API pública ──────────────────────────────────────────────────────────────
 
 void AlucinacaoInit(AlucinacaoBody *self) {
@@ -212,6 +305,8 @@ void AlucinacaoInit(AlucinacaoBody *self) {
     self->opc_confirmacao   = ALUC_CONFIRMAR;
     self->concluido         = false;
     self->cancelado         = false;
+    self->hover_seta_esq = false;
+    self->hover_seta_dir = false;
 
     for (int i = 0; i < ALUCINACAO_TOTAL_RELATORIOS; i++) {
         self->relatorios[i] = LoadTexture(RELATORIO_CAMINHOS[i]);
@@ -222,21 +317,24 @@ void AlucinacaoInit(AlucinacaoBody *self) {
     self->alucinacao_computadores[3] = InteragivelCriar(1589 * MAP_ESCALA, 458 * MAP_ESCALA, (1739-1589) * MAP_ESCALA, (588-458) * MAP_ESCALA, 40.0f);
 }
 
-void AlucinacaoUpdate(AlucinacaoBody *self) {
-    if (self->mostrando_instrucoes) {
+void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
+        if (self->mostrando_instrucoes) {
         if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
         else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
         return;
     }
     switch (self->tela_atual) {
         case TELA_ALUC_RELATORIOS:
-            AlucinacaoUpdateRelatorios(self);
+            AlucinacaoUpdateRelatorios(self, resources);
             break;
         case TELA_ALUC_CONFIRMACAO:
-            AlucinacaoUpdateConfirmacao(self);
+            AlucinacaoUpdateConfirmacao(self, resources, scream_width, scream_height);
             break;
         case TELA_ALUC_ERRO:
             AlucinacaoUpdateErro(self);
+            break;
+        case TELA_ALUC_ACERTO:
+            AlucinacaoUpdateAcerto(self, resources);
             break;
         default:
             break;
@@ -286,6 +384,9 @@ void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
             break;
         case TELA_ALUC_ERRO:
             AlucinacaoDrawErro(resources, scream_width, scream_height);
+            break;
+        case TELA_ALUC_ACERTO:
+            AlucinacaoDrawAcerto(self, resources, scream_width, scream_height);
             break;
         default:
             break;

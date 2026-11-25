@@ -17,6 +17,7 @@
 #define TRIADOR_MAX_SELECIONADOS    6
 #define TRIADOR_TOTAL_SETORES       3
 #define TRIADOR_POR_SETOR           2   ///< Quantidade correta de cada setor
+#define LISTA_VISIVEIS              4   
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
@@ -80,6 +81,9 @@ typedef struct TriadorBody {
 
     bool        concluido;
     bool        cancelado;
+
+    Rectangle   rect_botao_treinar;              // <<< ADICIONAR
+    Rectangle   rects_lista[LISTA_VISIVEIS];     // <<< ADICIONAR
 } TriadorBody;
 
 // ─── API pública ──────────────────────────────────────────────────────────────
@@ -88,7 +92,7 @@ typedef struct TriadorBody {
 void TriadorInit(TriadorBody *self);
 
 /** @brief Atualiza o estado do minigame a cada frame. */
-void TriadorUpdate(TriadorBody *self);
+void TriadorUpdate(TriadorBody *self, ResourcesBody *resources);
 
 /** @brief Desenha o indicador de interação no mundo (fora do minigame). */
 void TriadorDrawIndicador(TriadorBody *self, ResourcesBody *resources, Camera2D camera);

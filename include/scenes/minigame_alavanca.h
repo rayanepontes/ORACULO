@@ -66,6 +66,9 @@ typedef struct AlavancaBody {
 
     bool concluido; ///< True quando o minigame foi concluído com sucesso
     bool cancelado; ///< True quando o jogador pressiona ESC para fechar
+
+    Rectangle rect_botao_confirmar; // <<< ADICIONAR
+    Rectangle rect_botao_evacuar;   // <<< ADICIONAR
 } AlavancaBody;
 
 // ─── API pública ──────────────────────────────────────────────────────────────
@@ -77,7 +80,7 @@ void AlavancaInit(AlavancaBody *self);
  *  @param self      Ponteiro para o AlavancaBody ativo.
  *  @param tempo_restante Ponteiro para o tempo restante da partida (penalidade desconta aqui).
  */
-void AlavancaUpdate(AlavancaBody *self, float *tempo_restante);
+void AlavancaUpdate(AlavancaBody *self, float *tempo_restante, ResourcesBody *resources);
 
 /** @brief Desenha o indicador de interação no mundo (fora do minigame). */
 void AlavancaDrawIndicador(AlavancaBody *self, ResourcesBody *resources, Camera2D camera);
