@@ -5,6 +5,7 @@
 #include "graphics/ui.h"
 #include "map/map.h"
 #include "graphics/instrucoes.h"
+#include "core/resources.h"
 #include <math.h>
 
 // ─── Assets ───────────────────────────────────────────────────────────────────
@@ -55,13 +56,11 @@ static const ColaboradorDado COLABORADORES_DADOS[TRIADOR_TOTAL_COLABORADORES] = 
 };
 
 // ─── Constantes de layout ─────────────────────────────────────────────────────
-
-#define LISTA_VISIVEIS      4
 #define SLOTS_POR_LINHA     3
 
 // ─── Update helpers ───────────────────────────────────────────────────────────
 
-static void TriadorUpdatePrincipal(TriadorBody *self) {
+static void TriadorUpdatePrincipal(TriadorBody *self, ResourcesBody *resources) {
     // animação do indicador
     self->indicador_timer += GetFrameTime();
     if (self->indicador_timer >= 0.5f) {
@@ -79,15 +78,19 @@ static void TriadorUpdatePrincipal(TriadorBody *self) {
         if (InputBaixo()) {
             if (self->cursor < TRIADOR_TOTAL_COLABORADORES - 1) {
                 self->cursor++;
-                if (self->cursor >= self->scroll_offset + LISTA_VISIVEIS)
+                if (self->cursor >= self->scroll_offset + LISTA_VISIVEIS){
                     self->scroll_offset++;
+                }
+                PlaySound(resources->som_selecao);
             }
         }
         if (InputCima()) {
             if (self->cursor > 0) {
                 self->cursor--;
-                if (self->cursor < self->scroll_offset)
+                if (self->cursor < self->scroll_offset){
                     self->scroll_offset--;
+                }
+                PlaySound(resources->som_selecao);
             }
         }
 
@@ -98,26 +101,31 @@ static void TriadorUpdatePrincipal(TriadorBody *self) {
                 c->selecionado = false;
                 self->total_selecionados--;
                 self->por_setor[c->setor]--;
+                PlaySound(resources->som_confirmacao);
             } else if (self->total_selecionados < TRIADOR_MAX_SELECIONADOS) {
                 c->selecionado = true;
                 self->total_selecionados++;
                 self->por_setor[c->setor]++;
+                PlaySound(resources->som_confirmacao);
             }
         }
 
         // ir para o botão
         if (InputDireita()) {
             self->foco = FOCO_BOTAO;
+            PlaySound(resources->som_selecao);
         }
 
     } else { // FOCO_BOTAO
         // voltar para a lista
         if (InputEsquerda()) {
             self->foco = FOCO_LISTA;
+            PlaySound(resources->som_selecao);
         }
 
         // confirmar treino
         if (IsKeyPressed(KEY_ENTER)) {
+            PlaySound(resources->som_confirmacao);
             if (self->total_selecionados < TRIADOR_MAX_SELECIONADOS) {
                 self->aviso_timer = 3.0f;
             } else {
@@ -139,6 +147,75 @@ static void TriadorUpdatePrincipal(TriadorBody *self) {
         // decrementa aviso
         if (self->aviso_timer > 0.0f)
             self->aviso_timer -= GetFrameTime();
+    }
+
+        // ── Mouse: scroll, hover e clique ────────────────────────────────────────
+    Vector2 mouse = GetMousePosition();
+
+    // Scroll com roda do mouse (só quando o mouse está sobre a lista)
+    float wheel = GetMouseWheelMove();
+    if (wheel != 0) {
+        if (wheel < 0 && self->scroll_offset + LISTA_VISIVEIS < TRIADOR_TOTAL_COLABORADORES) {
+            self->scroll_offset++;
+            if (self->cursor < self->scroll_offset)
+                self->cursor = self->scroll_offset;
+        } else if (wheel > 0 && self->scroll_offset > 0) {
+            self->scroll_offset--;
+            if (self->cursor >= self->scroll_offset + LISTA_VISIVEIS)
+                self->cursor = self->scroll_offset + LISTA_VISIVEIS - 1;
+        }
+    }
+
+    // Hover e clique nos cards da lista
+    for (int i = 0; i < LISTA_VISIVEIS; i++) {
+        int idx = self->scroll_offset + i;
+        if (idx >= TRIADOR_TOTAL_COLABORADORES) break;
+        if (CheckCollisionPointRec(mouse, self->rects_lista[i])) {
+            if (self->foco != FOCO_LISTA || self->cursor != idx)
+                PlaySound(resources->som_selecao);
+            self->foco = FOCO_LISTA;
+            self->cursor = idx;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                Colaborador *c = &self->colaboradores[idx];
+                if (c->selecionado) {
+                    c->selecionado = false;
+                    self->total_selecionados--;
+                    self->por_setor[c->setor]--;
+                    PlaySound(resources->som_confirmacao);
+                } else if (self->total_selecionados < TRIADOR_MAX_SELECIONADOS) {
+                    c->selecionado = true;
+                    self->total_selecionados++;
+                    self->por_setor[c->setor]++;
+                    PlaySound(resources->som_confirmacao);
+                }
+            }
+        }
+    }
+
+    // Hover e clique no botão TREINAR
+    if (CheckCollisionPointRec(mouse, self->rect_botao_treinar)) {
+        if (self->foco != FOCO_BOTAO) PlaySound(resources->som_selecao);
+        self->foco = FOCO_BOTAO;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            PlaySound(resources->som_confirmacao);
+            if (self->total_selecionados < TRIADOR_MAX_SELECIONADOS) {
+                self->aviso_timer = 3.0f;
+            } else {
+                bool correto = true;
+                for (int i = 0; i < TRIADOR_TOTAL_SETORES; i++) {
+                    if (self->por_setor[i] != TRIADOR_POR_SETOR) {
+                        correto = false;
+                        break;
+                    }
+                }
+                if (correto) {
+                    self->tela_atual = TELA_TRIADOR_ACERTO;
+                } else {
+                    self->tela_atual = TELA_TRIADOR_ERRO;
+                    self->foco = FOCO_LISTA;
+                }
+            }
+        }
     }
 }
 
@@ -181,6 +258,8 @@ static void TriadorDrawLista(TriadorBody *self, ResourcesBody *resources,
         Colaborador *c = &self->colaboradores[idx];
         float x = item_x;
         float y = item_y + i * (item_h + gap);
+
+        self->rects_lista[i] = (Rectangle){ x, y, item_w, item_h };
 
         DrawTexturePro(
             c->avatar,
@@ -315,6 +394,8 @@ static void TriadorDrawBotao(TriadorBody *self, ResourcesBody *resources,
     float by = sh * (797.0f   / ref_h);
     float bw = sw * (578.07f  / ref_w);
     float bh = sh * (101.0f   / ref_h);
+
+    self->rect_botao_treinar = (Rectangle){ bx, by, bw, bh };
 
     bool ativo = self->total_selecionados == TRIADOR_MAX_SELECIONADOS;
     Color tint = ativo ? WHITE : resources->branco;
@@ -491,14 +572,14 @@ void TriadorInit(TriadorBody *self) {
     self->objeto = InteragivelCriar(1066 * MAP_ESCALA, 1695 * MAP_ESCALA, (1143-1066) * MAP_ESCALA, (1824-1695) * MAP_ESCALA, 40.0f);
 }
 
-void TriadorUpdate(TriadorBody *self) {
-    if (self->mostrando_instrucoes) {
+void TriadorUpdate(TriadorBody *self, ResourcesBody *resources) {
+        if (self->mostrando_instrucoes) {
         if (IsKeyPressed(KEY_ESCAPE)) self->cancelado = true;
         else if (IsKeyPressed(KEY_ENTER)) self->mostrando_instrucoes = false;
         return;
     }
     switch (self->tela_atual) {
-        case TELA_TRIADOR_PRINCIPAL: TriadorUpdatePrincipal(self); break;
+        case TELA_TRIADOR_PRINCIPAL: TriadorUpdatePrincipal(self, resources); break;
         case TELA_TRIADOR_ERRO:      TriadorUpdateErro(self);      break;
         case TELA_TRIADOR_ACERTO:    TriadorUpdateAcerto(self);    break;
     }

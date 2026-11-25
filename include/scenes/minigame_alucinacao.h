@@ -72,6 +72,13 @@ typedef struct AlucinacaoBody {
     Texture2D         relatorios[ALUCINACAO_TOTAL_RELATORIOS];
     Texture2D         background; 
     Interagivel alucinacao_computadores[ALUCINACAO_TOTAL_COMPUTADORES];
+
+    Rectangle rect_seta_esq;    // <<< ADICIONAR
+    Rectangle rect_seta_dir;    // <<< ADICIONAR
+    Rectangle rect_relatorio;   // <<< ADICIONAR
+
+    bool        hover_seta_esq;  // <<< ADICIONAR
+    bool        hover_seta_dir;  // <<< ADICIONAR
 } AlucinacaoBody;
 
 /** @brief Inicializa o minigame carregando as texturas dos relatórios.

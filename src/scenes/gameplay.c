@@ -229,7 +229,7 @@ static void GameplayManualUpdate(GameplayBody *self) {
 }
 
 static void GameplayUpdateMinigameTriador(GameplayBody *self, GameState *state, ResourcesBody *resources) {
-    TriadorUpdate(&self->triador);
+    TriadorUpdate(&self->triador, resources);
 
     if (self->triador.cancelado) {
         self->triador.cancelado = false;
@@ -249,7 +249,7 @@ static void GameplayUpdateMinigameTriador(GameplayBody *self, GameState *state, 
 }
 
 static void GameplayUpdateMinigameAlavanca(GameplayBody *self, GameState *state, ResourcesBody *resources) {
-    AlavancaUpdate(&self->alavanca, &self->tempo_restante);
+    AlavancaUpdate(&self->alavanca, &self->tempo_restante, resources);
     if (self->alavanca.concluido) {
         self->alavanca.objeto.ativo = false;
         self->alavanca_usada = true;
