@@ -27,11 +27,13 @@
  * @param TELA_ALUC_RELATORIOS    Navegação entre os relatórios (◄ ►).
  * @param TELA_ALUC_CONFIRMACAO   Confirmação antes de enviar o relatório escolhido.
  * @param TELA_ALUC_ERRO          Mensagem de erro ao escolher o relatório errado.
+ * @param TELA_ALUC_ACERTO        Mensagem de sucesso ao escolher o relatório correto.
  */
 typedef enum TelaAlucinacao {
     TELA_ALUC_RELATORIOS,  // Navegação entre os relatórios
     TELA_ALUC_CONFIRMACAO, // Confirmação de escolha
-    TELA_ALUC_ERRO         // Feedback de resposta errada
+    TELA_ALUC_ERRO,         // Feedback de resposta errada
+    TELA_ALUC_ACERTO       // Feedback de resposta certa
 } TelaAlucinacao;
 
 /** @enum OpcConfirmacaoAluc

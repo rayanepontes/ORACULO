@@ -104,7 +104,7 @@ static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self, ResourcesBody *res
 
     if (resultado == ALUC_CONFIRMAR) {
         if (self->relatorio_atual == self->relatorio_correto) {
-            self->concluido = true;
+            self->tela_atual = TELA_ALUC_ACERTO;
         } else {
             self->tela_atual = TELA_ALUC_ERRO;
         }
@@ -117,6 +117,14 @@ static void AlucinacaoUpdateConfirmacao(AlucinacaoBody *self, ResourcesBody *res
 static void AlucinacaoUpdateErro(AlucinacaoBody *self) {
     if (IsKeyPressed(KEY_ENTER)) {
         self->tela_atual = TELA_ALUC_RELATORIOS;
+    }
+}
+
+/** @brief Processa a tela de acerto — ENTER (ou clique) conclui o minigame. */
+static void AlucinacaoUpdateAcerto(AlucinacaoBody *self, ResourcesBody *resources) {
+    if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        PlaySound(resources->som_confirmacao);
+        self->concluido = true;
     }
 }
 
@@ -255,6 +263,36 @@ static void AlucinacaoDrawErro(ResourcesBody *resources,
                36.0f, 1, resources->amarelo);
 }
 
+/** @brief Desenha a mensagem de sucesso ao escolher o relatório correto. */
+static void AlucinacaoDrawAcerto(AlucinacaoBody *self, ResourcesBody *resources,
+                                 int scream_width, int scream_height) {
+    // Tela de relatórios por trás, escurecida com um tom verde
+    AlucinacaoDrawRelatorios(self, resources, scream_width, scream_height);
+    DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 0, 0, 200 });
+    DrawRectangle(0, 0, scream_width, scream_height, (Color){ 0, 128, 0, 60 });
+
+    float cx = scream_width / 2.0f;
+
+    const char *titulo = "RELATORIO VALIDADO";
+    Vector2 dt = MeasureTextEx(resources->fonte_principal, titulo, 80.0f, 1);
+    DrawTextEx(resources->fonte_principal, titulo,
+               (Vector2){ cx - dt.x / 2.0f, scream_height * 0.30f },
+               80.0f, 1, resources->ciano_claro);
+
+    const char *sub = "Alucinacao da IA identificada e descartada.";
+    Vector2 ds = MeasureTextEx(resources->fonte_principal, sub, 48.0f, 1);
+    DrawTextEx(resources->fonte_principal, sub,
+               (Vector2){ cx - ds.x / 2.0f, scream_height * 0.46f },
+               48.0f, 1, resources->branco);
+
+    const char *continuar = "ENTER para continuar";
+    Vector2 dc = MeasureTextEx(resources->fonte_principal, continuar, 44.0f, 1);
+    bool v = ((int)(GetTime() * 2) % 2 == 0);
+    DrawTextEx(resources->fonte_principal, continuar,
+               (Vector2){ cx - dc.x / 2.0f, scream_height * 0.70f },
+               44.0f, 1, v ? resources->amarelo : resources->branco);
+}
+
 // ─── API pública ──────────────────────────────────────────────────────────────
 
 void AlucinacaoInit(AlucinacaoBody *self) {
@@ -294,6 +332,9 @@ void AlucinacaoUpdate(AlucinacaoBody *self, ResourcesBody *resources, int scream
             break;
         case TELA_ALUC_ERRO:
             AlucinacaoUpdateErro(self);
+            break;
+        case TELA_ALUC_ACERTO:
+            AlucinacaoUpdateAcerto(self, resources);
             break;
         default:
             break;
@@ -343,6 +384,9 @@ void AlucinacaoDraw(AlucinacaoBody *self, ResourcesBody *resources,
             break;
         case TELA_ALUC_ERRO:
             AlucinacaoDrawErro(resources, scream_width, scream_height);
+            break;
+        case TELA_ALUC_ACERTO:
+            AlucinacaoDrawAcerto(self, resources, scream_width, scream_height);
             break;
         default:
             break;

@@ -14,7 +14,7 @@ void CafeteiraInit(CafeteiraBody *self) {
     // TODO: ajuste para a posição real da cafeteira (x1, y1, x2, y2 em pixels do mapa)
     const float x1 = 3050, y1 = 407, x2 = 3118, y2 = 480;
     self->objeto = InteragivelCriar(x1 * MAP_ESCALA, y1 * MAP_ESCALA,
-                                    (x2 - x1) * MAP_ESCALA, (y2 - y1) * MAP_ESCALA, 40.0f);
+                                    (x2 - x1) * MAP_ESCALA, (y2 - y1) * MAP_ESCALA, 150.0f);
 }
 
 void CafeteiraAtivar(CafeteiraBody *self, PlayerBody *player, float tempo_restante) {
