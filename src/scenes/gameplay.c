@@ -19,6 +19,23 @@
 
 // ─── Helper interno ───────────────────────────────────────────────────────────
 
+/** @brief Monta o vetor de tarefas concluídas na ordem das linhas do painel.
+ *
+ * @details A ordem da arte é diferente dos índices de minigame, então este
+ *          vetor faz a tradução. Índices: 0 alucinação, 1 triador, 2 alavanca,
+ *          3 botão do alarme, 4 reconector.
+ *
+ * @param self  Ponteiro para o GameplayBody ativo.
+ * @param saida Vetor com PAINEL_TOTAL_TAREFAS posições a ser preenchido.
+ */
+static void GameplayTarefasConcluidas(GameplayBody *self, bool *saida) {
+    saida[0] = self->minigames_completos[1];  // Triador de Treinamento
+    saida[1] = self->minigames_completos[2];  // Alavanca de Emergência
+    saida[2] = self->minigames_completos[0];  // Detector de Alucinação
+    saida[3] = self->minigames_completos[4];  // Reconector Neural
+    saida[4] = self->minigames_completos[3];  // Alarme de Emergência
+}
+
 /** @brief Desenha o cronômetro (MM:SS) no canto superior direito da tela. */
 static void GameplayDrawHUD(GameplayBody *self, ResourcesBody *resources, int scream_width) {
     int total_seg = (int)ceilf(self->tempo_restante);
@@ -429,6 +446,7 @@ void GameplayInit(GameplayBody *self) {
     // ── Mapa do jogo ──────────────────────────────────────────────────────────
     MapInit(&self->map, MAP_SINGLE, "assets/texture/mapa/mapa.png"); 
     ObjetosMapaInit(&self->objetos);
+    PainelTarefasInit(&self->painel_tarefas);
     self->tela_instrucoes_tex = LoadTexture("assets/texture/Tutorial.png");
     self->tela_alerta_tex     = LoadTexture("assets/texture/Alerta.png");
     self->camera.target   = (Vector2){ 
@@ -562,6 +580,9 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     // ── Temporizador ──
     GameplayTemporizadorUpdate(self);
     if (self->terminou) return;
+
+    // ── Painel de tarefas (TAB ou clique na aba) ──
+    PainelTarefasUpdate(&self->painel_tarefas, scream_height, &resources->som_selecao);
 
     // ── Centro do player ──
 
@@ -700,7 +721,14 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         ReconectorDrawIndicador(&self->reconector, resources, self->camera);
     }
 
-    GameplayDrawAlarmeFlash(self, scream_width, scream_height);  
+    GameplayDrawAlarmeFlash(self, scream_width, scream_height);
+
+    // Painel de tarefas: visível durante o jogo, escondido nas telas de fim
+    if (*state == STATE_PLAYING || *state == STATE_INTERFACE) {
+        bool tarefas_feitas[PAINEL_TOTAL_TAREFAS];
+        GameplayTarefasConcluidas(self, tarefas_feitas);
+        PainelTarefasDraw(&self->painel_tarefas, tarefas_feitas, scream_height);
+    }
 
     if (*state == STATE_PLAYING && self->manual_aberto) {
         GameplayDrawManual(self, resources, scream_width, scream_height);
@@ -783,4 +811,5 @@ void GameplayUnload(GameplayBody *self) {
     TriadorUnload(&self->triador);
     AlavancaUnload(&self->alavanca);
     ReconectorUnload(&self->reconector);
+    PainelTarefasUnload(&self->painel_tarefas);
 }

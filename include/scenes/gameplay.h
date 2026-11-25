@@ -21,6 +21,7 @@
 #include "scenes/minigame_alavanca.h"
 #include "scenes/minigame_botao.h"
 #include "scenes/minigame_reconector.h"
+#include "graphics/painel_tarefas.h"
 
 
 /** @brief Duração total de uma partida, em segundos (600 = 10 minutos). */
@@ -103,6 +104,7 @@ typedef enum OpcVoltarMenu{
  * @param triador_usado     true após o minigame do triador ser concluído.
  * @param alavanca          Estado do minigame Alavanca de Emergência.
  * @param alavanca_usada    true após o minigame da alavanca ser concluído.
+ * @param painel_tarefas  Painel deslizante com a lista de tarefas (TAB / clique na aba).
  * @param opc_confirmacao   Opção selecionada no diálogo de confirmação de saída.
  */
 typedef struct GameplayBody {
@@ -137,6 +139,7 @@ typedef struct GameplayBody {
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
+    PainelTarefasBody painel_tarefas;   // aba de tarefas
     OpcVoltarMenu opc_confirmacao;
 } GameplayBody;
 
