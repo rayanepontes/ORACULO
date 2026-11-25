@@ -344,6 +344,44 @@ A solução depende da **verificação das fontes e do cruzamento de informaçõ
 | **Confiança Cega na IA**                  | Os relatórios exibem níveis de confiança de 99%.                            | Entender que confiança não significa necessariamente verdade.         |
 | **Pensamento Crítico**                    | As respostas da IA entram em conflito com evidências externas.              | Questionar, comparar e validar as informações.                        |
 
+
+## 4. O Reconector Neural
+
+## Foco: Redes Neurais Multimodais e Isolamento de Dados
+
+Para acessar o núcleo do servidor, o jogador precisa abrir o painel de processamento neural depois que o ORÁCULO bloqueou os próprios "sentidos" para impedir comandos externos.
+
+O objetivo é reconectar os cabos de dados dos 4 módulos principais da IA sem deixar que os fluxos se cruzem.
+
+## Como funciona
+Na tela aparece um grid com visual de placa de circuito contendo 4 pares de Nós de Processamento:
+
+Azul (Visão Computacional): Câmera → Processador de Imagem;
+
+Verde (Reconhecimento de Voz): Microfone → Processador de Áudio;
+
+Amarelo (LLM / Texto): Teclado → Processador de Linguagem;
+
+Vermelho (Firewall Ético): Trava de Segurança → Servidor Central.
+
+```text
+┌─────────────────────────────────────────┐
+│       PAINEL DE PROCESSAMENTO NEURAL    │
+│                                         │
+│   [🔴] ───► ───► ───► ───► ───► ───┐    │
+│   [  ] [🔵] [  ] [🟢] [  ] [  ]    │    │
+│   [  ] [  ] [  ] [  ] [  ] [  ]    │    │
+│   [  ] [🔵] [🟡] [  ] [🟡] [  ]    │    │
+│   [  ] [  ] [  ] [  ] [  ] [  ]    │    │
+│   [  ] [🟢] [  ] [  ] [  ] [🔴] ◄──┘    │
+│                                         │
+│            [ RESETAR MALHA ]            │
+└─────────────────────────────────────────┘
+```
+
+## Conceito aprendido
+
+O desafio ilustra como sistemas multimodais integram diferentes fontes de entrada (visão, áudio e texto) mantendo canais estruturados e isolados, além de mostrar como camadas de segurança e governança envolvem o funcionamento central do modelo.
 ---
 
 # Interface e Experiência
@@ -430,26 +468,27 @@ Isso garante que uma resposta inesperada da API não quebre a lógica principal 
 
 # Estrutura dos Minigames
 
+# Estrutura dos Minigames
+
 ```text
-                    ORÁCULO
-                       │
-          ┌────────────┼────────────┐
-          │            │            │
-          ▼            ▼            ▼
-     TRIADOR       ALAVANCA      DETECTOR
-          │            │            │
-          ▼            ▼            ▼
-      VIÉS DE       DECISÕES      ALUCINAÇÃO
-       DADOS       AUTOMATIZADAS      │
-          │            │              │
-          ▼            ▼              ▼
-   BALANCEAR       SUPERVISÃO     VERIFICAR
-      DADOS          HUMANA        EVIDÊNCIAS
-          │            │              │
-          └────────────┼──────────────┘
-                       ▼
-                COFRE FINAL
-```
+                           ORÁCULO
+                              │
+        ┌──────────────┬──────┴──────┬──────────────┐
+        │              │             │              │
+        ▼              ▼             ▼              ▼
+    TRIADOR        ALAVANCA      DETECTOR      RECONECTOR
+        │              │             │              │
+        ▼              ▼             ▼              ▼
+    VIÉS DE        DECISÕES      ALUCINAÇÃO     REDES IA
+     DADOS       AUTOMATIZADAS       │         MULTIMODAIS
+        │              │             │              │
+        ▼              ▼             ▼              ▼
+   BALANCEAR      SUPERVISÃO     VERIFICAR      ISOLAR E
+     DADOS          HUMANA       EVIDÊNCIAS     CONECTAR
+        │              │             │              │
+        └──────────────┴──────┬──────┴──────────────┘
+                              ▼
+                         COFRE FINAL
 
 Cada minigame apresenta um problema diferente, mas todos seguem a mesma lógica:
 
