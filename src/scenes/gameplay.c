@@ -36,6 +36,14 @@ static void GameplayTarefasConcluidas(GameplayBody *self, bool *saida) {
     saida[4] = self->minigames_completos[3];  // Alarme de Emergência
 }
 
+/** @brief Monta o vetor de salas pendentes do minimapa a partir das flags da partida. */
+static void GameplayMinimapaPendentes(GameplayBody *self, bool *saida) {
+    MinimapaCalcularPendentes(self->computador_usado, self->triador_usado,
+                              self->alavanca_usada,   self->reconector_usado,
+                              self->botao_usado,      self->cafeteira.usada,
+                              saida);
+}
+
 /** @brief Desenha o cronômetro (MM:SS) no canto superior direito da tela. */
 static void GameplayDrawHUD(GameplayBody *self, ResourcesBody *resources, int scream_width) {
     int total_seg = (int)ceilf(self->tempo_restante);
@@ -447,6 +455,7 @@ void GameplayInit(GameplayBody *self) {
     MapInit(&self->map, MAP_SINGLE, "assets/texture/mapa/mapa.png"); 
     ObjetosMapaInit(&self->objetos);
     PainelTarefasInit(&self->painel_tarefas);
+    MinimapaInit(&self->minimapa);
     CafeteiraInit(&self->cafeteira);
     self->tela_instrucoes_tex = LoadTexture("assets/texture/Tutorial.png");
     self->tela_alerta_tex     = LoadTexture("assets/texture/Alerta.png");
@@ -539,6 +548,23 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
                     self->interface_atual = TELA_NENHUMA;
                 }
                 break;
+
+            case TELA_MINIMAPA: {
+                GameplayAlarmeUpdate(self, resources);
+                GameplayTemporizadorUpdate(self);
+
+                bool pendentes[MINIMAPA_TOTAL_SALAS];
+                GameplayMinimapaPendentes(self, pendentes);
+                MinimapaUpdate(&self->minimapa, pendentes);
+
+                if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(MINIMAPA_TECLA) ||
+                    MinimapaIconeClicado(scream_width, scream_height)) {
+                    PlaySound(resources->som_selecao);
+                    *state = STATE_PLAYING;
+                    self->interface_atual = TELA_NENHUMA;
+                }
+                break;
+            }
                     
             case TELA_INSTRUCOES: 
                 if (IsKeyPressed(KEY_ENTER)) {
@@ -575,6 +601,14 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     if (IsKeyPressed(KEY_ESCAPE)) {
         self->interface_atual = TELA_VOLTAR_MENU;
         *state = STATE_INTERFACE; 
+        return;
+    }
+
+    // ── Minimapa (clique no ícone ou tecla N) ──
+    if (MinimapaIconeClicado(scream_width, scream_height) || IsKeyPressed(MINIMAPA_TECLA)) {
+        PlaySound(resources->som_selecao);
+        self->interface_atual = TELA_MINIMAPA;
+        *state = STATE_INTERFACE;
         return;
     }
 
@@ -753,6 +787,9 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     GameplayDrawHUD(self, resources, scream_width); 
     CafeteiraDrawHUD(&self->cafeteira, resources, self->tempo_restante, scream_width);
     CafeteiraDrawAviso(&self->cafeteira, resources, scream_width, scream_height);
+    if (*state == STATE_PLAYING && !self->manual_aberto) {
+        MinimapaDrawIcone(&self->minimapa, scream_width, scream_height, false);
+    }
     
     if (*state == STATE_INTERFACE) {
         switch (self->interface_atual) {
@@ -778,6 +815,15 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         
             case TELA_MINIGAME_RECONECTOR:
                 ReconectorDraw(&self->reconector, resources, scream_width, scream_height);
+                break;
+
+            case TELA_MINIMAPA:
+                MinimapaDraw(&self->minimapa, resources, scream_width, scream_height);
+                // Redesenha o que precisa continuar visível por cima do overlay
+                GameplayDrawAlarmeFlash(self, scream_width, scream_height);
+                GameplayDrawHUD(self, resources, scream_width);
+                CafeteiraDrawHUD(&self->cafeteira, resources, self->tempo_restante, scream_width);
+                MinimapaDrawIcone(&self->minimapa, scream_width, scream_height, true);
                 break;
 
             case TELA_INSTRUCOES:                   
@@ -830,4 +876,5 @@ void GameplayUnload(GameplayBody *self) {
     AlavancaUnload(&self->alavanca);
     ReconectorUnload(&self->reconector);
     PainelTarefasUnload(&self->painel_tarefas);
+    MinimapaUnload(&self->minimapa);
 }

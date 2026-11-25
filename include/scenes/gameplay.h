@@ -23,6 +23,7 @@
 #include "scenes/minigame_reconector.h"
 #include "graphics/painel_tarefas.h"
 #include "scenes/cafeteira.h"
+#include "scenes/minimapa.h"
 
 
 /** @brief Duração total de uma partida, em segundos (600 = 10 minutos). */
@@ -46,7 +47,8 @@
  * @param TELA_MINIGAME_ALUCINACAO Minigame do Detector de Alucinação.
  * @param TELA_MINIGAME_TRIADOR    Minigame de treinamento de IA.
  * @param TELA_BOTAO_ALARME        Tela do botão que desliga o alarme.
- * @param TELA_MINIGAME_RECONECTOR Tela do minigame reconector neural.
+ * @param TELA_MINIGAME_RECONECTOR Tela do mapa de tarefas.
+ * @param TELA_MINIMAPA            Tela do minigame reconector neural.
  * @param TOTAL_TELAS              Quantidade total de telas de interface E quando não a telas no momento.
  */
 typedef enum TelaInterface {
@@ -58,6 +60,7 @@ typedef enum TelaInterface {
     TELA_MINIGAME_ALAVANCA,  ///< Minigame da alavanca de emergência.
     TELA_BOTAO_ALARME,       ///< Tela do botão que desliga o alarme.
     TELA_MINIGAME_RECONECTOR, ///< Tela do minigame reconector neural.
+    TELA_MINIMAPA,            ///< Mapa de tarefas.
     TELA_NENHUMA      // Quantidade total de telas de interface E quando não a telas no momento.
 } TelaInterface;
 
@@ -141,6 +144,7 @@ typedef struct GameplayBody {
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
     PainelTarefasBody painel_tarefas;   // aba de tarefas
+    MinimapaBody  minimapa;
     CafeteiraBody cafeteira;
     OpcVoltarMenu opc_confirmacao;
 } GameplayBody;
