@@ -20,13 +20,15 @@
 #include "scenes/minigame_triador.h"
 #include "scenes/minigame_alavanca.h"
 #include "scenes/minigame_botao.h"
+#include "scenes/minigame_reconector.h"
+
 
 /** @brief Duração total de uma partida, em segundos (600 = 10 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 600.0f
 /** @brief Quantidade de páginas do manual (a primeira é a capa). */
-#define MANUAL_TOTAL_PAGINAS 4
+#define MANUAL_TOTAL_PAGINAS 5
 /** @brief Número máximo de minigames diferentes no jogo. */
-#define GAMEPLAY_TOTAL_MINIGAMES 3
+#define GAMEPLAY_TOTAL_MINIGAMES 5
 
 /** @enum TelaInterface
  *
@@ -42,6 +44,7 @@
  * @param TELA_MINIGAME_ALUCINACAO Minigame do Detector de Alucinação.
  * @param TELA_MINIGAME_TRIADOR    Minigame de treinamento de IA.
  * @param TELA_BOTAO_ALARME        Tela do botão que desliga o alarme.
+ * @param TELA_MINIGAME_RECONECTOR Tela do minigame reconector neural.
  * @param TOTAL_TELAS              Quantidade total de telas de interface E quando não a telas no momento.
  */
 typedef enum TelaInterface {
@@ -52,6 +55,7 @@ typedef enum TelaInterface {
     TELA_MINIGAME_TRIADOR, // Minigame de treinamento de IA.
     TELA_MINIGAME_ALAVANCA,  ///< Minigame da alavanca de emergência.
     TELA_BOTAO_ALARME,       ///< Tela do botão que desliga o alarme.
+    TELA_MINIGAME_RECONECTOR, ///< Tela do minigame reconector neural.
     TELA_NENHUMA      // Quantidade total de telas de interface E quando não a telas no momento.
 } TelaInterface;
 
@@ -128,6 +132,8 @@ typedef struct GameplayBody {
     BotaoBody     botao;
     bool          botao_usado;   // true depois que o alarme foi desligado
     bool          alarme_ativo;  // true enquanto o alarme está tocando
+    ReconectorBody reconector;
+    bool           reconector_usado;
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
