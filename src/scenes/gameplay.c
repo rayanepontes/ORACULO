@@ -39,11 +39,11 @@ static void GameplayDrawHUD(GameplayBody *self, ResourcesBody *resources, int sc
 }
 
 /** @brief Desenha o overlay da tela de instruções. */
-static void GameplayDrawInstrucoes(ResourcesBody *resources, int scream_width, int scream_height) {
+static void GameplayDrawInstrucoes(GameplayBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
     // Fundo
     DrawRectangle(0, 0, scream_width, scream_height, resources->azul_escuro);
 
-    Texture2D tela_tutorial = LoadTexture("assets/texture/Tutorial.png");
+    Texture2D tela_tutorial = self->tela_instrucoes_tex;
     if (tela_tutorial.id != 0) {
         float escala = fminf((scream_width  * 0.80f) / tela_tutorial.width,
                             (scream_height * 0.80f) / tela_tutorial.height);
@@ -68,11 +68,11 @@ static void GameplayDrawInstrucoes(ResourcesBody *resources, int scream_width, i
 }
 
 /** @brief Desenha a tela de alerta do laborátorio. */
-static void GameplayDrawnAlerta(ResourcesBody *resources, int scream_width, int scream_height) {
+static void GameplayDrawnAlerta(GameplayBody *self, ResourcesBody *resources, int scream_width, int scream_height) {
     // Fundo
     DrawRectangle(0, 0, scream_width, scream_height, resources->azul_escuro);
 
-    Texture2D tela_alerta = LoadTexture("assets/texture/Alerta.png");
+    Texture2D tela_alerta = self->tela_alerta_tex;
     if (tela_alerta.id != 0) {
         float escala = fminf((scream_width  * 0.80f) / tela_alerta.width,
                             (scream_height * 0.80f) / tela_alerta.height);
@@ -96,6 +96,24 @@ static void GameplayDrawnAlerta(ResourcesBody *resources, int scream_width, int 
             72.0f, 1, cor);
 }
 
+/** @brief Intensidade do flash vermelho do alarme (0-255): mínimo e máximo do pulso. */
+#define ALARME_FLASH_ALPHA_MIN  15
+#define ALARME_FLASH_ALPHA_MAX  85
+/** @brief Quantas vezes por segundo o flash pulsa. */
+#define ALARME_FLASH_FREQUENCIA 1.0f
+
+/** @brief Cobre a tela com um vermelho translúcido pulsando enquanto o alarme toca. */
+static void GameplayDrawAlarmeFlash(GameplayBody *self, int scream_width, int scream_height) {
+    if (!self->alarme_ativo) return;
+
+    // Onda suave entre 0 e 1
+    float pulso = (sinf((float)GetTime() * 2.0f * PI * ALARME_FLASH_FREQUENCIA) + 1.0f) / 2.0f;
+    unsigned char alpha = (unsigned char)(ALARME_FLASH_ALPHA_MIN +
+                          pulso * (ALARME_FLASH_ALPHA_MAX - ALARME_FLASH_ALPHA_MIN));
+
+    DrawRectangle(0, 0, scream_width, scream_height, (Color){ 255, 0, 0, alpha });
+}
+
 /** @brief Caminhos dos PNGs do manual, na ordem das páginas (0 = capa). */
 static const char *MANUAL_CAMINHOS[MANUAL_TOTAL_PAGINAS] = {
     "assets/texture/manual_jogador/manual_capa.png",
@@ -117,6 +135,37 @@ static void GameplayTemporizadorUpdate(GameplayBody *self) {
         self->venceu           = false;
         self->terminou         = true;    // main troca para STATE_GAME_OVER
     }
+}
+
+/** @brief Processa a tela do botão; ao concluir, desliga o alarme. */
+static void GameplayUpdateBotao(GameplayBody *self, GameState *state, ResourcesBody *resources) {
+    BotaoUpdate(&self->botao);
+
+    if (self->botao.concluido) {
+        self->botao.objeto.ativo = false;
+        self->botao_usado = true;
+        StopMusicStream(resources->alarme);
+        self->alarme_ativo = false;
+        PlaySound(resources->som_confirmacao);
+        *state = STATE_PLAYING;
+        self->interface_atual = TELA_NENHUMA;
+    } else if (self->botao.cancelado) {
+        self->botao.cancelado = false;
+        *state = STATE_PLAYING;
+        self->interface_atual = TELA_NENHUMA;
+    }
+}
+
+/** @brief Mantém o alarme tocando (stream) e o para ao fim da partida ou ao voltar ao menu. */
+static void GameplayAlarmeUpdate(GameplayBody *self, ResourcesBody *resources) {
+    if (!self->alarme_ativo) return;
+
+    if (self->terminou || self->voltar_menu) {
+        StopMusicStream(resources->alarme);
+        self->alarme_ativo = false;
+        return;
+    }
+    UpdateMusicStream(resources->alarme);
 }
 
 /** @brief Processa o minigame de alucinação e reage ao resultado.
@@ -370,6 +419,11 @@ void GameplayInit(GameplayBody *self) {
     // ── Mapa do jogo ──────────────────────────────────────────────────────────
     MapInit(&self->map, MAP_SINGLE, "assets/texture/mapa/mapa.png"); 
     ObjetosMapaInit(&self->objetos);
+    self->tela_instrucoes_tex = LoadTexture("assets/texture/Tutorial.png");
+    self->tela_alerta_tex     = LoadTexture("assets/texture/Alerta.png");
+    BotaoInit(&self->botao);
+    self->botao_usado  = false;
+    self->alarme_ativo = false;
     self->camera.target   = (Vector2){ 
         self->player.position.x + sprite_w / 2.0f,
         self->player.position.y + sprite_h / 2.0f };  // o que a câmera mira
@@ -392,6 +446,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
                 GameplayTemporizadorUpdate(self);
+                GameplayAlarmeUpdate(self, resources);
 
                 const char *labels_vol[TOTAL_OPC] = { "DESISTIR", "VOLTAR AO JOGO" };
                 UiOpcaoEstilo estilo_vol = {
@@ -418,17 +473,26 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
                 }
                 break;
 
+            case TELA_BOTAO_ALARME:
+                GameplayAlarmeUpdate(self, resources);
+                GameplayTemporizadorUpdate(self);
+                GameplayUpdateBotao(self, state, resources);
+                break;
+
             case TELA_MINIGAME_ALUCINACAO:
+                GameplayAlarmeUpdate(self, resources);
                 GameplayTemporizadorUpdate(self);
                 GameplayUpdateMinigameAlucinacao(self, state, resources, scream_width, scream_height);
                 break;
 
             case TELA_MINIGAME_TRIADOR:
+                GameplayAlarmeUpdate(self, resources);
                 GameplayTemporizadorUpdate(self);
                 GameplayUpdateMinigameTriador(self, state, resources);
                 break;
 
             case TELA_MINIGAME_ALAVANCA:
+                GameplayAlarmeUpdate(self, resources);
                 GameplayTemporizadorUpdate(self);
                 GameplayUpdateMinigameAlavanca(self, state, resources);
                 break;
@@ -436,10 +500,13 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
             case TELA_INSTRUCOES: 
                 if (IsKeyPressed(KEY_ENTER)) {
                     self->interface_atual = TELA_ALERTA;
+                    PlayMusicStream(resources->alarme);   // alarme em loop a partir daqui
+                    self->alarme_ativo = true;
                 }
                 break;
             
             case TELA_ALERTA:
+                GameplayAlarmeUpdate(self, resources);
                 if (IsKeyPressed(KEY_ENTER)) {
                     self->timer_ativo  = true;  // o tempo começa a contar aqui
                     *state = STATE_PLAYING;
@@ -457,6 +524,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     if (self->manual_aberto || IsKeyPressed(KEY_M)) {
         GameplayManualUpdate(self);
         GameplayTemporizadorUpdate(self);
+        GameplayAlarmeUpdate(self, resources);
         return;
     }
 
@@ -471,12 +539,23 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     GameplayTemporizadorUpdate(self);
     if (self->terminou) return;
 
-    // ── Interação com o computador (minigame de alucinação) ──
+    // ── Centro do player ──
 
     Vector2 player_centro = {
         self->player.position.x + (PLAYER_BASE_WIDTH  * PLAYER_BASE_SCALE) / 2.0f,
         self->player.position.y + (PLAYER_BASE_HEIGHT * PLAYER_BASE_SCALE) / 2.0f
     };
+
+    // ── Interação com o botão do alarme ───────────────────────────────────────
+    if (!self->botao_usado) {
+        if (InteragivelPoderInteragir(&self->botao.objeto, player_centro) && IsKeyPressed(KEY_E)) {
+            PlaySound(resources->som_entry_minigame);
+            BotaoResetar(&self->botao);
+            self->interface_atual = TELA_BOTAO_ALARME;
+            *state = STATE_INTERFACE;
+            return;
+        }
+    }
 
 
     // ── Interação com os computadores (minigame de alucinação) ──
@@ -520,7 +599,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     }
 
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
-
+    GameplayAlarmeUpdate(self, resources);
 
     // Câmera andando junto com o player
     float sprite_w = PLAYER_BASE_WIDTH * PLAYER_BASE_SCALE;  
@@ -557,6 +636,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     };
 
     // Indicador de interação dos computadores
+    if (!self->botao_usado &&
+        InteragivelPoderInteragir(&self->botao.objeto, player_centro)) {
+        BotaoDrawIndicador(&self->botao, resources, self->camera);
+    }
+
     int comp_proximo = -1;
     for (int i = 0; i < ALUCINACAO_TOTAL_COMPUTADORES; i++) {
         if (InteragivelPoderInteragir(&self->alucinacao.alucinacao_computadores[i], player_centro)) {
@@ -577,6 +661,8 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         AlavancaDrawIndicador(&self->alavanca, resources, self->camera);
     }
 
+    GameplayDrawAlarmeFlash(self, scream_width, scream_height);  
+
     if (*state == STATE_PLAYING && self->manual_aberto) {
         GameplayDrawManual(self, resources, scream_width, scream_height);
     }
@@ -587,6 +673,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:
                 GameplayDrawVoltarMenu(self, resources, scream_width, scream_height);
+                break;
+
+            case TELA_BOTAO_ALARME:
+                BotaoDraw(&self->botao, resources, scream_width, scream_height);
                 break;
 
             case TELA_MINIGAME_ALUCINACAO:
@@ -602,11 +692,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
                 break;
 
             case TELA_INSTRUCOES:                   
-                GameplayDrawInstrucoes(resources, scream_width, scream_height);
+                GameplayDrawInstrucoes(self, resources, scream_width, scream_height);
                 break;
 
             case TELA_ALERTA:
-                GameplayDrawnAlerta(resources, scream_width, scream_height);
+                GameplayDrawnAlerta(self, resources, scream_width, scream_height);
 
                 break;
             
@@ -642,7 +732,10 @@ void GameplayUnload(GameplayBody *self) {
     }
     PlayerUnload(&self->player);
     MapUnload(&self->map);
+    UnloadTexture(self->tela_instrucoes_tex);
+    UnloadTexture(self->tela_alerta_tex);
     ObjetosMapaUnload(&self->objetos);
+    BotaoUnload(&self->botao);
     AlucinacaoUnload(&self->alucinacao);
     TriadorUnload(&self->triador);
     AlavancaUnload(&self->alavanca);

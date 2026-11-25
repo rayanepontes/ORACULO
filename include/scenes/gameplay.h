@@ -19,6 +19,7 @@
 #include "scenes/minigame_alucinacao.h"
 #include "scenes/minigame_triador.h"
 #include "scenes/minigame_alavanca.h"
+#include "scenes/minigame_botao.h"
 
 /** @brief Duração total de uma partida, em segundos (600 = 10 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 600.0f
@@ -40,6 +41,7 @@
  * @param TELA_ALERTA              Alerta do protocolo zero.
  * @param TELA_MINIGAME_ALUCINACAO Minigame do Detector de Alucinação.
  * @param TELA_MINIGAME_TRIADOR    Minigame de treinamento de IA.
+ * @param TELA_BOTAO_ALARME        Tela do botão que desliga o alarme.
  * @param TOTAL_TELAS              Quantidade total de telas de interface E quando não a telas no momento.
  */
 typedef enum TelaInterface {
@@ -49,6 +51,7 @@ typedef enum TelaInterface {
     TELA_MINIGAME_ALUCINACAO, // Minigame do Detector de Alucinação.
     TELA_MINIGAME_TRIADOR, // Minigame de treinamento de IA.
     TELA_MINIGAME_ALAVANCA,  ///< Minigame da alavanca de emergência.
+    TELA_BOTAO_ALARME,       ///< Tela do botão que desliga o alarme.
     TELA_NENHUMA      // Quantidade total de telas de interface E quando não a telas no momento.
 } TelaInterface;
 
@@ -82,6 +85,8 @@ typedef enum OpcVoltarMenu{
  * @param manual_aberto   True enquanto o manual está sobreposto (o tempo continua).
  * @param manual_pagina   Índice da página atual do manual (0 = capa).
  * @param manual_paginas  Texturas das páginas do manual.
+ * @param tela_instrucoes_tex  Texturas da tela de instruções/tutorial do game.
+ * @param tela_alerta_tex  Texturas da tela de alerta.
  * @param nickname          Nome do jogador copiado do menu (máx 6 chars + '\0').
  * @param minigames_concluidos   Quantos minigames o jogador já concluiu nesta partida.
  * @param minigames_completos    Flags por índice; evita contabilizar o mesmo minigame duas vezes.
@@ -109,6 +114,8 @@ typedef struct GameplayBody {
     bool          manual_aberto;                           // manual na tela?
     int           manual_pagina_atual;                           // página atual (0 = capa)
     Texture2D     manual_paginas[MANUAL_TOTAL_PAGINAS];    // PNGs do manual
+    Texture2D     tela_instrucoes_tex;  // Tutorial.png (carregada uma vez)
+    Texture2D     tela_alerta_tex;      // Alerta.png (carregada uma vez)
     char          nickname[7];       // copiado do menu antes de iniciar
     int           minigames_concluidos; // quantos minigames já foram finalizados
     bool          minigames_completos[GAMEPLAY_TOTAL_MINIGAMES]; // evita contar o mesmo duas vezes
@@ -118,6 +125,9 @@ typedef struct GameplayBody {
     bool        triador_usado;
     AlavancaBody  alavanca;
     bool          alavanca_usada;
+    BotaoBody     botao;
+    bool          botao_usado;   // true depois que o alarme foi desligado
+    bool          alarme_ativo;  // true enquanto o alarme está tocando
     bool          terminou;          // main lê: partida chegou ao fim
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
