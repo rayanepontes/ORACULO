@@ -24,6 +24,9 @@
 /** @brief Caminho para a música do gameplay. */
 #define RESOURCES_MUSICA_GAMEPLAY_PATH "assets/audio/music/oraculo_gameplay_music.wav"
 
+/** @brief Caminho para o som de alarme. */
+#define RESOURCES_SOM_ALARME_PATH "assets/audio/sfx/alarm_sound.wav"
+
 /** @brief Caminho para o efeito sonoro de troca de opção nos menus. */
 #define RESOURCES_SOM_SELECAO_PATH     "assets/audio/sfx/select_sound.wav"
 
@@ -42,8 +45,11 @@
 /** @brief Volume das músicas de fundo do menu (0.0 a 1.0). */
 #define RESOURCES_MUSICA_MENU_VOLUME 0.6f
 
+/** @brief Volume do alarme (0.0 a 1.0). */
+#define RESOURCES_ALARME_VOLUME 0.4f
+
 /** @brief Volume das músicas de fundo da gameplay (0.0 a 1.0). */
-#define RESOURCES_MUSICA_GAMEPLAY_VOLUME 0.4f
+#define RESOURCES_MUSICA_GAMEPLAY_VOLUME 0.3f
 
 /** @brief Volume dos efeitos sonoros (0.0 a 1.0). */
 #define RESOURCES_SFX_VOLUME 0.8f
@@ -62,6 +68,7 @@
  * @param letra_caixa        Cor das letras na caixa de nome.
  * @param musica_menu        Musica tema do menu.
  * @param musica_gameplay    Musica tema da gameplay.
+ * @param alarme             Alarme que toca até que a pessoa segure o botão.
  * @param som_selecao        Efeito sonoro tocado ao navegar entre opções de menu.
  * @param som_confirmacao    Efeito sonoro tocado ao confirmar uma opção (ENTER).
  * @param som_gameover       Efeito sonoro tocado ao entrar na tela de game over.
@@ -81,6 +88,7 @@ typedef struct ResourcesBody {
     Color    letra_caixa;
     Music    musica_menu;
     Music    musica_gameplay;
+    Music    alarme;
     Sound    som_selecao;
     Sound    som_confirmacao;
     Sound    som_gameover;

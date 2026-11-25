@@ -25,6 +25,9 @@ void ResourcesInit(ResourcesBody *self) {
     self->musica_gameplay = LoadMusicStream(RESOURCES_MUSICA_GAMEPLAY_PATH);
     self->musica_gameplay.looping = true;
     SetMusicVolume(self->musica_gameplay, RESOURCES_MUSICA_GAMEPLAY_VOLUME);
+    self->alarme = LoadMusicStream(RESOURCES_SOM_ALARME_PATH);
+    self->alarme.looping = true;
+    SetMusicVolume(self->alarme, RESOURCES_ALARME_VOLUME);
 
     self->som_selecao = LoadSound(RESOURCES_SOM_SELECAO_PATH);
     SetSoundVolume(self->som_selecao, RESOURCES_SFX_VOLUME);
@@ -42,6 +45,7 @@ void ResourcesUnload(ResourcesBody *self) {
     UnloadFont(self->fonte_principal);
     UnloadMusicStream(self->musica_menu);
     UnloadMusicStream(self->musica_gameplay);
+    UnloadMusicStream(self->alarme);
     UnloadSound(self->som_selecao);
     UnloadSound(self->som_confirmacao);
     UnloadSound(self->som_gameover);
