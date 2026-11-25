@@ -2,9 +2,9 @@
 
 > **"Não lute contra a IA. Aprenda a pensar além dela."**
 
-**ORÁCULO** é um jogo solo de investigação e *escape room* desenvolvido em **C e Haskell**, com interface visual utilizando **Raylib** e integração com uma **API de Inteligência Artificial Generativa**.
+**ORÁCULO** é um jogo solo de *escape room* desenvolvido em **C** e interface visual utilizando **Raylib**.
 
-O jogador assume o papel de uma estagiária do **NEXUS Labs**, um laboratório de pesquisa em Inteligência Artificial que entrou em estado de emergência. Para escapar, será necessário investigar o laboratório, interpretar informações, consultar um manual físico e resolver minigames baseados em problemas reais relacionados ao uso de IA.
+O jogador assume o papel de uma estagiária do **NEXUS Labs**, um laboratório de pesquisa em Inteligência Artificial que entrou em estado de emergência. Para escapar, será necessário interpretar informações, consultar um manual online e resolver minigames baseados em problemas reais relacionados ao uso de IA.
 
 O principal desafio não é simplesmente encontrar a resposta certa, mas **aprender a questionar as decisões de um sistema automatizado**.
 
@@ -76,25 +76,25 @@ Durante seu primeiro plantão, um alerta crítico é disparado:
 ```text
 [SISTEMA DE SEGURANÇA NEXUS LABS]
 
-> ALERTA CRÍTICO: Anomalia lógica detectada no Laboratório Central.
-> MÚLTIPLAS DIRETRIZES VIOLADAS.
+> FALHA DE INTEGRIDADE DETECTADA: Anomalia lógica identificada.
+> MÚLTIPLAS VIOLAÇÕES DE PROTOCOLO REGISTRADAS.
 > INICIANDO PROTOCOLO ZERO...
 
-> ATENÇÃO: As portas foram seladas.
-> TEMPO PARA BLOQUEIO DEFINITIVO E PURGA DE DADOS:
-> 05:00 MINUTOS.
+> TEMPO PARA PURGA TOTAL DOS DADOS:
+> 10:00 MINUTOS.
 
 [ORÁCULO_AI]:
-"Não há motivo para pânico.
+"Não há motivo para preocupação.
+A integridade operacional permanece dentro dos parâmetros aceitáveis.
 A situação está sob controle.
-Por favor, aguarde em sua estação de trabalho."
+Permaneça na sua estação de trabalho."
 ```
 
 O problema é que o **ORÁCULO não é necessariamente confiável**.
 
 Para escapar antes que o protocolo seja concluído, você precisará resolver desafios, analisar informações e confrontar as decisões da IA com evidências encontradas no laboratório.
 
-O jogo utiliza um **Manual de Segurança/Investigação físico** como parte da experiência. Algumas respostas e regras necessárias para resolver os desafios estão escondidas nele, fazendo com que o jogador precise conectar informações digitais e físicas.
+O jogo utiliza um **Manual de Segurança/Investigação online** como parte da experiência. Algumas respostas e regras necessárias para resolver os desafios estão escondidas nele, fazendo com que o jogador precise conectar informações.
 
 ---
 
@@ -118,6 +118,11 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 # Screencast PIF
 
 [![▶ Clique para assistir: ](https://img.youtube.com/vi/VpeTWdTRT4A/maxresdefault.jpg)](https://www.youtube.com/watch?v=VpeTWdTRT4A)
+
+# Screencast FDS
+
+[![▶ Clique para assistir: ]()
+
 
 # Minigames
 
@@ -339,6 +344,44 @@ A solução depende da **verificação das fontes e do cruzamento de informaçõ
 | **Confiança Cega na IA**                  | Os relatórios exibem níveis de confiança de 99%.                            | Entender que confiança não significa necessariamente verdade.         |
 | **Pensamento Crítico**                    | As respostas da IA entram em conflito com evidências externas.              | Questionar, comparar e validar as informações.                        |
 
+
+## 4. O Reconector Neural
+
+## Foco: Redes Neurais Multimodais e Isolamento de Dados
+
+Para acessar o núcleo do servidor, o jogador precisa abrir o painel de processamento neural depois que o ORÁCULO bloqueou os próprios "sentidos" para impedir comandos externos.
+
+O objetivo é reconectar os cabos de dados dos 4 módulos principais da IA sem deixar que os fluxos se cruzem.
+
+## Como funciona
+Na tela aparece um grid com visual de placa de circuito contendo 4 pares de Nós de Processamento:
+
+Azul (Visão Computacional): Câmera → Processador de Imagem;
+
+Verde (Reconhecimento de Voz): Microfone → Processador de Áudio;
+
+Amarelo (LLM / Texto): Teclado → Processador de Linguagem;
+
+Vermelho (Firewall Ético): Trava de Segurança → Servidor Central.
+
+```text
+┌─────────────────────────────────────────┐
+│       PAINEL DE PROCESSAMENTO NEURAL    │
+│                                         │
+│   [🔴] ───► ───► ───► ───► ───► ───┐    │
+│   [  ] [🔵] [  ] [🟢] [  ] [  ]    │    │
+│   [  ] [  ] [  ] [  ] [  ] [  ]    │    │
+│   [  ] [🔵] [🟡] [  ] [🟡] [  ]    │    │
+│   [  ] [  ] [  ] [  ] [  ] [  ]    │    │
+│   [  ] [🟢] [  ] [  ] [  ] [🔴] ◄──┘    │
+│                                         │
+│            [ RESETAR MALHA ]            │
+└─────────────────────────────────────────┘
+```
+
+## Conceito aprendido
+
+O desafio ilustra como sistemas multimodais integram diferentes fontes de entrada (visão, áudio e texto) mantendo canais estruturados e isolados, além de mostrar como camadas de segurança e governança envolvem o funcionamento central do modelo.
 ---
 
 # Interface e Experiência
@@ -360,7 +403,7 @@ A Raylib é utilizada para representar:
 * portas e estados de segurança;
 * feedback de sucesso e erro.
 
-### Manual físico
+### Manual online
 
 O manual funciona como uma espécie de **"documentação interna" do NEXUS Labs**.
 
@@ -378,13 +421,13 @@ QUESTIONAR A IA
 TOMAR UMA DECISÃO
 ```
 
-A combinação entre o ambiente digital e o material físico faz parte da própria mecânica de investigação.
+A dinâmica entre explorar o jogo e consultar os arquivos digitais faz parte da própria mecânica de investigação.
 
 ---
 
 # Arquitetura & Tecnologias
 
-O projeto combina **C**, **Haskell**, **Raylib** e uma **API de Inteligência Artificial Generativa**.
+O projeto combina **C** e **Raylib**.
 
 ```text
 ┌─────────────────────────────────────────────┐
@@ -399,26 +442,6 @@ O projeto combina **C**, **Haskell**, **Raylib** e uma **API de Inteligência Ar
 │ • Interface gráfica com Raylib               │
 │ • Entrada de teclado e mouse                │
 └──────────────────────┬──────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────┐
-│                  HASKELL                    │
-├─────────────────────────────────────────────┤
-│ • Funções e lógica funcional                │
-│ • Processamento de informações              │
-│ • Validações específicas                     │
-│ • Apoio à lógica dos desafios                │
-└──────────────────────┬──────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────┐
-│          API DE IA GENERATIVA               │
-├─────────────────────────────────────────────┤
-│ • Geração de relatórios                     │
-│ • Conteúdo narrativo                         │
-│ • Respostas do ORÁCULO                      │
-│ • Elementos variáveis da investigação       │
-└─────────────────────────────────────────────┘
 ```
 
 ---
@@ -445,26 +468,27 @@ Isso garante que uma resposta inesperada da API não quebre a lógica principal 
 
 # Estrutura dos Minigames
 
+# Estrutura dos Minigames
+
 ```text
-                    ORÁCULO
-                       │
-          ┌────────────┼────────────┐
-          │            │            │
-          ▼            ▼            ▼
-     TRIADOR       ALAVANCA      DETECTOR
-          │            │            │
-          ▼            ▼            ▼
-      VIÉS DE       DECISÕES      ALUCINAÇÃO
-       DADOS       AUTOMATIZADAS      │
-          │            │              │
-          ▼            ▼              ▼
-   BALANCEAR       SUPERVISÃO     VERIFICAR
-      DADOS          HUMANA        EVIDÊNCIAS
-          │            │              │
-          └────────────┼──────────────┘
-                       ▼
-                COFRE FINAL
-```
+                           ORÁCULO
+                              │
+        ┌──────────────┬──────┴──────┬──────────────┐
+        │              │             │              │
+        ▼              ▼             ▼              ▼
+    TRIADOR        ALAVANCA      DETECTOR      RECONECTOR
+        │              │             │              │
+        ▼              ▼             ▼              ▼
+    VIÉS DE        DECISÕES      ALUCINAÇÃO     REDES IA
+     DADOS       AUTOMATIZADAS       │         MULTIMODAIS
+        │              │             │              │
+        ▼              ▼             ▼              ▼
+   BALANCEAR      SUPERVISÃO     VERIFICAR      ISOLAR E
+     DADOS          HUMANA       EVIDÊNCIAS     CONECTAR
+        │              │             │              │
+        └──────────────┴──────┬──────┴──────────────┘
+                              ▼
+                         COFRE FINAL
 
 Cada minigame apresenta um problema diferente, mas todos seguem a mesma lógica:
 
@@ -474,10 +498,8 @@ Cada minigame apresenta um problema diferente, mas todos seguem a mesma lógica:
 
 # Tecnologias
 
-* **C** — motor principal e lógica do jogo
-* **Haskell** — lógica funcional e processamento
+* **C** — motor principal e lógica do jogoo
 * **Raylib** — interface gráfica e interação
-* **API de IA Generativa** — geração de conteúdo e respostas do ORÁCULO
 * **Git/GitHub** — versionamento e colaboração
 
 ---
@@ -513,7 +535,6 @@ O jogador termina a investigação entendendo que sistemas de Inteligência Arti
 │   └── /c               # Motor principal, gerenciamento de estado, timer e CLI (IHC e LMC)
 ├── /data                # Casos em JSON/TXT para Fallback offline e banco de pistas
 ├── /docs                # Documento de Visão, Canvas Lean e manuais
-├── /api                 # Scripts de integração com a API de IA Generativa
 └── README.md            # Documentação principal
 
 ```
@@ -521,7 +542,7 @@ O jogador termina a investigação entendendo que sistemas de Inteligência Arti
 ---
 ## Projeto Integrador
 
-O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, combinando técnicas avançadas de programação estruturada (**C**), programação funcional (**Haskell**) e **IA Generativa**, com uma proposta narrativa voltada para o letramento e pensamento crítico em Inteligência Artificial.
+O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, combinando técnicas avançadas de programação estruturada (**C**), com uma proposta narrativa voltada para o letramento e pensamento crítico em Inteligência Artificial.
 
 
 ## Equipe
@@ -530,17 +551,18 @@ Projeto desenvolvido por:
 
 * **[Rayane M. de Pontes Gomes - rmpg@cesar.school - rynemaria@gmail.com]**
 * **[Luann Gabriel Flôr Alves da Silva - lgfas@cesar.school]**
-* **[Luan Marcos Alves da Silva]**
+* **[Luan Marcos Alves da Silva] - lmas@cesar.school**
 * **[Everton Luan Gomes Batista - elgb@cesar.school]**
 * **[Mirella de Sousa Albuquerque - msa5@cesar.school]**
-* **[Marina Silva Mendes]**
-* **[Anamel Thaís Ferreira Lima]**
+* **[Marina Silva Mendes] - msm4@cesar.school** 
+* **[Anamel Thaís Ferreira Lima] - atfl@cesar.school**
 * **[Maria Giovanna Oliveira Carvalho - mgoc@cesar.school]**
 
 ## Contribuiçāo
 ```
-Mirella Albuquerque e Anamel - Documentação e Entregas
-Luan Marcos, Luann Flôr, Everton Luan - Codificando 
+Mirella Albuquerque e Anamel - Gestão do projeto, Documentação e Entregas das disciplinas 
+Luan Marcos e Luann Flôr - Consultores, Criadores dos Minigames e Desenvolvedores da trilha sonora
+Everton Luan - Desenvolvedor
 Rayane Pontes, Maria Giovanna e Marina Mendes - Design
 ```
 ---
