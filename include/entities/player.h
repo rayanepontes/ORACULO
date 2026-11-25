@@ -13,6 +13,9 @@
 /** @brief Velocidade de movimento do player em pixels por frame. */
 #define PLAYER_SPEED 8.0f
 
+/** @brief Velocidade do player correndo (efeito do café), em pixels por frame. */
+#define PLAYER_RUN_SPEED 16.0f
+
 /** @brief Fator de escala aplicado ao sprite do player. */
 #define PLAYER_BASE_SCALE 1.5f
 
@@ -57,6 +60,7 @@ typedef enum PlayerDirection {
 typedef enum PlayerActionType{
     idle,
     walk,
+    run,
     total_actions
 } PlayerActionType;
 
@@ -76,6 +80,7 @@ typedef enum PlayerActionType{
 typedef struct PlayerBody{
     Vector2 position; //Coordenadas (x, y) onde o player está localizado.
     PlayerDirection direction; //Lado para qual o player está virado.
+    bool correndo; //True enquanto o player está sob efeito do café (corre em vez de andar).
     PlayerActionType action_atual; //Guarda qual é o tipo de ação que o player está executando no momento.
     Texture2D textures[total_actions]; //Array de texturas que um player possui.
     AnimationBody anims[total_actions]; //Array de animações que um player possui.

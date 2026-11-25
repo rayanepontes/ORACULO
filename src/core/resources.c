@@ -18,6 +18,7 @@ void ResourcesInit(ResourcesBody *self) {
     self->lilas_claro  = GetColor(0x9988BBFF);
     self->ciano_claro  = GetColor(0xAEFFFAFF);
     self->letra_caixa  = GetColor(0x2A1F4EFF);
+    self->marrom_cafe  = GetColor(0xB9794AFF);
 
     self->musica_menu     = LoadMusicStream(RESOURCES_MUSICA_MENU_PATH);
     self->musica_menu.looping     = true;

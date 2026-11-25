@@ -66,6 +66,7 @@
  * @param lilas_claro        Lilás claro da paleta.
  * @param ciano_claro        Ciano clarinho.
  * @param letra_caixa        Cor das letras na caixa de nome.
+ * @param marrom_cafe        Marrom claro usado no HUD do café.
  * @param musica_menu        Musica tema do menu.
  * @param musica_gameplay    Musica tema da gameplay.
  * @param alarme             Alarme que toca até que a pessoa segure o botão.
@@ -86,6 +87,7 @@ typedef struct ResourcesBody {
     Color    lilas_claro;
     Color    ciano_claro; 
     Color    letra_caixa;
+    Color    marrom_cafe;
     Music    musica_menu;
     Music    musica_gameplay;
     Music    alarme;

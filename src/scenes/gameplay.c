@@ -447,6 +447,7 @@ void GameplayInit(GameplayBody *self) {
     MapInit(&self->map, MAP_SINGLE, "assets/texture/mapa/mapa.png"); 
     ObjetosMapaInit(&self->objetos);
     PainelTarefasInit(&self->painel_tarefas);
+    CafeteiraInit(&self->cafeteira);
     self->tela_instrucoes_tex = LoadTexture("assets/texture/Tutorial.png");
     self->tela_alerta_tex     = LoadTexture("assets/texture/Alerta.png");
     self->camera.target   = (Vector2){ 
@@ -653,6 +654,16 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
         }
     }
 
+    // ── Interação com a cafeteira ─────────────────────────────────────────────
+    if (!self->cafeteira.usada) {
+        if (InteragivelPoderInteragir(&self->cafeteira.objeto, player_centro) && IsKeyPressed(KEY_E)) {
+            CafeteiraAtivar(&self->cafeteira, &self->player, self->tempo_restante);
+            PlaySound(resources->som_confirmacao);
+        }
+    }
+
+    CafeteiraUpdate(&self->cafeteira, &self->player, self->tempo_restante);
+
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
     GameplayAlarmeUpdate(self, resources);
 
@@ -721,6 +732,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         ReconectorDrawIndicador(&self->reconector, resources, self->camera);
     }
 
+    if (!self->cafeteira.usada &&
+        InteragivelPoderInteragir(&self->cafeteira.objeto, player_centro)) {
+        CafeteiraDrawIndicador(&self->cafeteira, resources, self->camera);
+    }
+
     GameplayDrawAlarmeFlash(self, scream_width, scream_height);
 
     // Painel de tarefas: visível durante o jogo, escondido nas telas de fim
@@ -735,7 +751,9 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
     }
 
     GameplayDrawHUD(self, resources, scream_width); 
-
+    CafeteiraDrawHUD(&self->cafeteira, resources, self->tempo_restante, scream_width);
+    CafeteiraDrawAviso(&self->cafeteira, resources, scream_width, scream_height);
+    
     if (*state == STATE_INTERFACE) {
         switch (self->interface_atual) {
             case TELA_VOLTAR_MENU:

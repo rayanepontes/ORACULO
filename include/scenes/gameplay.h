@@ -22,6 +22,7 @@
 #include "scenes/minigame_botao.h"
 #include "scenes/minigame_reconector.h"
 #include "graphics/painel_tarefas.h"
+#include "scenes/cafeteira.h"
 
 
 /** @brief Duração total de uma partida, em segundos (600 = 10 minutos). */
@@ -140,6 +141,7 @@ typedef struct GameplayBody {
     bool          venceu;            // main lê: vitória (true) ou derrota (false)
     bool          voltar_menu;       // main lê: jogador pediu para voltar ao menu
     PainelTarefasBody painel_tarefas;   // aba de tarefas
+    CafeteiraBody cafeteira;
     OpcVoltarMenu opc_confirmacao;
 } GameplayBody;
 
