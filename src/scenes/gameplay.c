@@ -13,6 +13,7 @@
 #include "map/map.h"
 #include "scenes/minigame_alucinacao.h"
 #include "scenes/minigame_alavanca.h"
+#include "scenes/minigame_reconector.h"
 #include <math.h> 
 #include <stdlib.h>
 
@@ -404,6 +405,13 @@ void GameplayInit(GameplayBody *self) {
     AlavancaInit(&self->alavanca);
     self->alavanca_usada = false;
 
+    ReconectorInit(&self->reconector);
+    self->reconector_usado = false;
+
+    BotaoInit(&self->botao);
+    self->botao_usado  = false;
+    self->alarme_ativo = false;
+
     self->minigames_concluidos = 0;
     for (int i = 0; i < GAMEPLAY_TOTAL_MINIGAMES; i++) {
         self->minigames_completos[i] = false;
@@ -423,9 +431,6 @@ void GameplayInit(GameplayBody *self) {
     ObjetosMapaInit(&self->objetos);
     self->tela_instrucoes_tex = LoadTexture("assets/texture/Tutorial.png");
     self->tela_alerta_tex     = LoadTexture("assets/texture/Alerta.png");
-    BotaoInit(&self->botao);
-    self->botao_usado  = false;
-    self->alarme_ativo = false;
     self->camera.target   = (Vector2){ 
         self->player.position.x + sprite_w / 2.0f,
         self->player.position.y + sprite_h / 2.0f };  // o que a câmera mira
@@ -497,6 +502,23 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
                 GameplayAlarmeUpdate(self, resources);
                 GameplayTemporizadorUpdate(self);
                 GameplayUpdateMinigameAlavanca(self, state, resources);
+                break;
+
+            case TELA_MINIGAME_RECONECTOR:
+                GameplayAlarmeUpdate(self, resources);
+                GameplayTemporizadorUpdate(self);
+                ReconectorUpdate(&self->reconector, resources);
+                if (self->reconector.concluido) {
+                    self->reconector.objeto.ativo = false;
+                    self->reconector_usado = true;
+                    *state = STATE_PLAYING;
+                    self->interface_atual = TELA_NENHUMA;
+                    GameplayMinigameConcluido(self, 4);
+                } else if (self->reconector.cancelado) {
+                    self->reconector.cancelado = false;
+                    *state = STATE_PLAYING;
+                    self->interface_atual = TELA_NENHUMA;
+                }
                 break;
                     
             case TELA_INSTRUCOES: 
@@ -600,6 +622,16 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
         }
     }
 
+    // ── Interação com o reconector ──
+    if (!self->reconector_usado) {
+        if (InteragivelPoderInteragir(&self->reconector.objeto, player_centro) && IsKeyPressed(KEY_E)) {
+            ReconectorInit(&self->reconector);
+            self->interface_atual = TELA_MINIGAME_RECONECTOR;
+            *state = STATE_INTERFACE;
+            return;
+        }
+    }
+
     PlayerUpdateAction(&self->player, self->map.colisores, self->map.colisor_count);
     GameplayAlarmeUpdate(self, resources);
 
@@ -663,6 +695,11 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
         AlavancaDrawIndicador(&self->alavanca, resources, self->camera);
     }
 
+    if (!self->reconector_usado &&
+        InteragivelPoderInteragir(&self->reconector.objeto, player_centro)) {
+        ReconectorDrawIndicador(&self->reconector, resources, self->camera);
+    }
+
     GameplayDrawAlarmeFlash(self, scream_width, scream_height);  
 
     if (*state == STATE_PLAYING && self->manual_aberto) {
@@ -691,6 +728,10 @@ void GameplayDraw(GameplayBody *self, GameState *state,  ResourcesBody *resource
 
             case TELA_MINIGAME_ALAVANCA:
                 AlavancaDraw(&self->alavanca, resources, scream_width, scream_height);
+                break;
+        
+            case TELA_MINIGAME_RECONECTOR:
+                ReconectorDraw(&self->reconector, resources, scream_width, scream_height);
                 break;
 
             case TELA_INSTRUCOES:                   
@@ -741,4 +782,5 @@ void GameplayUnload(GameplayBody *self) {
     AlucinacaoUnload(&self->alucinacao);
     TriadorUnload(&self->triador);
     AlavancaUnload(&self->alavanca);
+    ReconectorUnload(&self->reconector);
 }
