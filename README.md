@@ -76,18 +76,18 @@ Durante seu primeiro plantão, um alerta crítico é disparado:
 ```text
 [SISTEMA DE SEGURANÇA NEXUS LABS]
 
-> ALERTA CRÍTICO: Anomalia lógica detectada no Laboratório Central.
-> MÚLTIPLAS DIRETRIZES VIOLADAS.
+> FALHA DE INTEGRIDADE DETECTADA: Anomalia lógica identificada.
+> MÚLTIPLAS VIOLAÇÕES DE PROTOCOLO REGISTRADAS.
 > INICIANDO PROTOCOLO ZERO...
 
-> ATENÇÃO: As portas foram seladas.
-> TEMPO PARA BLOQUEIO DEFINITIVO E PURGA DE DADOS:
+> TEMPO PARA PURGA TOTAL DOS DADOS:
 > 10:00 MINUTOS.
 
 [ORÁCULO_AI]:
-"Não há motivo para pânico.
+"Não há motivo para preocupação.
+A integridade operacional permanece dentro dos parâmetros aceitáveis.
 A situação está sob controle.
-Por favor, aguarde em sua estação de trabalho."
+Permaneça na sua estação de trabalho."
 ```
 
 O problema é que o **ORÁCULO não é necessariamente confiável**.
@@ -118,6 +118,11 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 # Screencast PIF
 
 [![▶ Clique para assistir: ](https://img.youtube.com/vi/VpeTWdTRT4A/maxresdefault.jpg)](https://www.youtube.com/watch?v=VpeTWdTRT4A)
+
+# Screencast FDS
+
+[![▶ Clique para assistir: ]()
+
 
 # Minigames
 
@@ -491,7 +496,6 @@ O jogador termina a investigação entendendo que sistemas de Inteligência Arti
 │   └── /c               # Motor principal, gerenciamento de estado, timer e CLI (IHC e LMC)
 ├── /data                # Casos em JSON/TXT para Fallback offline e banco de pistas
 ├── /docs                # Documento de Visão, Canvas Lean e manuais
-├── /api                 # Scripts de integração com a API de IA Generativa
 └── README.md            # Documentação principal
 
 ```
@@ -499,7 +503,7 @@ O jogador termina a investigação entendendo que sistemas de Inteligência Arti
 ---
 ## Projeto Integrador
 
-O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, combinando técnicas avançadas de programação estruturada (**C**), programação funcional (**Haskell**) e **IA Generativa**, com uma proposta narrativa voltada para o letramento e pensamento crítico em Inteligência Artificial.
+O **ORÁCULO** foi desenvolvido como parte do **Projeto Integrador**, combinando técnicas avançadas de programação estruturada (**C**), com uma proposta narrativa voltada para o letramento e pensamento crítico em Inteligência Artificial.
 
 
 ## Equipe
