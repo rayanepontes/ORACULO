@@ -24,9 +24,9 @@
 /** @brief Duração total de uma partida, em segundos (600 = 10 minutos). */
 #define GAMEPLAY_TEMPO_TOTAL 600.0f
 /** @brief Quantidade de páginas do manual (a primeira é a capa). */
-#define MANUAL_TOTAL_PAGINAS 4
+#define MANUAL_TOTAL_PAGINAS 5
 /** @brief Número máximo de minigames diferentes no jogo. */
-#define GAMEPLAY_TOTAL_MINIGAMES 3
+#define GAMEPLAY_TOTAL_MINIGAMES 4
 
 /** @enum TelaInterface
  *

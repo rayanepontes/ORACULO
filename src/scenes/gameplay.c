@@ -119,7 +119,8 @@ static const char *MANUAL_CAMINHOS[MANUAL_TOTAL_PAGINAS] = {
     "assets/texture/manual_jogador/manual_capa.png",
     "assets/texture/manual_jogador/manual_pag_1.png",
     "assets/texture/manual_jogador/manual_pag_2.png",
-    "assets/texture/manual_jogador/manual_pag_3.png"
+    "assets/texture/manual_jogador/manual_pag_3.png",
+    "assets/texture/manual_jogador/manual_pag_4.png"
 };
 
 /** @brief Desconta o tempo da partida; ao zerar, encerra com derrota. */
@@ -149,6 +150,7 @@ static void GameplayUpdateBotao(GameplayBody *self, GameState *state, ResourcesB
         PlaySound(resources->som_confirmacao);
         *state = STATE_PLAYING;
         self->interface_atual = TELA_NENHUMA;
+        GameplayMinigameConcluido(self, 3); // <<< ADICIONAR (índice 3 = botão)
     } else if (self->botao.cancelado) {
         self->botao.cancelado = false;
         *state = STATE_PLAYING;
