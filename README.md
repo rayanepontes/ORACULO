@@ -89,23 +89,24 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 [![▶ Clique para assistir: ](./project/thumb.png)](https://www.youtube.com/watch?v=It_t3TPcRGA)
 
 # Histórias de Usuário 
+É possível comprovar a implementação e validação de todas as Histórias de Usuário diretamente no vídeo de demonstração, utilizando as marcações de tempo abaixo. Os detalhes completos, critérios de aceite e evidências de teste estão anexados nos cartões do [Backlog no Trello](https://trello.com/b/dTZMPV3x/historias-de-usuarios): 
 
-**HU01 - Navegar pelo Menu Principal no Terminal: 00:02**
-**HU02 - Temporizador de 10 Minutos da Partida: 00:26**
-**HU03 - Transitar entre Salas do Laboratório: 02:22**
-**HU04 - Colocar meu User ao entrar na partida: 00:10**
-**HU05 - Acessar tutorial do jogo: 00:14**
-**HU06 - Aumento de velocidade ao ingerir Café: 02:32**
-**HU07 - Identificar minigames no ambiente: 00:56**
-**HU08 - Consultar Manual de Regras e Boas Práticas do NEXUS Labs: 01:07**
-**HU09 - Resolver Minigame 1: O Triador de Treinamento: 03:56**
-**HU10 - Resolver Minigame 2: A Alavanca de Emergência: 01:40**
-**HU11 - Resolver Minigame 3: O Detector de Alucinação: 02:41**
-**HU12 - Resolver Minigame 4: O Reconector Neural: 04:54**
-**HU13 - Compreender se a task está correta: 02:54**
-**HU14 - Visualizar minha pontuação no ranking: 05:52**
-**HU15 - Música do jogo: Qualquer etapa do jogo**
-**HU16 - Consultar Tabela de Ranking dos Top Players: 05:52** 
+* HU01 - Navegar pelo Menu Principal no Terminal: 00:02
+* HU02 - Temporizador de 10 Minutos da Partida: 00:26
+* HU03 - Transitar entre Salas do Laboratório: 02:22
+* HU04 - Colocar meu User ao entrar na partida: 00:10
+* HU05 - Acessar tutorial do jogo: 00:14
+* HU06 - Aumento de velocidade ao ingerir Café: 02:32
+* HU07 - Identificar minigames no ambiente: 00:56
+* HU08 - Consultar Manual de Regras e Boas Práticas do NEXUS Labs: 01:07
+* HU09 - Resolver Minigame 1: O Triador de Treinamento: 03:56
+* HU10 - Resolver Minigame 2: A Alavanca de Emergência: 01:40
+* HU11 - Resolver Minigame 3: O Detector de Alucinação: 02:41
+* HU12 - Resolver Minigame 4: O Reconector Neural: 04:54
+* HU13 - Compreender se a task está correta: 02:54
+* HU14 - Visualizar minha pontuação no ranking: 05:52
+* HU15 - Música do jogo: Qualquer etapa do jogo
+* HU16 - Consultar Tabela de Ranking dos Top Players: 05:52
 
 ---
 # Minigames
