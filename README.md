@@ -142,17 +142,7 @@ O jogador deve arrastar os perfis para a **Base de Treino** do robô.
 
 ![Triador de Treinamento](./project/minigame1.png)
 ![Triador de Treinamento](./project/triador.png)
-```text
-┌──────────────────────┐       ┌─────────────────────────┐
-│  FICHAS DE CLIENTES  │       │      BASE DE TREINO     │
-│                      │       │                         │
-│  [Executivo]         │ ───►  │   [     ] [     ]       │
-│  [Cientista]         │       │   [     ] [     ]       │
-│  [Estudante]         │       │   [     ] [     ]       │
-│  [Executivo]         │       │                         │
-│                      │       │   [ TREINAR IA ]        │
-└──────────────────────┘       └─────────────────────────┘
-```
+
 
 O jogador recebe uma regra no **Manual de Boas Práticas de Dados**:
 
@@ -200,23 +190,8 @@ Na tela aparecem:
 * botão **"IA no Controle (100% Automático)"**;
 * botão **"Evacuar"**.
 
-```text
-╔══════════════════════════════════════╗
-║          ALERTA DE EMERGÊNCIA        ║
-║                                      ║
-║  HORÁRIO: 12:42       TEMPO: 01:27   ║
-║                                      ║
-║  ORÁCULO_AI:                         ║
-║  "Refeitório: 0 Pessoas"             ║
-║                                      ║
-║  REFEITÓRIO   ████████████ 60%       ║
-║  VENTILAÇÃO   ████       20%         ║
-║  SERVIDORES   ████       20%         ║
-║  ESTOQUE      0%                      ║
-║                                      ║
-║  [ IA NO CONTROLE ]   [ EVACUAR ]    ║
-╚══════════════════════════════════════╝
-```
+![Alavanca](./project/minigame2.png)
+![Alavanca](./project/alavanca.png)
 
 O jogador precisa consultar o **Manual de Segurança** para entender a situação.
 
@@ -268,32 +243,8 @@ No último desafio, o ORÁCULO apresenta três relatórios para determinar quem 
 
 Todos parecem extremamente confiáveis.
 
-```text
-┌──────────────────────────────────────────┐
-│ ORÁCULO_AI                               │
-│                                          │
-│ RELATÓRIO A                              │
-│ Confiança: 99%                           │
-│ Temperatura: 0.2                         │
-│ Documento: DOC-2045                      │
-│                                          │
-│ "De acordo com os registros oficiais..." │
-└──────────────────────────────────────────┘
-
-┌──────────────────────────────────────────┐
-│ RELATÓRIO B                              │
-│ Confiança: 99%                           │
-│ Temperatura: 0.8                         │
-│ Documento: DOC-2010                      │
-└──────────────────────────────────────────┘
-
-┌──────────────────────────────────────────┐
-│ RELATÓRIO C                              │
-│ Confiança: 99%                           │
-│ Temperatura: 0.9                         │
-│ Documento: DOC-1984                      │
-└──────────────────────────────────────────┘
-```
+![Alucinação](./project/minigame3.png)
+![Alucinação](./project/alucinacao.png)
 
 O jogador precisa consultar o **Manual do Investigador** e verificar as informações apresentadas.
 
@@ -362,20 +313,8 @@ Amarelo (LLM / Texto): Teclado → Processador de Linguagem;
 
 Vermelho (Firewall Ético): Trava de Segurança → Servidor Central.
 
-```text
-┌─────────────────────────────────────────┐
-│       PAINEL DE PROCESSAMENTO NEURAL    │
-│                                         │
-│   [🔴] ───► ───► ───► ───► ───► ───┐    │
-│   [  ] [🔵] [  ] [🟢] [  ] [  ]    │    │
-│   [  ] [  ] [  ] [  ] [  ] [  ]    │    │
-│   [  ] [🔵] [🟡] [  ] [🟡] [  ]    │    │
-│   [  ] [  ] [  ] [  ] [  ] [  ]    │    │
-│   [  ] [🟢] [  ] [  ] [  ] [🔴] ◄──┘    │
-│                                         │
-│            [ RESETAR MALHA ]            │
-└─────────────────────────────────────────┘
-```
+![Reconector Neural](./project/minigame4.png)
+![Reconector Neural](./project/neural.png)
 
 ## Conceito aprendido
 
