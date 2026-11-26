@@ -90,23 +90,24 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 
 # Histórias de Usuário 
 
-**HU01 - Navegar pelo Menu Principal no Terminal:**
-**HU02 - Temporizador de 10 Minutos da Partida:**
-**HU03 - Transitar entre Salas do Laboratório:**
-**HU04 - Colocar meu User ao entrar na partida:**
-**HU05 - Acessar tutorial do jogo:**
-**HU06 - Aumento de velocidade ao ingerir Café:**
-**HU07 - Identificar minigames no ambiente**
-**HU08 - Consultar Manual de Regras e Boas Práticas do NEXUS Labs:**
-**HU09 - Resolver Minigame 1: O Triador de Treinamento:**
-**HU10 - Resolver Minigame 2: A Alavanca de Emergência:**
-**HU11 - Resolver Minigame 3: O Detector de Alucinação:**
-**HU12 - Resolver Minigame 4: O Reconector Neural:**
-**HU13 - Compreender se a task está correta:**
-**HU14 - Visualizar minha pontuação no ranking:**
-**HU15 - Música do jogo:**
-**HU16 - Consultar Tabela de Ranking dos Top Players:** 
+**HU01 - Navegar pelo Menu Principal no Terminal: 00:02**
+**HU02 - Temporizador de 10 Minutos da Partida: 00:26**
+**HU03 - Transitar entre Salas do Laboratório: 02:22**
+**HU04 - Colocar meu User ao entrar na partida: 00:10**
+**HU05 - Acessar tutorial do jogo: 00:14**
+**HU06 - Aumento de velocidade ao ingerir Café: 02:32**
+**HU07 - Identificar minigames no ambiente: 00:56**
+**HU08 - Consultar Manual de Regras e Boas Práticas do NEXUS Labs: 01:07**
+**HU09 - Resolver Minigame 1: O Triador de Treinamento: 03:56**
+**HU10 - Resolver Minigame 2: A Alavanca de Emergência: 01:40**
+**HU11 - Resolver Minigame 3: O Detector de Alucinação: 02:41**
+**HU12 - Resolver Minigame 4: O Reconector Neural: 04:54**
+**HU13 - Compreender se a task está correta: 02:54**
+**HU14 - Visualizar minha pontuação no ranking: 05:52**
+**HU15 - Música do jogo: Qualquer etapa do jogo**
+**HU16 - Consultar Tabela de Ranking dos Top Players: 05:52** 
 
+---
 # Minigames
 
 ## 1. O Triador de Treinamento
