@@ -692,7 +692,7 @@ void GameplayUpdate(GameplayBody *self, GameState *state, ResourcesBody *resourc
     if (!self->cafeteira.usada) {
         if (InteragivelPoderInteragir(&self->cafeteira.objeto, player_centro) && IsKeyPressed(KEY_E)) {
             CafeteiraAtivar(&self->cafeteira, &self->player, self->tempo_restante);
-            PlaySound(resources->som_confirmacao);
+            PlaySound(resources->som_cafe);
         }
     }
 

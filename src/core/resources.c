@@ -40,6 +40,8 @@ void ResourcesInit(ResourcesBody *self) {
     SetSoundVolume(self->som_win, RESOURCES_SFX_VOLUME);
     self->som_entry_minigame = LoadSound(RESOURCES_SOM_MINIGAME_ENTRY);
     SetSoundVolume(self->som_entry_minigame, RESOURCES_SFX_VOLUME);
+    self->som_cafe = LoadSound(RESOURCES_SOM_CAFE);
+    SetSoundVolume(self->som_cafe, RESOURCES_SFX_VOLUME);
 }
 
 void ResourcesUnload(ResourcesBody *self) {
@@ -52,4 +54,5 @@ void ResourcesUnload(ResourcesBody *self) {
     UnloadSound(self->som_gameover);
     UnloadSound(self->som_win);
     UnloadSound(self->som_entry_minigame);
+    UnloadSound(self->som_cafe);
 }

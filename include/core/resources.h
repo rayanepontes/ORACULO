@@ -42,6 +42,9 @@
 /** @brief Caminho para o efeito sonoro de entrada em minigames. */
 #define RESOURCES_SOM_MINIGAME_ENTRY "assets/audio/sfx/minigame_entry.wav"
 
+/** @brief Caminho para o efeito sonoro de beber café. */
+#define RESOURCES_SOM_CAFE "assets/audio/sfx/ana_drinking_coffee.wav"
+
 /** @brief Volume das músicas de fundo do menu (0.0 a 1.0). */
 #define RESOURCES_MUSICA_MENU_VOLUME 0.6f
 
@@ -75,6 +78,7 @@
  * @param som_gameover       Efeito sonoro tocado ao entrar na tela de game over.
  * @param som_win            Efeito sonoro tocado ao entrar na tela de vitória.
  * @param som_entry_minigame Efeito sonoro tocado ao entrar em um minigame qualquer.
+ * @param som_cafe           Efeito sonoro tocado ao beber café na cafeteira.
  */
 typedef struct ResourcesBody {
     Font     fonte_principal;
@@ -96,6 +100,7 @@ typedef struct ResourcesBody {
     Sound    som_gameover;
     Sound    som_win;
     Sound    som_entry_minigame;
+    Sound    som_cafe;
 } ResourcesBody;
 
 /**
