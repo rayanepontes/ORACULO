@@ -88,6 +88,24 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 
 [![▶ Clique para assistir: ](./project/thumb.png)](https://www.youtube.com/watch?v=It_t3TPcRGA)
 
+# Histórias de Usuário 
+
+**HU01 - Navegar pelo Menu Principal no Terminal:**
+**HU02 - Temporizador de 10 Minutos da Partida:**
+**HU03 - Transitar entre Salas do Laboratório:**
+**HU04 - Colocar meu User ao entrar na partida:**
+**HU05 - Acessar tutorial do jogo:**
+**HU06 - Aumento de velocidade ao ingerir Café:**
+**HU07 - Identificar minigames no ambiente**
+**HU08 - Consultar Manual de Regras e Boas Práticas do NEXUS Labs:**
+**HU09 - Resolver Minigame 1: O Triador de Treinamento:**
+**HU10 - Resolver Minigame 2: A Alavanca de Emergência:**
+**HU11 - Resolver Minigame 3: O Detector de Alucinação:**
+**HU12 - Resolver Minigame 4: O Reconector Neural:**
+**HU13 - Compreender se a task está correta:**
+**HU14 - Visualizar minha pontuação no ranking:**
+**HU15 - Música do jogo:**
+**HU16 - Consultar Tabela de Ranking dos Top Players:** 
 
 # Minigames
 
