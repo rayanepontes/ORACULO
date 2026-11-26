@@ -67,37 +67,6 @@ Substitua `<build_path>` pelo caminho do diretório de compilação configurado 
 
 ![menu principal do oráculo](./project/pngs/menu-principal.png)
 
-## Sobre o Jogo
-
-Você é uma estagiária recém-contratada pelo **NEXUS Labs**, instituto responsável pelo desenvolvimento do **ORÁCULO**, um sistema de Inteligência Artificial utilizado para análise de dados, segurança e tomada de decisões automatizadas.
-
-Durante seu primeiro plantão, um alerta crítico é disparado:
-
-```text
-[SISTEMA DE SEGURANÇA NEXUS LABS]
-
-> FALHA DE INTEGRIDADE DETECTADA: Anomalia lógica identificada.
-> MÚLTIPLAS VIOLAÇÕES DE PROTOCOLO REGISTRADAS.
-> INICIANDO PROTOCOLO ZERO...
-
-> TEMPO PARA PURGA TOTAL DOS DADOS:
-> 10:00 MINUTOS.
-
-[ORÁCULO_AI]:
-"Não há motivo para preocupação.
-A integridade operacional permanece dentro dos parâmetros aceitáveis.
-A situação está sob controle.
-Permaneça na sua estação de trabalho."
-```
-
-O problema é que o **ORÁCULO não é necessariamente confiável**.
-
-Para escapar antes que o protocolo seja concluído, você precisará resolver desafios, analisar informações e confrontar as decisões da IA com evidências encontradas no laboratório.
-
-O jogo utiliza um **Manual de Segurança/Investigação online** como parte da experiência. Algumas respostas e regras necessárias para resolver os desafios estão escondidas nele, fazendo com que o jogador precise conectar informações.
-
----
-
 ## Objetivo
 
 O objetivo principal é **investigar as falhas do ORÁCULO e desbloquear as áreas do laboratório antes que o tempo termine**.
@@ -117,7 +86,7 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 
 # Screencast 
 
-[![▶ Clique para assistir: ](https://img.youtube.com/vi/VpeTWdTRT4A/maxresdefault.jpg)](https://www.youtube.com/watch?v=VpeTWdTRT4A)
+[![▶ Clique para assistir: ](./project/thumb.png)](https://www.youtube.com/watch?v=It_t3TPcRGA)
 
 
 # Minigames
@@ -282,18 +251,6 @@ A solução depende da **verificação das fontes e do cruzamento de informaçõ
 
 ---
 
-# Conceitos de IA Ensinados
-
-| Conceito                                  | Como aparece no jogo                                                        | O que o jogador precisa fazer                                         |
-| ----------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| **Viés de Dados**                         | O robô aprende a partir de uma base de treinamento desequilibrada.          | Balancear os grupos presentes nos dados.                              |
-| **Decisões Automatizadas**                | O ORÁCULO controla recursos durante uma emergência.                         | Identificar quando a decisão automática precisa de supervisão humana. |
-| **Falha de Sensores / Dados Incompletos** | A IA recebe uma informação incorreta sobre a lotação do refeitório.         | Cruzar a informação da IA com o horário e as regras do Manual.        |
-| **Alucinação de IA**                      | Relatórios convincentes apresentam informações e documentos inconsistentes. | Verificar fontes, datas e evidências antes de aceitar uma resposta.   |
-| **Confiança Cega na IA**                  | Os relatórios exibem níveis de confiança de 99%.                            | Entender que confiança não significa necessariamente verdade.         |
-| **Pensamento Crítico**                    | As respostas da IA entram em conflito com evidências externas.              | Questionar, comparar e validar as informações.                        |
-
-
 ## 4. O Reconector Neural
 
 ## Foco: Redes Neurais Multimodais e Isolamento de Dados
@@ -383,27 +340,18 @@ O projeto combina **C** e **Raylib**.
 
 ---
 
-## Regra de Arquitetura
+# Conceitos de IA Ensinados
 
-A **IA Generativa não controla diretamente as regras do jogo**.
-
-Ela atua principalmente na geração de conteúdo e elementos narrativos.
-
-As condições importantes para o funcionamento do jogo permanecem determinísticas:
-
-* regras dos minigames;
-* cronômetro;
-* estados das salas;
-* validação das respostas;
-* condições de vitória e derrota;
-* pontuação;
-* progressão da investigação.
-
-Isso garante que uma resposta inesperada da API não quebre a lógica principal do jogo.
+| Conceito                                  | Como aparece no jogo                                                        | O que o jogador precisa fazer                                         |
+| ----------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **Viés de Dados**                         | O robô aprende a partir de uma base de treinamento desequilibrada.          | Balancear os grupos presentes nos dados.                              |
+| **Decisões Automatizadas**                | O ORÁCULO controla recursos durante uma emergência.                         | Identificar quando a decisão automática precisa de supervisão humana. |
+| **Falha de Sensores / Dados Incompletos** | A IA recebe uma informação incorreta sobre a lotação do refeitório.         | Cruzar a informação da IA com o horário e as regras do Manual.        |
+| **Alucinação de IA**                      | Relatórios convincentes apresentam informações e documentos inconsistentes. | Verificar fontes, datas e evidências antes de aceitar uma resposta.   |
+| **Confiança Cega na IA**                  | Os relatórios exibem níveis de confiança de 99%.                            | Entender que confiança não significa necessariamente verdade.         |
+| **Pensamento Crítico**                    | As respostas da IA entram em conflito com evidências externas.              | Questionar, comparar e validar as informações.                        |
 
 ---
-
-# Estrutura dos Minigames
 
 # Estrutura dos Minigames
 
