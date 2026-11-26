@@ -115,13 +115,9 @@ A proposta educativa é fazer o jogador **experimentar esses problemas na práti
 
 ---
 
-# Screencast PIF
+# Screencast 
 
 [![▶ Clique para assistir: ](https://img.youtube.com/vi/VpeTWdTRT4A/maxresdefault.jpg)](https://www.youtube.com/watch?v=VpeTWdTRT4A)
-
-# Screencast FDS
-
-[![▶ Clique para assistir: ]()
 
 
 # Minigames
@@ -144,6 +140,8 @@ Na tela, uma esteira apresenta diferentes **Fichas de Clientes**, contendo infor
 
 O jogador deve arrastar os perfis para a **Base de Treino** do robô.
 
+![Triador de Treinamento](./project/minigame1.png)
+![Triador de Treinamento](./project/triador.png)
 ```text
 ┌──────────────────────┐       ┌─────────────────────────┐
 │  FICHAS DE CLIENTES  │       │      BASE DE TREINO     │
